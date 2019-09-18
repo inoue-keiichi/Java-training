@@ -32,4 +32,5 @@ public class Vehicle {
 	public int id;
 	public String owner;
 	public int angle;
+	public int speed;
 }

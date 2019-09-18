@@ -8,11 +8,11 @@ class LinkedListTest {
 
 	@Test
 	void test() {
-		final Object obj = new Object();
-		final LinkedList next = new LinkedList();
-		final LinkedList list = new LinkedList(obj, next);
+		final LinkedList list = new LinkedList();
+		list.obj = "Test";
+		list.next = LinkedList.first;
 
-		assertEquals(obj, list.obj);
-		assertEquals(next, list.next);
+		assertEquals("Test", list.obj);
+		assertEquals(null, list.next);
 	}
 }

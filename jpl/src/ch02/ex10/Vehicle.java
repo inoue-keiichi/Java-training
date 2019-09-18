@@ -1,4 +1,4 @@
-package src.ch02.ex09;
+package src.ch02.ex10;
 
 public class Vehicle {
 	public static int nextid = 0;
@@ -17,5 +17,10 @@ public class Vehicle {
 	public static int getMaxId() {
 		int maxId = nextid-1;
 		return maxId;
+	}
+	
+	public String toString() {
+		String str = id + "(" + owner + ")";
+		return str;
 	}
 }
