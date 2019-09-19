@@ -1,7 +1,7 @@
 package src.ch02.ex06;
 
 public class LinkedList {
-	public static void main() {
+	public static void main(String[] args) {
 		LinkedList node1 = new LinkedList();
 		node1.obj = "Tom";
 		node1.next = first;

@@ -10,13 +10,6 @@ public class Vehicle {
 	private String owner;
 	private int angle;
 	private int speed;
-	
-	public static void main(String[] args) {
-		final String owner = args.toString();
-		final Vehicle toyota = new Vehicle(owner);
-
-		System.out.println("Owner : " + toyota.owner);
-	}
 
 	public Vehicle(String owner) {
 		this.owner = owner;

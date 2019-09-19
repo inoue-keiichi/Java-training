@@ -12,6 +12,16 @@ public class Vehicle {
 	private int angle;
 	private int speed;
 
+	public static void main(String[] args) {
+		String owner;
+		Vehicle car;
+		for (int i = 0; i < args.length; i++) {
+			owner = args[i];
+			car = new Vehicle(owner);
+			System.out.println("Owner : " + car.getOwner());
+		}
+	}
+
 	public Vehicle(String owner) {
 		this.owner = owner;
 		this.id = nextid;

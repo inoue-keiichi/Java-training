@@ -1,7 +1,7 @@
 package src.ch02.ex07;
 
 public class Vehicle {
-	public static void main(String arg[]) {
+	public static void main(String[] args) {
 		final Vehicle toyota = new Vehicle("Tom");
 		final Vehicle daihatsu = new Vehicle("Mike");
 		final Vehicle nissan = new Vehicle("Mai");
