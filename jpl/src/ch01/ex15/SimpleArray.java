@@ -1,7 +1,5 @@
 package src.ch01.ex15;
 
-import static org.junit.jupiter.api.Assumptions.assumingThat;
-
 import java.util.Objects;
 
 public class SimpleArray implements AddDelete {

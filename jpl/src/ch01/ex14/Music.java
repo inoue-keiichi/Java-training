@@ -1,12 +1,12 @@
 package src.ch01.ex14;
 
 public class Music {
-	private int musicId;
 	private String musicName;
 	private String artistName;
+	private Object data;
 
-	public int getMusicId() {
-		return this.musicId;
+	public Object getData() {
+		return this.data;
 	}
 
 	public String getMusicName() {
@@ -17,8 +17,8 @@ public class Music {
 		return this.artistName;
 	}
 
-	public void setMusicId(int musicId) {
-		this.musicId = musicId;
+	public void setMusicId(Object data) {
+		this.data = data;
 	}
 
 	public void setMusicName(String musicName) {
