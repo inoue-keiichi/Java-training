@@ -1,4 +1,4 @@
-package src.ch01.ex14;
+package ch01.ex14;
 
 public class WalkManVer3 {
 	private Music[] musics;

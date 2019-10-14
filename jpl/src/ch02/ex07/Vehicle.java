@@ -1,4 +1,4 @@
-package src.ch02.ex07;
+package ch02.ex07;
 
 public class Vehicle {
 	public static void main(String[] args) {

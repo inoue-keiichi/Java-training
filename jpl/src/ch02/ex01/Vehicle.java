@@ -1,4 +1,4 @@
-package src.ch02.ex01;
+package ch02.ex01;
 
 public class Vehicle {
 	public String owner;

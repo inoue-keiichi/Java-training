@@ -1,4 +1,4 @@
-package src.ch01.ex06;
+package ch01.ex06;
 
 public class Fibonacci {
 

@@ -1,4 +1,4 @@
-package src.ch01.ex10;
+package ch01.ex10;
 
 public class Fibo {
 	private int value;

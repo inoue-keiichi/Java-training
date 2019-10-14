@@ -1,4 +1,4 @@
-package src.ch02.ex02;
+package ch02.ex02;
 
 public class LinkedList {
 	public static LinkedList first = null;

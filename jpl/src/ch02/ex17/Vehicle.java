@@ -1,4 +1,4 @@
-package src.ch02.ex17;
+package ch02.ex17;
 
 public class Vehicle {
 	public enum VehicleAngle {

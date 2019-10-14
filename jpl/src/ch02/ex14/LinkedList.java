@@ -1,4 +1,4 @@
-package src.ch02.ex14;
+package ch02.ex14;
 
 public class LinkedList {
 	//firstは、LinkedListで辿った最後の要素にしたいためnullのままにしたい。

@@ -1,4 +1,4 @@
-package src.ch01.ex16;
+package ch01.ex16;
 
 import java.io.FileInputStream;
 import java.io.IOException;

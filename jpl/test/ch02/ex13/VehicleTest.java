@@ -1,8 +1,7 @@
-package test.ch02.ex13;
+package ch02.ex13;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import src.ch02.ex13.*;
 
 public class VehicleTest {
 	@Test

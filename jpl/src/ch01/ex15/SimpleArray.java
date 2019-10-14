@@ -1,4 +1,4 @@
-package src.ch01.ex15;
+package ch01.ex15;
 
 import java.util.Objects;
 

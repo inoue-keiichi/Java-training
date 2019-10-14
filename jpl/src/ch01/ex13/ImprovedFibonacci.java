@@ -1,4 +1,4 @@
-package src.ch01.ex13;
+package ch01.ex13;
 
 public class ImprovedFibonacci {
 

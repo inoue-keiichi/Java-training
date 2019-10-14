@@ -1,4 +1,4 @@
-package src.ch02.ex11;
+package ch02.ex11;
 
 
 public class LinkedList {

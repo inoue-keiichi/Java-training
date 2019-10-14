@@ -1,4 +1,4 @@
-package src.ch01.ex08;
+package ch01.ex08;
 
 public class Point {
 	public double x;

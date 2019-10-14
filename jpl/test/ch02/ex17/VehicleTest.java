@@ -1,11 +1,10 @@
-package test.ch02.ex17;
+package ch02.ex17;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import src.ch02.ex17.*;
-import src.ch02.ex17.Vehicle.VehicleAngle;
+import ch02.ex17.Vehicle.VehicleAngle;
 
 public class VehicleTest{
 	@Test

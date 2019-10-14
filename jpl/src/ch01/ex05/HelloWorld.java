@@ -1,4 +1,4 @@
-package src.ch01.ex05;
+package ch01.ex05;
 
 public class HelloWorld {
 	

@@ -1,4 +1,4 @@
-package src.ch02.ex13;
+package ch02.ex13;
 
 public class Vehicle {
 	private static int nextid = 0;

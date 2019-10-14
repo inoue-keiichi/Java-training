@@ -1,4 +1,4 @@
-package test.ch01.ex15;
+package ch01.ex15;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import org.junit.jupiter.api.Test;
-
-import src.ch01.ex15.*;
 
 public class SimpleArrayTest {
 	// nameとvalueを追加できるかテスト

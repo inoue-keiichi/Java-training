@@ -1,4 +1,4 @@
-package src.ch02.ex18;
+package ch02.ex18;
 
 enum VehicleAngle {
 	TURN_LEFT, TURN_RIGHT
@@ -48,7 +48,7 @@ public class Vehicle {
 		speed = 0;
 	}
 
-	public static int getMaxId() {
+	public static final int getMaxId() {
 		int maxId = nextid - 1;
 		return maxId;
 	}
@@ -58,31 +58,31 @@ public class Vehicle {
 		return str;
 	}
 
-	public int getId() {
+	public final int getId() {
 		return id;
 	}
 
-	public String getOwner() {
+	public final String getOwner() {
 		return owner;
 	}
 
-	public int getAngle() {
+	public final int getAngle() {
 		return angle;
 	}
 
-	public int getSpeed() {
+	public final int getSpeed() {
 		return speed;
 	}
 
-	public void setOwner(String owner) {
+	public final void setOwner(String owner) {
 		this.owner = owner;
 	}
 
-	public void setAngle(int angle) {
+	public final void setAngle(int angle) {
 		this.angle = angle;
 	}
 
-	public void setSpeed(int speed) {
+	public final void setSpeed(int speed) {
 		this.speed = speed;
 	}
 }

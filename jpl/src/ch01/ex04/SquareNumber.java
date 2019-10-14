@@ -1,4 +1,4 @@
-package src.ch01.ex04;
+package ch01.ex04;
 
 public class SquareNumber {
 
