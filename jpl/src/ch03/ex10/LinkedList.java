@@ -12,7 +12,7 @@ public class LinkedList implements Cloneable {
 		this.obj = obj;
 		this.next = next;
 	}
-	
+
 	public LinkedList(Object obj) {
 		this(obj, first);
 	}
@@ -57,6 +57,36 @@ public class LinkedList implements Cloneable {
 		}
 		return count;
 	}
+
+//	public void remove() {
+//		if(Objects.isNull(next)) {
+//			return;
+//		}
+//		
+//		LinkedList nextNode = next;
+//		int length = count();
+//		System.out.println(length);
+//		for (int i = 0; i < length-2; i++) {
+//			nextNode = nextNode.next;
+//		}
+//		nextNode.setNext(null);
+//	}
+	
+	public void remove() {
+		if(Objects.isNull(next)) {
+			return;
+		}
+		
+		LinkedList nextNode = next;
+		while(!Objects.isNull(nextNode)) {
+			nextNode = nextNode.next;
+			if(Objects.isNull(nextNode.next.next)) {
+				nextNode.next =null;
+				break;
+			}
+		}
+	}
+	
 
 	public String toString() {
 		String str = "[" + obj.toString();
