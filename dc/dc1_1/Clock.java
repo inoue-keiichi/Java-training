@@ -25,7 +25,7 @@ public class Clock extends Frame implements Runnable {
 	}
 
 	public void paint(Graphics g) {
-		g.drawString(h + ":" + m + ":" + s, 50, 50);
+		g.drawString(h + ":" + m + ":" + s, 50, 100);
 	}
 
 	@Override
