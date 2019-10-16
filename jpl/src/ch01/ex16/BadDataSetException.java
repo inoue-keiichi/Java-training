@@ -4,9 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 class BadDataSetException extends Exception {
+	public String fileName;
 	public IOException exception;
 
-	BadDataSetException(IOException exception) {
+	BadDataSetException(String fileName, IOException exception) {
+		this.fileName = fileName;
 		this.exception = exception;
 	}
 
@@ -32,7 +34,7 @@ class MyUtilities {
 			in = new FileInputStream(file);
 			return readDataSet(in);
 		} catch (IOException e) {
-			throw new BadDataSetException(e);
+			throw new BadDataSetException(file, e);
 		} finally {
 			try {
 				if (in != null) {
