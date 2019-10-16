@@ -1,18 +1,12 @@
-import java.awt.Container;
+package dc1_1;
+
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Calendar;
 
-public class dc1_1 {
-	public static void main(String[] args) {
-		Clock.clock.setVisible(true);
-		Clock.thread.start();
-	}
-}
-
-class Clock extends Frame implements Runnable {
+public class Clock extends Frame implements Runnable {
 	protected static int h;
 	protected static int m;
 	protected static int s;
@@ -23,6 +17,11 @@ class Clock extends Frame implements Runnable {
 	public Clock() {
 		setSize(200, 200);
 		addWindowListener(new MyWindowAdapter());
+	}
+	
+	public static void main(String[] args) {
+		Clock.clock.setVisible(true);
+		Clock.thread.start();
 	}
 
 	public void paint(Graphics g) {
@@ -36,7 +35,6 @@ class Clock extends Frame implements Runnable {
 			h = now.get(Calendar.HOUR_OF_DAY);
 			m = now.get(Calendar.MINUTE);
 			s = now.get(Calendar.SECOND);
-			System.out.println(h + ":" + m + ":" + s);
 			repaint();
 			try {
 				Thread.sleep(1000); // スリープ１秒
