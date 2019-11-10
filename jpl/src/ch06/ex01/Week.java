@@ -1,5 +1,5 @@
 package ch06.ex01;
 
-enum Week {
+public enum Week {
 	SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THUSDAY, FRIDAY, SATUDAY
 }
