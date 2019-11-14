@@ -2,53 +2,40 @@ package dc1_2;
 
 import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.Panel;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Calendar;
 
-class ClockFrame extends Panel implements Runnable {
-	protected static Color fontColor = Color.green;
-	protected static Color backgroundColor = Color.black;
-	protected static int fontSize = 100;
-	protected static int font = Font.PLAIN;
+public class ClockFrame extends Frame {
+	private static final ClockFrame clockFrame = new ClockFrame();
+	private final ClockView clockView = ClockView.getInstance();
+	private final MenuView menuView = MenuView.getInstance();
+	final Panel menuPanel = new Panel();
+	final Panel clockPanel = new Panel();
+	Color backgroundColor;
 
-	protected static int h;
-	protected static int m;
-	protected static int s;
-	protected static Calendar now;
-	static final ClockFrame clock = new ClockFrame();
-	static final Thread thread = new Thread(clock);
-
-	public void paint(Graphics g) {
-		Dimension size = getSize();
-		Image back = createImage(size.width, size.height);
-		Graphics buffer = back.getGraphics();
-
-		buffer.setColor(fontColor);
-		buffer.setFont(new Font("Dialog", font, fontSize));
-		buffer.drawString(h + ":" + m + ":" + s, 0, 200);
-		g.drawImage(back, 0, 0, this);
+	public ClockFrame() {
+		backgroundColor = Color.black;
+		setLayout(new GridLayout(2, 1));
+		add(clockView);
+		add(menuPanel);
+		clockView.setBackground(backgroundColor);
+		clockView.setVisible(true);
+		menuPanel.add(menuView.btn);
+		menuPanel.setBackground(backgroundColor);
+		setSize(500, 500);
+		addWindowListener(new ClockWindowAdapter());
 	}
 
-	@Override
-	public void run() {
-		while (true) {
-			now = Calendar.getInstance();
-			h = now.get(Calendar.HOUR_OF_DAY);
-			m = now.get(Calendar.MINUTE);
-			s = now.get(Calendar.SECOND);
-			repaint();
-			try {
-				Thread.sleep(1000); // スリープ１秒
-			} catch (InterruptedException e) {
-			}
-		}
+	public static ClockFrame getInstance() {
+		return clockFrame;
+	}
+
+	public void setBackground(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
+		menuPanel.setBackground(backgroundColor);
+		clockView.setBackground(backgroundColor);
 	}
 }

@@ -11,14 +11,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Menu implements ActionListener {
+public class MenuView implements ActionListener {
+	private static final MenuView menuView = new MenuView(ClockFrame.getInstance());
+	final MenuController menuController = MenuController.getInstance();
 	Button btn;
 	Dialog dialog;
 	Frame frame;
-	
-	static final Menu menu = new Menu(ClockLayout.layout);
 
-	Menu(final Frame frame) {
+	private MenuView(final Frame frame) {
 		this.btn = new Button("menu");
 		this.btn.setBounds(50, 80, 100, 30);
 		this.btn.setBackground(Color.getColor("blue"));
@@ -27,11 +27,15 @@ public class Menu implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		PropertyDialog.propertyDialog.setVisible(true);
+		menuController.setVisible(true);
 	}
 
 	public void windowClosing(WindowEvent e) {
 		System.exit(0);
+	}
+
+	public static MenuView getInstance() {
+		return menuView;
 	}
 
 }

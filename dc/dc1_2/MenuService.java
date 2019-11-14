@@ -4,25 +4,30 @@ import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Font;
 
-public class PropertyDialogService {
-	static final String[] FONT_STYLE_ARRAY = { "Plain", "Bold", "Italic" };
-	static final String[] FONT_SIZE_ARRAY = { "100", "120", "130", "140", "150", "160", "170", "180", "190", "200", "250",
-			"200" };
-	static final String[] COLOR_ARRAY = { "black", "blue", "cyan", "darkGray", "gray", "green", "lightGray", "magenta",
+public class MenuService {
+	private static final MenuService menuService = new MenuService();
+	private final String[] FONT_STYLE_ARRAY = { "Plain", "Bold", "Italic" };
+	private final String[] FONT_SIZE_ARRAY = { "100", "120", "130", "140", "150", "160", "170", "180", "190", "200",
+			"250", "300" };
+	private final String[] COLOR_ARRAY = { "black", "blue", "cyan", "darkGray", "gray", "green", "lightGray", "magenta",
 			"orange", "pink", "red", "white", "yellow" };
 
-	static Choice fontChoice = setChoice(PropertyDialogService.FONT_STYLE_ARRAY);
-	static Choice fontSizeChoice = setChoice(PropertyDialogService.FONT_SIZE_ARRAY);
-	static Choice fontColorChoice = setChoice(PropertyDialogService.COLOR_ARRAY);
-	static Choice backgroundColorChoice = setChoice(PropertyDialogService.COLOR_ARRAY);
-	
+	private Choice fontChoice = setChoice(FONT_STYLE_ARRAY);
+	private Choice fontSizeChoice = setChoice(FONT_SIZE_ARRAY);
+	private Choice fontColorChoice = setChoice(COLOR_ARRAY);
+	private Choice backgroundColorChoice = setChoice(COLOR_ARRAY);
+
+	private MenuService() {
+
+	}
+
 	/**
 	 * プルダウンの選択肢をセットしてChoiceオブジェクトを返します。
 	 * 
 	 * @param array 選択肢の配列
 	 * @return Choiceのオブジェクト
 	 */
-	public static final Choice setChoice(String[] array) {
+	public final Choice setChoice(String[] array) {
 		Choice choice = new Choice();
 		for (String element : array) {
 			choice.add(element);
@@ -118,4 +123,25 @@ public class PropertyDialogService {
 		}
 		return color;
 	}
+
+	public static final MenuService getInstance() {
+		return menuService;
+	}
+
+	public final Choice getFontChoice() {
+		return fontChoice;
+	}
+
+	public final Choice getFontSizeChoice() {
+		return fontSizeChoice;
+	}
+
+	public final Choice getFontColorChoice() {
+		return fontColorChoice;
+	}
+
+	public final Choice getBackgroundColorChoice() {
+		return backgroundColorChoice;
+	}
+
 }

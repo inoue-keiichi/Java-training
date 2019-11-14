@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class Main {
 	public static void main(String[] args) {
-		ClockLayout.layout.setVisible(true);
-		ClockFrame.thread.start();
+		ClockFrame.getInstance().setVisible(true);
+		ClockView.thread.start();
 	}
 }
