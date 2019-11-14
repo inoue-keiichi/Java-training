@@ -12,7 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MenuController extends Dialog implements ActionListener {
-	private static final MenuController menuController = new MenuController(ClockFrame.getInstance(), "Setting");
+	private static final MenuController menuController = new MenuController(ClockView.getInstance(),
+			"Property Setting");
 	private final MenuService menuService = MenuService.getInstance();
 	private final ClockService clockService = ClockService.getInstance();
 
@@ -30,6 +31,7 @@ public class MenuController extends Dialog implements ActionListener {
 		Button okBtn = new Button("OK");
 		okBtn.setBounds(50, 80, 100, 30);
 		okBtn.addActionListener(this);
+		add(new Label());
 		add(okBtn);
 		setResizable(false);
 		setSize(400, 200);
@@ -44,12 +46,9 @@ public class MenuController extends Dialog implements ActionListener {
 		clockService.setFontColor(menuService.colorConverter(menuService.getFontColorChoice().getSelectedItem()));
 		clockService.setBackgroundColor(
 				menuService.colorConverter(menuService.getBackgroundColorChoice().getSelectedItem()));
-		ClockFrame.getInstance().backgroundColor = menuService
-				.colorConverter(menuService.getBackgroundColorChoice().getSelectedItem());
-		ClockFrame.getInstance()
-				.setBackground(menuService.colorConverter(menuService.getBackgroundColorChoice().getSelectedItem()));
 		dispose();
-		ClockFrame.getInstance().setSize(clockService.getFontSize() * 5, clockService.getFontSize() * 5);
+		ClockView.getInstance().setBackground(clockService.getBackgroundColor());
+		ClockView.getInstance().setSize(clockService.getFontSize() * 5, clockService.getFontSize() * 5);
 	}
 
 	public static final MenuController getInstance() {

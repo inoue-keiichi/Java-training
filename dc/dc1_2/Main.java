@@ -5,7 +5,8 @@ import java.awt.Color;
 
 public class Main {
 	public static void main(String[] args) {
-		ClockFrame.getInstance().setVisible(true);
+		ClockView.getInstance().setBackground(ClockService.getInstance().getBackgroundColor());
+		ClockView.getInstance().setVisible(true);
 		ClockView.thread.start();
 	}
 }

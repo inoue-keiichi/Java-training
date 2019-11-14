@@ -1,7 +1,9 @@
 package dc1_2;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.util.Calendar;
 
 public class ClockService {
@@ -15,6 +17,28 @@ public class ClockService {
 	private int hour;
 	private int minute;
 	private int second;
+
+	private ClockService() {
+
+	}
+
+	public String getTime() {
+		String timeStr = new String();
+		if (hour < 10) {
+			timeStr += "0";
+		}
+		timeStr += hour + ":";
+		if (minute < 10) {
+			timeStr += "0";
+		}
+		timeStr += minute + ":";
+		if (second < 10) {
+			timeStr += "0";
+		}
+		timeStr += second;
+
+		return timeStr;
+	}
 
 	public static ClockService getInstance() {
 		return clockService;

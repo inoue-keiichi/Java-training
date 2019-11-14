@@ -12,7 +12,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MenuView implements ActionListener {
-	private static final MenuView menuView = new MenuView(ClockFrame.getInstance());
+	private static final MenuView menuView = new MenuView(ClockView.getInstance());
 	final MenuController menuController = MenuController.getInstance();
 	Button btn;
 	Dialog dialog;

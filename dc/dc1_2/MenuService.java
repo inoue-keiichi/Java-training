@@ -9,13 +9,15 @@ public class MenuService {
 	private final String[] FONT_STYLE_ARRAY = { "Plain", "Bold", "Italic" };
 	private final String[] FONT_SIZE_ARRAY = { "100", "120", "130", "140", "150", "160", "170", "180", "190", "200",
 			"250", "300" };
-	private final String[] COLOR_ARRAY = { "black", "blue", "cyan", "darkGray", "gray", "green", "lightGray", "magenta",
-			"orange", "pink", "red", "white", "yellow" };
+	private final String[] FONT_COLOR_ARRAY = { "green", "black", "blue", "cyan", "darkGray", "gray", "lightGray",
+			"magenta", "orange", "pink", "red", "white", "yellow" };
+	private final String[] BACKGROUND_COLOR_ARRAY = { "black", "blue", "cyan", "darkGray", "gray", "green", "lightGray",
+			"magenta", "orange", "pink", "red", "white", "yellow" };
 
 	private Choice fontChoice = setChoice(FONT_STYLE_ARRAY);
 	private Choice fontSizeChoice = setChoice(FONT_SIZE_ARRAY);
-	private Choice fontColorChoice = setChoice(COLOR_ARRAY);
-	private Choice backgroundColorChoice = setChoice(COLOR_ARRAY);
+	private Choice fontColorChoice = setChoice(FONT_COLOR_ARRAY);
+	private Choice backgroundColorChoice = setChoice(BACKGROUND_COLOR_ARRAY);
 
 	private MenuService() {
 
@@ -96,7 +98,7 @@ public class MenuService {
 		case "green":
 			color = Color.green;
 			break;
-		case "lightGreen":
+		case "lightGray":
 			color = Color.lightGray;
 			break;
 		case "magenta":
