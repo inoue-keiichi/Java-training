@@ -1,10 +1,7 @@
-package dc1_2;
+package dc1_3;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.util.Calendar;
+import static dc1_3.PopupMenuUtility.*;
 
 public class ClockService {
 	private static final ClockService clockService = new ClockService();
@@ -13,6 +10,7 @@ public class ClockService {
 	private Color backgroundColor = Color.black;
 	private int fontSize = 100;
 	private String fontName = "Dialog";
+
 	private int hour;
 	private int minute;
 	private int second;
@@ -37,6 +35,24 @@ public class ClockService {
 		timeStr += second;
 
 		return timeStr;
+	}
+
+	public void convertCommand(String popupMenuName, String command) {
+		switch (popupMenuName) {
+		case "Font":
+			this.fontName = command;
+			break;
+		case "Font Size":
+			this.fontSize = Integer.parseInt(command);
+			break;
+		case "Font Color":
+			this.fontColor = colorConverter(command);
+			break;
+		case "Background Color":
+			this.backgroundColor = colorConverter(command);
+			break;
+		default:
+		}
 	}
 
 	public static ClockService getInstance() {

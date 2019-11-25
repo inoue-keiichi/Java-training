@@ -41,7 +41,7 @@ public class MenuController extends Dialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		clockService.setFont(menuService.fontConverter(menuService.getFontChoice().getSelectedItem()));
+		clockService.setFont(menuService.getFontChoice().getSelectedItem());
 		clockService.setFontSize(menuService.intConverter(menuService.getFontSizeChoice().getSelectedItem()));
 		clockService.setFontColor(menuService.colorConverter(menuService.getFontColorChoice().getSelectedItem()));
 		clockService.setBackgroundColor(

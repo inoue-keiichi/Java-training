@@ -40,16 +40,16 @@ class ClockView extends Frame implements Runnable {
 		// フレームの大きさによって文字の大きさを変える
 		final Dimension size = getSize();
 		FontMetrics fontMetrics = getFontMetrics(
-				new Font("Dialog", clockService.getFont(), clockService.getFontSize()));
+				new Font(clockService.getFont(), Font.PLAIN, clockService.getFontSize()));
 		while (size.width
 				- fontMetrics.stringWidth(clockService.getTime()) < MIN_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT) {
 			clockService.setFontSize(clockService.getFontSize() - 1);
-			fontMetrics = getFontMetrics(new Font("Dialog", clockService.getFont(), clockService.getFontSize()));
+			fontMetrics = getFontMetrics(new Font(clockService.getFont(), Font.PLAIN, clockService.getFontSize()));
 		}
 		while (size.width
 				- fontMetrics.stringWidth(clockService.getTime()) > MAX_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT) {
 			clockService.setFontSize(clockService.getFontSize() + 1);
-			fontMetrics = getFontMetrics(new Font("Dialog", clockService.getFont(), clockService.getFontSize()));
+			fontMetrics = getFontMetrics(new Font(clockService.getFont(), Font.PLAIN, clockService.getFontSize()));
 		}
 		this.setMinimumSize(new Dimension(MAX_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT,
 				fontMetrics.getHeight() + MIN_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT));

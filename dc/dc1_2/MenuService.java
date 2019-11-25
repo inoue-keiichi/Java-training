@@ -3,6 +3,7 @@ package dc1_2;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 
 public class MenuService {
 	private static final MenuService menuService = new MenuService();
@@ -14,7 +15,8 @@ public class MenuService {
 	private final String[] BACKGROUND_COLOR_ARRAY = { "black", "blue", "cyan", "darkGray", "gray", "green", "lightGray",
 			"magenta", "orange", "pink", "red", "white", "yellow" };
 
-	private Choice fontChoice = setChoice(FONT_STYLE_ARRAY);
+	private Choice fontChoice = setChoice(
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
 	private Choice fontSizeChoice = setChoice(FONT_SIZE_ARRAY);
 	private Choice fontColorChoice = setChoice(FONT_COLOR_ARRAY);
 	private Choice backgroundColorChoice = setChoice(BACKGROUND_COLOR_ARRAY);
