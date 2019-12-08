@@ -13,7 +13,7 @@ import static dc1_3.PopupMenuUtility.*;
 
 public class PopupMenuView implements ActionListener {
 	private static final PopupMenuView popupMenuView = new PopupMenuView("Property");
-	
+
 	private final PopupMenu popupMenu = new PopupMenu("Property");
 	private final PopupMenuAdapter popupFontMenu;
 	private final PopupMenuAdapter popupFontSizeMenu;
