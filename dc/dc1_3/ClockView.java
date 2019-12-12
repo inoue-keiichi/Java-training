@@ -1,50 +1,34 @@
 package dc1_3;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.Panel;
 import java.awt.Point;
 import java.awt.PopupMenu;
-import java.awt.Rectangle;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Arrays;
 import java.util.Calendar;
-
-import dc1_3.ClockService;
-//import dc1_2.MenuView;
 
 public class ClockView extends Window implements Runnable, MouseListener, MouseMotionListener {
 	private static final ClockView clockView = new ClockView();
 
 	private final ClockService clockService = ClockService.getInstance();
-	private final PopupMenuView popupMenuView = PopupMenuView.getInstance();
-	private final PopupMenu popupMenu = popupMenuView.getPopupMenu();
+	private final PopupMenu popupMenu = PopupMenuView.getInstance().getPopupMenu();
 	static final Thread thread = new Thread(clockView);
 
-	int mouseX;
-	int mouseY;
-	int windowX = this.getBounds().x;
-	int windowY = this.getBounds().y;
-	int preMouseX = this.getBounds().x;
-	int preMouseY = this.getBounds().y;
-	int dx;
-	int dy;
-	FontMetrics fontMetrics;
+	private int mouseX;
+	private int mouseY;
+	private int preMouseX = this.getBounds().x;
+	private int preMouseY = this.getBounds().y;
+	private int dx;
+	private int dy;
 
 	private ClockView() {
 		super(new Frame());
-		fontMetrics = getFontMetrics(new Font(clockService.getFont(), Font.PLAIN, clockService.getFontSize()));
 		addWindowListener(new ClockWindowAdapter());
 		add(popupMenu);
 		addMouseMotionListener(this);
@@ -54,7 +38,6 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
@@ -62,6 +45,7 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 		if (e.getButton() == MouseEvent.BUTTON1 || e.getButton() == MouseEvent.BUTTON2) {
 			return;
 		}
+		this.toFront();
 		popupMenu.show(this, e.getX(), e.getY());
 	}
 
@@ -73,11 +57,12 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-
+		// TODO 自動生成されたメソッド・スタブ
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -86,8 +71,8 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 		mouseY = point.y;
 		dx = mouseX - preMouseX;
 		dy = mouseY - preMouseY;
-		this.setBounds(this.getBounds().x + dx, this.getBounds().y + dy,
-				fontMetrics.stringWidth(clockService.getTime()), fontMetrics.getHeight());
+		this.setBounds(this.getBounds().x + dx, this.getBounds().y + dy, clockService.getWidth(),
+				clockService.getHeight());
 		System.out.println(dx + ", " + dy);
 	}
 
@@ -106,10 +91,11 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 		final Image back = createImage(size.width, size.height);
 		final Graphics buffer = back.getGraphics();
 		buffer.setColor(clockService.getFontColor());
-		buffer.setFont(fontMetrics.getFont());
+		buffer.setFont(clockService.getFontMetrics().getFont());
 		buffer.drawString(clockService.getTime(),
-				(int) (size.width - fontMetrics.stringWidth(clockService.getTime())) / 2,
-				(int) (size.height + fontMetrics.getAscent()) / 2);
+				(int) (size.width - clockService.getFontMetrics().stringWidth(clockService.getTime())) / 2,
+				(int) (size.height + clockService.getFontMetrics().getAscent()) / 2);
+		g.drawImage(back, 0, 0, this);
 		g.drawImage(back, 0, 0, this);
 	}
 
@@ -119,9 +105,6 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 			clockService.setHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 			clockService.setMinute(Calendar.getInstance().get(Calendar.MINUTE));
 			clockService.setSecond(Calendar.getInstance().get(Calendar.SECOND));
-			fontMetrics = getFontMetrics(new Font(clockService.getFont(), Font.PLAIN, clockService.getFontSize()));
-			setBounds(this.getBounds().x, this.getBounds().y, fontMetrics.stringWidth(clockService.getTime()),
-					fontMetrics.getHeight());
 			setBackground(clockService.getBackgroundColor());
 			repaint();
 			try {

@@ -1,6 +1,8 @@
 package dc1_3;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
+
 import static dc1_3.PopupMenuUtility.*;
 
 public class ClockService {
@@ -10,6 +12,9 @@ public class ClockService {
 	private Color backgroundColor = Color.black;
 	private int fontSize = 100;
 	private String fontName = "Dialog";
+	private FontMetrics fontMetrics;
+	private int height;
+	private int width;
 
 	private int hour;
 	private int minute;
@@ -113,5 +118,29 @@ public class ClockService {
 
 	public int getSecond() {
 		return second;
+	}
+
+	public FontMetrics getFontMetrics() {
+		return fontMetrics;
+	}
+
+	public void setFontMetrics(FontMetrics fontMetrics) {
+		this.fontMetrics = fontMetrics;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setHeight(int height) {
+		this.height = (int) (height * 1.2);
+	}
+
+	public void setWidth(int width) {
+		this.width = (int) (width * 1.2);
 	}
 }

@@ -102,25 +102,4 @@ public class PopupMenuUtility {
 		}
 		return color;
 	}
-
-//	public static final PopupMenuService getInstance() {
-//		return menuService;
-//	}
-//
-//	public final String[] getFontFamilyNames() {
-//		return FONT_FAMILY_NAMES;
-//	}
-//
-//	public final String[] getFontSizes() {
-//		return FONT_SIZES;
-//	}
-//
-//	public final String[] getFontColors() {
-//		return FONT_COLORS;
-//	}
-//
-//	public final String[] getBackgroundColors() {
-//		return BACKGROUND_COLORS;
-//	}
-
 }

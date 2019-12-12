@@ -3,10 +3,10 @@ package dc1_3;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 
-public class PopupMenuFactory {
-	public static PopupMenuAdapter create(String name, String[] menuItemNames) {
+public class ClockPopupMenuFactory {
+	public static PopupMenuTemplate create(String name, String[] menuItemNames) {
 		final PopupMenu popupMenu = new PopupMenu(name);
-		final PopupMenuAdapter popupMenuAdapter = new PopupMenuAdapter(popupMenu);
+		final PopupMenuTemplate popupMenuAdapter = new PopupMenuTemplate(popupMenu);
 		for (String menuItemName : menuItemNames) {
 			popupMenu.add(new MenuItem(menuItemName));
 		}
