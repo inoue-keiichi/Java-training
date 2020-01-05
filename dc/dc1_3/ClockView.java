@@ -42,10 +42,10 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		this.toFront();
 		if (e.getButton() == MouseEvent.BUTTON1 || e.getButton() == MouseEvent.BUTTON2) {
 			return;
 		}
-		this.toFront();
 		popupMenu.show(this, e.getX(), e.getY());
 	}
 
@@ -96,7 +96,7 @@ public class ClockView extends Window implements Runnable, MouseListener, MouseM
 				(int) (size.width - clockService.getFontMetrics().stringWidth(clockService.getTime())) / 2,
 				(int) (size.height + clockService.getFontMetrics().getAscent()) / 2);
 		g.drawImage(back, 0, 0, this);
-		g.drawImage(back, 0, 0, this);
+		System.out.println("x: " + (int) (size.width - clockService.getFontMetrics().stringWidth(clockService.getTime())) / 2 + " ," + "y: " + (int) (size.height + clockService.getFontMetrics().getAscent()) / 2);
 	}
 
 	@Override
