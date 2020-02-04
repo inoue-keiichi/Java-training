@@ -3,22 +3,48 @@ package ch14.ex10;
 import java.util.Objects;
 
 public class ThreadFactory {
+	public final Object runLock = new Object();
+	public final Object addLock = new Object();
 	private final Runnable runnable;
-	private Runnable inputRunnable;
-	private Thread thread;
+	public Runnable inputRunnable;
+	private final Thread thread;
+	public boolean stopFlg;
+	public int i = 0;
 
 	public ThreadFactory() {
 		runnable = new Runnable() {
 			@Override
 			public void run() {
-				if (Objects.nonNull(inputRunnable)) {
-					inputRunnable.run();
+				while (true) {
+					synchronized (runLock) {
+						try {
+							while (inputRunnable == null) {
+								runLock.wait();
+								inputRunnable = ThreadPool.getTask();
+								if (stopFlg) {
+									return;
+								}
+							}
+						} catch (InterruptedException e) {
+							// TODO 自動生成された catch ブロック
+							e.printStackTrace();
+						}
+					}
+
+					if (Objects.nonNull(inputRunnable)) {
+						inputRunnable.run();
+						inputRunnable = null;
+					}
+					synchronized (addLock) {
+						addLock.notifyAll();
+					}
+					if (stopFlg) {// dispatchが全て終わったらstopflg変える
+						return;
+					}
 				}
-				// 初期化
-				inputRunnable = null;
-				thread = new Thread(runnable);
 			}
 		};
+		stopFlg = false;
 		thread = new Thread(runnable);
 	}
 

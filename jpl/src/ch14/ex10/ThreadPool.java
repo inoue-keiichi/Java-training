@@ -31,9 +31,11 @@ import java.util.Queue;
  * @author Yoshiki Shibata
  */
 public class ThreadPool {
-	final Queue<Runnable> runnableQueue;
+	private static Queue<Runnable> runnableQueue;
 	final int numberOfThreads;
-	final int queueSize;
+	private int queueSize;
+//	public static final Object runLock = new Object();
+//	public static final Object addLock = new Object();
 	ThreadFactory[] threadFacts = null;
 
 	/**
@@ -49,7 +51,7 @@ public class ThreadPool {
 		if (queueSize < 1 || numberOfThreads < 1) {
 			throw new IllegalArgumentException();
 		}
-		this.runnableQueue = new ArrayDeque<>(queueSize);
+		runnableQueue = new ArrayDeque<>(queueSize);
 		this.numberOfThreads = numberOfThreads;
 		this.queueSize = queueSize;
 		this.threadFacts = new ThreadFactory[numberOfThreads];
@@ -68,6 +70,7 @@ public class ThreadPool {
 
 		for (int i = 0; i < numberOfThreads; i++) {
 			threadFacts[i] = new ThreadFactory();
+			threadFacts[i].getThread().start();
 		}
 	}
 
@@ -88,11 +91,31 @@ public class ThreadPool {
 
 		// dispatchされたタスクの実行終了まで待つ
 		while (!runnableQueue.isEmpty()) {
-
+			for (ThreadFactory thf : threadFacts) {
+				synchronized (thf.runLock) {
+					thf.runLock.notifyAll();
+				}
+			}
 		}
-		// 全てのthreadの終了を待つ
-		while (isAlive(threadFacts)) {
 
+		for (ThreadFactory thf : threadFacts) {
+			thf.stopFlg = true;
+		}
+
+		// 全てのthreadの終了を待つ
+		for (ThreadFactory thf : threadFacts) {
+			try {
+				while (!(thf.getThread().getState() == Thread.State.WAITING
+						|| thf.getThread().getState() == Thread.State.TERMINATED)) {
+				}
+				synchronized (thf.runLock) {
+					thf.runLock.notifyAll();
+				}
+				thf.getThread().join();
+			} catch (InterruptedException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
 		}
 		this.threadFacts = new ThreadFactory[numberOfThreads];
 	}
@@ -114,26 +137,33 @@ public class ThreadPool {
 			throw new IllegalStateException();
 		}
 
-		// queueから取り出したタスクをthreadで実行する
-		runnableQueue.add(runnable);
-		while (true) {
+		synchronized (this) {
+			if (runnableQueue.size() < queueSize) {
+				runnableQueue.add(runnable);
+				runnable = null;
+			}
+		}
+		while (runnableQueue.size() > 0) {
 			for (ThreadFactory thf : threadFacts) {
-				if (thf.getThread().isAlive()) {
-					continue;
+				synchronized (thf.runLock) {
+					thf.runLock.notifyAll();
 				}
-				thf.setRunnable(runnableQueue.poll());
-				thf.getThread().start();
-				return;
+			}
+		}
+		synchronized (this) {
+			if (runnable != null) {
+				runnableQueue.add(runnable);
+				runnable = null;
 			}
 		}
 	}
 
-	private boolean isAlive(final ThreadFactory[] threadFacts) {
-		for (ThreadFactory thf : threadFacts) {
-			if (thf.getThread().isAlive()) {
-				return true;
-			}
-		}
-		return false;
+	/**
+	 * タスクの先頭を取得および削除します。タスクが空の場合はnullを返します。
+	 * 
+	 * @return タスクの先頭
+	 */
+	public static Runnable getTask() {
+		return runnableQueue.poll();
 	}
 }
