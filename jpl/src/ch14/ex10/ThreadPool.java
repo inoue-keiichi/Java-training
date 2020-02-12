@@ -137,23 +137,22 @@ public class ThreadPool {
 			throw new IllegalStateException();
 		}
 
-		synchronized (this) {
-			if (runnableQueue.size() < queueSize) {
-				runnableQueue.add(runnable);
-				runnable = null;
-			}
-		}
-		while (runnableQueue.size() > 0) {
+		while (true) {
 			for (ThreadFactory thf : threadFacts) {
-				synchronized (thf.runLock) {
-					thf.runLock.notifyAll();
+				synchronized (this) {
+					if (runnable != null && runnableQueue.size() < queueSize) {
+						runnableQueue.add(runnable);
+						runnable = null;
+					}
+					if (runnable == null && runnableQueue.size() < 1) {
+						return;
+					}
 				}
-			}
-		}
-		synchronized (this) {
-			if (runnable != null) {
-				runnableQueue.add(runnable);
-				runnable = null;
+				if (thf.getThread().getState() == Thread.State.WAITING) {
+					synchronized (thf.runLock) {
+						thf.runLock.notifyAll();
+					}
+				}
 			}
 		}
 	}
