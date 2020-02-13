@@ -1,67 +1,41 @@
 package main.array.member;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Type;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
-import main.ErrorHandler;
-import main.MemberPrintGenerator;
-import main.value.ReflectionService;
-import main.value.member.ConstructorPrintGenerator;
-import main.value.type.ObjectTypeInputPanel;
+import main.PrintGenerator;
+import main.array.ArrayReflectionService;
+import static main.StringUtils.*;
 
-public class ConstructorDialogPrintGenerator extends JPanel implements ActionListener {
-	private static final ConstructorDialogPrintGenerator objectTypeInputPanel = new ConstructorDialogPrintGenerator();
+public class ElementConstructorPrintGenerator extends PrintGenerator {
+	private static final ElementConstructorPrintGenerator elementConstructorPrintGenerator = new ElementConstructorPrintGenerator();
 
-	final ReflectionService reflectionService = ReflectionService.getInstance();
-	final ConstructorPrintGenerator constructorPrintGenerator = ConstructorPrintGenerator.getInstance();
-	final MemberPrintGenerator memberPrintGenerator = MemberPrintGenerator.getInstance();
+	private final ElementPanel elementPanel = ElementPanel.getInstance();
+	private final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
 
-	final JTextField typeText = new JTextField(30);
-	final JButton setBtn = new JButton("Set");
+	@Override
+	public void execute() {
+		final Constructor<?>[] constructors = reflectionService.getConstructor();
+		final JComboBox<String> constructorComboBox = elementPanel.getConstructorComboBox();
+		// 元々あった選択肢を削除
+		if (constructorComboBox.getItemCount() > 0) {
+			constructorComboBox.removeAllItems();
+		}
+		for (Constructor<?> constructor : constructors) {
+			constructorComboBox.addItem(getNameAndParameter(constructor));
+		}
+		this.notifyObservers();
+	}
 
-	public ConstructorDialogPrintGenerator() {
-		GridBagLayout layout = new GridBagLayout();
-		this.setLayout(layout);
-		GridBagConstraints constraints = new GridBagConstraints();
-
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		layout.setConstraints(typeText, constraints);
-		this.add(typeText);
-
-		constraints.gridx = 1;
-		constraints.gridy = 0;
-		constraints.anchor = GridBagConstraints.EAST;
-		layout.setConstraints(setBtn, constraints);
-		this.add(setBtn);
-		setBtn.addActionListener(this);
+	public static ElementConstructorPrintGenerator getInstance() {
+		return elementConstructorPrintGenerator;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		try {
-			reflectionService.setClazz(typeText.getText());
-		} catch (ClassNotFoundException e1) {
-			ErrorHandler.getInstance().execute(e1);
-		}
-		// コンストラクタの項目を表示する
-		constructorPrintGenerator.execute();
-		// メンバータブを表示する
-		try {
-			memberPrintGenerator.execute();
-		} catch (Throwable e1) {
-			// TODO 自動生成された catch ブロック
-			e1.printStackTrace();
-		}
-	}
-
-	public static ConstructorDialogPrintGenerator getInstance() {
-		return objectTypeInputPanel;
+	public String getLog() {
+		return "Success!\nYou can select the constructor of " + reflectionService.getClazzName() + ".\n";
 	}
 }
