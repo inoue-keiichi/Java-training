@@ -7,14 +7,13 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JTextField;
 
 import main.PrintGenerator;
-import main.array.ArrayReflectionService;
 
 public class ConstructorDialogCreatePrintGenerator extends PrintGenerator {
 	private static ConstructorDialogCreatePrintGenerator constructorDialogCreatePrintGenerator = new ConstructorDialogCreatePrintGenerator();
 
-	private final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
-	private final ElementFieldPrintGenerator fieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
-	private final ElementMethodPrintGenerator methodPrintGenerator = ElementMethodPrintGenerator.getInstance();
+	//private final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
+	//private final ElementFieldPrintGenerator fieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
+	//private final ElementMethodPrintGenerator methodPrintGenerator = ElementMethodPrintGenerator.getInstance();
 
 	private String constructorName;
 

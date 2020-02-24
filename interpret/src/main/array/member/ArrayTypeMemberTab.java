@@ -8,8 +8,8 @@ public class ArrayTypeMemberTab extends JTabbedPane {
 
 	private ArrayTypeMemberTab() {
 		// this.addTab("setter", SetterPanel.getInstance());
-		this.addTab("field", ElementFieldPanel.getInstance());
-		this.addTab("method", ElementMethodPanel.getInstance());
+		//this.addTab("field", ElementFieldPanel.getInstance());
+		//this.addTab("method", ElementMethodPanel.getInstance());
 	}
 
 	public static ArrayTypeMemberTab getInstance() {

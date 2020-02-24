@@ -23,7 +23,6 @@ import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
 import main.StringUtils;
-import main.array.ArrayReflectionService;
 import main.value.ReflectionService;
 
 import static java.awt.GridBagConstraints.*;
@@ -37,8 +36,10 @@ public class SetterPanel extends JPanel implements ActionListener {
 	// private ArrayReflectionService reflectionService =
 	// ArrayReflectionService.getInstance();
 	private ReflectionService reflectionService = ReflectionService.getInstance();
-	private ElementMethodPrintGenerator methodPrintGenerator = ElementMethodPrintGenerator.getInstance();
-	private ElementFieldPrintGenerator fieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
+	// private ElementMethodPrintGenerator methodPrintGenerator =
+	// ElementMethodPrintGenerator.getInstance();
+	// private ElementFieldPrintGenerator fieldPrintGenerator =
+	// ElementFieldPrintGenerator.getInstance();
 	private ConstructorDialogCreatePrintGenerator constructorDialogCreatePrintGenerator = ConstructorDialogCreatePrintGenerator
 			.getInstance();
 	private SetterPrintGenerator setterPrintGenerator = SetterPrintGenerator.getInstance();

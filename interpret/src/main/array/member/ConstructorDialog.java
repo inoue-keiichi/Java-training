@@ -25,12 +25,11 @@ import main.Argument;
 import main.ErrorHandler;
 import main.InterpretView;
 
-import main.array.ArrayReflectionService;
-
 public class ConstructorDialog extends JDialog implements ItemListener {
 	private static final ConstructorDialog constructorDialog = new ConstructorDialog(InterpretView.getInstance(),
 			"Constructor Setting");
-	private final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
+	// private final ArrayReflectionService reflectionService =
+	// ArrayReflectionService.getInstance();
 
 	private final JTextField typeText = new JTextField(20);
 	private final JButton setBtn = new JButton("Set");
@@ -131,8 +130,8 @@ public class ConstructorDialog extends JDialog implements ItemListener {
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
-		this.createArgumentPanel(reflectionService.getConstructorArgments());
+		// reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
+		// this.createArgumentPanel(reflectionService.getConstructorArgments());
 	}
 
 //	@Override

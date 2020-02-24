@@ -4,10 +4,6 @@ import main.array.member.ConstructorDialogCreatePrintGenerator;
 import main.array.member.ConstructorDialogPrintGenerator;
 import main.array.member.ElementButton;
 import main.array.member.ElementButtonPrintGenerator;
-import main.array.member.ElementFieldPrintGenerator;
-import main.array.member.ElementFieldUpdatePrintGenerator;
-import main.array.member.ElementMethodExecutePrintGenerator;
-import main.array.member.ElementMethodPrintGenerator;
 import main.array.member.SetterPrintGenerator;
 import main.array.type.ArrayCreatePrintGenerator;
 import main.value.member.ConstructorCreatePrintGenerator;
@@ -38,12 +34,12 @@ public class Main {
 //		final ConstructorCreatePrintGenerator constructorCreatePrintGenerator = ConstructorCreatePrintGenerator
 //				.getInstance();
 		// 配列の方
-		final ElementFieldPrintGenerator elementFieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
-		final ElementFieldUpdatePrintGenerator elementFieldUpdatePrintGenerator = ElementFieldUpdatePrintGenerator
-				.getInstance();
-		final ElementMethodPrintGenerator elementMethodPrintGenerator = ElementMethodPrintGenerator.getInstance();
-		final ElementMethodExecutePrintGenerator elementMethodExecutePrintGenerator = ElementMethodExecutePrintGenerator
-				.getInstance();
+//		final ElementFieldPrintGenerator elementFieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
+//		final ElementFieldUpdatePrintGenerator elementFieldUpdatePrintGenerator = ElementFieldUpdatePrintGenerator
+//				.getInstance();
+//		final ElementMethodPrintGenerator elementMethodPrintGenerator = ElementMethodPrintGenerator.getInstance();
+//		final ElementMethodExecutePrintGenerator elementMethodExecutePrintGenerator = ElementMethodExecutePrintGenerator
+//				.getInstance();
 		final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = ConstructorDialogPrintGenerator
 				.getInstance();
 		final ConstructorDialogCreatePrintGenerator constructorDialogCreatePrintGenerator = ConstructorDialogCreatePrintGenerator
@@ -67,10 +63,10 @@ public class Main {
 		fieldPrintGenerator.addObserver(logTextArea);
 		fieldUpdatePrintGenerator.addObserver(logTextArea);
 		// 配列の方
-		elementFieldPrintGenerator.addObserver(logTextArea);
-		elementFieldUpdatePrintGenerator.addObserver(logTextArea);
-		elementMethodPrintGenerator.addObserver(logTextArea);
-		elementMethodExecutePrintGenerator.addObserver(logTextArea);
+//		elementFieldPrintGenerator.addObserver(logTextArea);
+//		elementFieldUpdatePrintGenerator.addObserver(logTextArea);
+//		elementMethodPrintGenerator.addObserver(logTextArea);
+//		elementMethodExecutePrintGenerator.addObserver(logTextArea);
 		constructorDialogPrintGenerator.addObserver(logTextArea);
 		constructorDialogCreatePrintGenerator.addObserver(logTextArea);
 		elementButtonPrintGenerator.addObserver(elementButton);
