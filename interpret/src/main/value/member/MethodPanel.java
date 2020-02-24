@@ -16,17 +16,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import main.ArgText;
 import main.Argument;
+import main.Autowired;
 import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class MethodPanel extends JPanel implements Observer, ItemListener, ActionListener {
-	private static final MethodPanel methodPanel = new MethodPanel();
+	// private static final MethodPanel methodPanel = new MethodPanel();
 
 	private final ReflectionService reflectionService = ReflectionService.getInstance();
-	private final MethodExecutePrintGenerator methodExecutePrintGenerator = MethodExecutePrintGenerator.getInstance();
+	// private final MethodExecutePrintGenerator methodExecutePrintGenerator =
+	// MethodExecutePrintGenerator.getInstance();
 
 	private final JComboBox<String> memberComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
@@ -35,7 +38,7 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	private final GridBagConstraints gbc = new GridBagConstraints();
 	private final GridBagLayout layout = new GridBagLayout();
 
-	private MethodPanel() {
+	public MethodPanel() {
 		this.setLayout(layout);
 
 		gbc.gridx = 0;
@@ -63,7 +66,8 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 			return;
 		}
 		for (Argument arg : args) {
-			this.argsPanel.add(new JTextField(5));
+			// this.argsPanel.add(new JTextField(5));
+			this.argsPanel.add(new ArgText(8));
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
@@ -93,9 +97,9 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 		return argsPanel;
 	}
 
-	public static MethodPanel getInstance() {
-		return methodPanel;
-	}
+//	public static MethodPanel getInstance() {
+//		return methodPanel;
+//	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
@@ -106,7 +110,7 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			methodExecutePrintGenerator.execute();
+			Autowired.methodExecutePrintGenerator.execute();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			ErrorHandler.getInstance().execute(e1);
 		}

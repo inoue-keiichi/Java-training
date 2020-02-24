@@ -1,20 +1,36 @@
 package main.value;
 
 import java.lang.reflect.*;
+import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import main.Argument;
+import main.StringUtils;
 
 public class ReflectionService {
 	private static ReflectionService reflectionService = new ReflectionService();
+	// objectタイプ
 	private String clazzName;
 	private Constructor<?>[] constructors;
 	private Argument[] constructorArgments = null;
 	private Argument[][] constructorArgs = null;
 	private Argument[] methodArguments = null;
 	private Argument fieldArgument;
+	private Map<String, Object> instances = new HashMap<>();
 	private Object instance;
 	private Field[] fields;
 	private Method[] methods;
+
+	// arrayタイプ
+	private int arraySize;
+	private String referenceName;
+	private Object[] arrayInstance;
+	private Argument[] elementArgments;
 
 	public void setClazz(final String clazzName) throws ClassNotFoundException {
 		this.clazzName = clazzName;
@@ -36,7 +52,13 @@ public class ReflectionService {
 		}
 		validatedArgs = new Object[args.length];
 		for (int i = 0; i < args.length; i++) {
-			validatedArgs[i] = parsePrimitive(args[i]);
+			if (StringUtils.macthRegex(args[i].value)) {
+				// ${}の中身を取り出す
+				String key = args[i].value.substring(2, args[i].value.length() - 1);
+				validatedArgs[i] = this.instances.get(key);
+			} else {
+				validatedArgs[i] = parsePrimitive(args[i]);
+			}
 		}
 		return validatedArgs;
 	}
@@ -57,6 +79,8 @@ public class ReflectionService {
 		case "float":
 			return Float.parseFloat(arg.value);
 		case "int":
+			return (int) Integer.parseInt(arg.value);
+		case "java.lang.Integer":
 			return (int) Integer.parseInt(arg.value);
 		case "long":
 			return Long.parseLong(arg.value);
@@ -222,5 +246,74 @@ public class ReflectionService {
 
 	public String getClazzName() {
 		return this.clazzName;
+	}
+
+	public Map<String, Object> getInstances() {
+		return this.instances;
+	}
+
+	// array
+	public void setArraySize(final String arraySize) {
+		this.arraySize = Integer.parseInt(arraySize);
+	}
+
+	public int getArraySize() {
+		return this.arraySize;
+	}
+
+	public void setArray(final String referenceName, final String size) {
+		this.referenceName = referenceName;
+		this.arraySize = Integer.parseInt(size);
+	}
+
+	public String getReferenceName() {
+		return this.referenceName;
+	}
+
+	public void setElement(final Object element, final String index)
+			throws ArrayIndexOutOfBoundsException, NumberFormatException {
+		try {
+			int i = Integer.parseInt(index);
+
+			Object[] arrayInstance = (Object[]) this.instance;
+			arrayInstance[i] = element;
+
+			// arrayInstance[i] = this.instance;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ArrayIndexOutOfBoundsException();
+		} catch (NumberFormatException e) {
+			throw new NumberFormatException();
+		}
+	}
+
+	public Object getNewArrayInstance() {
+		return this.arrayInstance;
+	}
+
+	public void setNewArrayInstance(final Object[] arrayInstance) {
+		this.arrayInstance = arrayInstance;
+	}
+
+	public Argument[] getElementArgments() {
+		return elementArgments;
+	}
+
+	public void setElementArgTypes(Object[] instance) {
+//		if (constructorsIndex == -1) {
+//			return;
+//		}
+//		Class<?>[] types = constructors[constructorsIndex].getParameterTypes();
+//		// 引き数なし
+//		if (types.length < 1) {
+//			this.constructorArgments = null;
+//			return;
+//		}
+		final Class<?> type = instance.getClass().getComponentType();
+		final int length = Array.getLength(instance);
+		final Argument[] args = new Argument[length];
+		for (Argument arg : args) {
+			arg.type = type;
+		}
+		this.elementArgments = args;
 	}
 }

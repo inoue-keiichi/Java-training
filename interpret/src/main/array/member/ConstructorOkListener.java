@@ -5,22 +5,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import main.AbstractButton;
+import main.ErrorHandler;
 
-public class ConstructorOkButton extends AbstractButton implements ActionListener {
-	// private static final ConstructorDialog constructorDialog =
-	// ConstructorDialog.getInstance();
-
-	public ConstructorOkButton() {
-		super("OK");
-		this.addActionListener(this);
-	}
-
-	public void windowClosing(WindowEvent e) {
-		System.exit(0);
-	}
+public class ConstructorOkListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		ConstructorDialog.getInstance().dispose();
+		try {
+			ElementButtonPrintGenerator.getInstance().execute();
+		} catch (Throwable e1) {
+			ErrorHandler.getInstance().execute(e1);
+		}
 	}
 }

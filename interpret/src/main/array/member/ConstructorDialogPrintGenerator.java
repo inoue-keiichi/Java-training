@@ -10,16 +10,16 @@ import main.PrintGenerator;
 import main.array.ArrayReflectionService;
 import static main.StringUtils.*;
 
-public class ElementConstructorPrintGenerator extends PrintGenerator {
-	private static final ElementConstructorPrintGenerator elementConstructorPrintGenerator = new ElementConstructorPrintGenerator();
+public class ConstructorDialogPrintGenerator extends PrintGenerator {
+	private static final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = new ConstructorDialogPrintGenerator();
 
-	private final ElementPanel elementPanel = ElementPanel.getInstance();
+	private final ConstructorDialog constructorDialog = ConstructorDialog.getInstance();
 	private final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
 
 	@Override
 	public void execute() {
 		final Constructor<?>[] constructors = reflectionService.getConstructor();
-		final JComboBox<String> constructorComboBox = elementPanel.getConstructorComboBox();
+		final JComboBox<String> constructorComboBox = constructorDialog.getConstructorComboBox();
 		// 元々あった選択肢を削除
 		if (constructorComboBox.getItemCount() > 0) {
 			constructorComboBox.removeAllItems();
@@ -30,8 +30,8 @@ public class ElementConstructorPrintGenerator extends PrintGenerator {
 		this.notifyObservers();
 	}
 
-	public static ElementConstructorPrintGenerator getInstance() {
-		return elementConstructorPrintGenerator;
+	public static ConstructorDialogPrintGenerator getInstance() {
+		return constructorDialogPrintGenerator;
 	}
 
 	@Override

@@ -6,22 +6,26 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JTextField;
 
+import main.Autowired;
+import main.InstanceListPanel;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class ConstructorCreatePrintGenerator extends PrintGenerator {
-	private static ConstructorCreatePrintGenerator constructorCreatePrintGenerator = new ConstructorCreatePrintGenerator();
+	// private static ConstructorCreatePrintGenerator
+	// constructorCreatePrintGenerator = new ConstructorCreatePrintGenerator();
 
 	private final ReflectionService reflectionService = ReflectionService.getInstance();
-	private final FieldPrintGenerator fieldPrintGenerator = FieldPrintGenerator.getInstance();
-	private final MethodPrintGenerator methodPrintGenerator = MethodPrintGenerator.getInstance();
+//	private final FieldPrintGenerator fieldPrintGenerator = FieldPrintGenerator.getInstance();
+//	private final MethodPrintGenerator methodPrintGenerator = MethodPrintGenerator.getInstance();
 
 	private String constructorName;
 
 	@Override
-	public void execute() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void execute()
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		// 入力された文字列を保存
-		final ConstructorPanel constructorPanel = ConstructorPanel.getInstance();
+		final ConstructorPanel constructorPanel = Autowired.constructorPanel;
 		constructorPanel.getArgsPanel();
 		int i = 0;
 		for (Component comp : constructorPanel.getArgsPanel().getComponents()) {
@@ -31,23 +35,50 @@ public class ConstructorCreatePrintGenerator extends PrintGenerator {
 		}
 		// 入力された文字列を引数に変換
 		final Object[] args = reflectionService.validateArguments(reflectionService.getConstructorArgments());
-		//try {
-			// プルダウンで指定されたコンストラクタを取得してインスタンス生成
-			final int index = constructorPanel.getConstructorComboBox().getSelectedIndex();
-			final Object instance = reflectionService.getConstructors()[index].newInstance(args);
-			reflectionService.setNewInstance(instance);
-			// ログ用
-			this.constructorName = reflectionService.getConstructors()[index].toGenericString();
+		// try {
+		// プルダウンで指定されたコンストラクタを取得してインスタンス生成
+		final int index = constructorPanel.getConstructorComboBox().getSelectedIndex();
+		final Object instance = reflectionService.getConstructors()[index].newInstance(args);
+		// reflectionService.setNewInstance(instance);
+		// 作ったインスタンスは再利用できるようにする
+		String key = instance.getClass().getSimpleName();
+		// 同じキーがあれば番号を付加する
+		key = arrangeKey(key);
+		reflectionService.getInstances().put(key, instance);
+		InstanceListPanel.getInstance().addList(key);
+		// ログ用
+		this.constructorName = reflectionService.getConstructors()[index].toGenericString();
 		this.notifyObservers();
-		// fieldとmethodのプルダウンの選択肢を生成
-		fieldPrintGenerator.execute();
-		methodPrintGenerator.execute();
+//		// fieldとmethodのプルダウンの選択肢を生成
+//		fieldPrintGenerator.execute();
+//		methodPrintGenerator.execute();
 
 	}
 
-	public static ConstructorCreatePrintGenerator getInstance() {
-		return constructorCreatePrintGenerator;
+	/**
+	 * インスタンスに紐づく適切なキーを返します。
+	 * 
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private String arrangeKey(final String key) {
+		if (!reflectionService.getInstances().containsKey(key)) {
+			return key;
+		}
+		int i = 1;
+		String changedKey = key + "_" + i;
+		// keyが被らないようにする
+		while (reflectionService.getInstances().containsKey(changedKey)) {
+			i++;
+			changedKey = key + "_" + i;
+		}
+		return changedKey;
 	}
+
+//	public static ConstructorCreatePrintGenerator getInstance() {
+//		return constructorCreatePrintGenerator;
+//	}
 
 	@Override
 	public String getLog() {

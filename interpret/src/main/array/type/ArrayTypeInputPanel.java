@@ -8,16 +8,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.ErrorHandler;
-import main.MemberPrintGenerator;
 import main.array.ArrayReflectionService;
-import main.array.member.ElementConstructorPrintGenerator;
+import main.array.member.ConstructorDialogPrintGenerator;
+import main.value.ReflectionService;
 
 public class ArrayTypeInputPanel extends JPanel implements ActionListener {
 	private static final ArrayTypeInputPanel arrayTypeInputPanel = new ArrayTypeInputPanel();
 
-	final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
-	final ElementConstructorPrintGenerator constructorPrintGenerator = ElementConstructorPrintGenerator.getInstance();
-	final MemberPrintGenerator memberPrintGenerator = MemberPrintGenerator.getInstance();
+	final ReflectionService reflectionService = ReflectionService.getInstance();
+	final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = ConstructorDialogPrintGenerator
+			.getInstance();
+	// final MemberPrintGenerator memberPrintGenerator =
+	// MemberPrintGenerator.getInstance();
 	final ArrayCreatePrintGenerator arrayCreatePrintGenerator = ArrayCreatePrintGenerator.getInstance();
 
 	final JTextField typeText = new JTextField(20);
@@ -42,7 +44,7 @@ public class ArrayTypeInputPanel extends JPanel implements ActionListener {
 		}
 //		 メンバータブを表示
 		try {
-			memberPrintGenerator.execute();
+			// memberPrintGenerator.execute();
 		} catch (Throwable e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();

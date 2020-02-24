@@ -6,11 +6,13 @@ import java.lang.reflect.Method;
 
 import javax.swing.JTextField;
 
+import main.Autowired;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class MethodExecutePrintGenerator extends PrintGenerator {
-	private static final MethodExecutePrintGenerator methodExecutePrintGenerator = new MethodExecutePrintGenerator();
+	// private static final MethodExecutePrintGenerator methodExecutePrintGenerator
+	// = new MethodExecutePrintGenerator();
 
 	private static final ReflectionService reflectionService = ReflectionService.getInstance();
 
@@ -23,7 +25,7 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 		this.methodName = null;
 		this.returnValue = null;
 
-		final MethodPanel methodPanel = MethodPanel.getInstance();
+		final MethodPanel methodPanel = Autowired.methodPanel;
 		// メソッドの引数を保存する。
 		int i = 0;
 		for (Component comp : methodPanel.getArgsPanel().getComponents()) {
@@ -55,8 +57,8 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 		return "Success!\n" + this.methodName + "() => " + this.returnValue.toString() + ".\n";
 	}
 
-	public static MethodExecutePrintGenerator getInstance() {
-		return methodExecutePrintGenerator;
-	}
+//	public static MethodExecutePrintGenerator getInstance() {
+//		return methodExecutePrintGenerator;
+//	}
 
 }

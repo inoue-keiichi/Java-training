@@ -6,17 +6,8 @@ import java.awt.event.WindowEvent;
 
 import main.AbstractButton;
 
-public class ConstructorButton extends AbstractButton implements ActionListener {
+public class ConstructorListener implements ActionListener {
 	private static final ConstructorDialog constructorDialog = ConstructorDialog.getInstance();
-
-	public ConstructorButton() {
-		super("     ");
-		this.addActionListener(this);
-	}
-
-	public void windowClosing(WindowEvent e) {
-		System.exit(0);
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

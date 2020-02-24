@@ -8,7 +8,7 @@ public class ArrayReflectionService {
 	private static ArrayReflectionService reflectionService = new ArrayReflectionService();
 	private int arraySize;
 	private String referenceName;
-	private Object arrayInstance;
+	private Object[] arrayInstance;
 
 	private String clazzName;
 	private Constructor[] constructors;
@@ -25,6 +25,17 @@ public class ArrayReflectionService {
 		this.arraySize = Integer.parseInt(size);
 		// this.arrayInstance = this.createArrayInstance(this.referenceName,
 		// this.arraySize);
+	}
+
+	public void setElement(final String index) throws ArrayIndexOutOfBoundsException, NumberFormatException {
+		try {
+			int i = Integer.parseInt(index);
+			arrayInstance[i] = this.instance;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ArrayIndexOutOfBoundsException();
+		} catch (NumberFormatException e) {
+			throw new NumberFormatException();
+		}
 	}
 
 	public Object createArrayInstance(final String referenceName, final int size) throws ClassNotFoundException {
@@ -204,7 +215,7 @@ public class ArrayReflectionService {
 		return this.arrayInstance;
 	}
 
-	public void setNewArrayInstance(final Object arrayInstance) {
+	public void setNewArrayInstance(final Object[] arrayInstance) {
 		this.arrayInstance = arrayInstance;
 	}
 
@@ -260,7 +271,7 @@ public class ArrayReflectionService {
 		return this.arraySize;
 	}
 
-	public void setArrayNewInstance(final Object arrayInstance) {
+	public void setArrayNewInstance(final Object[] arrayInstance) {
 		this.arrayInstance = arrayInstance;
 	}
 }

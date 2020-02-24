@@ -1,11 +1,6 @@
 package main.array.member;
 
-import static java.awt.GridBagConstraints.EAST;
-import static java.awt.GridBagConstraints.HORIZONTAL;
-import static java.awt.GridBagConstraints.NONE;
-import static java.awt.GridBagConstraints.SOUTH;
-import static java.awt.GridBagConstraints.SOUTHEAST;
-import static java.awt.GridBagConstraints.WEST;
+import static java.awt.GridBagConstraints.*;
 
 import java.awt.Button;
 import java.awt.Dialog;
@@ -13,6 +8,8 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -25,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.Argument;
+import main.ErrorHandler;
 import main.InterpretView;
 
 import main.array.ArrayReflectionService;
@@ -34,12 +32,13 @@ public class ConstructorDialog extends JDialog implements ItemListener {
 			"Constructor Setting");
 	private final ArrayReflectionService reflectionService = ArrayReflectionService.getInstance();
 
-	private final JTextField typeText = new JTextField(10);
+	private final JTextField typeText = new JTextField(20);
+	private final JButton setBtn = new JButton("Set");
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
-	private final JButton cancelBtn = new JButton("Cancel");
 	private final JButton okBtn = new JButton("OK");
+	private final JButton cancelBtn = new JButton("Cancel");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
 	private ConstructorDialog(JFrame frame, String title) {
@@ -47,7 +46,7 @@ public class ConstructorDialog extends JDialog implements ItemListener {
 		final GridBagLayout layout = new GridBagLayout();
 
 		setLayout(layout);
-		setSize(400, 200);
+		setSize(450, 200);
 		// this.setLocation(clockService.getFrameX(), clockService.getFrameY());
 
 		this.setLayout(new GridBagLayout());
@@ -57,37 +56,44 @@ public class ConstructorDialog extends JDialog implements ItemListener {
 		this.add(new JLabel("Type: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		gbc.anchor = EAST;
+		gbc.anchor = CENTER;
 		this.add(typeText, gbc);
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.anchor = EAST;
+		this.add(this.setBtn, gbc);
+		this.setBtn.addActionListener(new TypeSetListener());
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		gbc.anchor = WEST;
+		gbc.anchor = EAST;
 		this.add(new JLabel("Constructor: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 1;
+		gbc.gridwidth = 2;
 		gbc.anchor = EAST;
 		this.add(constructorComboBox, gbc);
 		constructorComboBox.addItemListener(this);
 
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.anchor = WEST;
-		this.add(new JLabel("Argument: "), gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.anchor = EAST;
-		this.add(this.argsPanel, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.anchor = WEST;
-		this.add(new ConstructorCancelButton(), gbc);
-		// cancelBtn.addActionListener(this);
+//		gbc.gridx = 0;
+//		gbc.gridy = 2;
+//		gbc.anchor = WEST;
+//		this.add(new JLabel("Argument: "), gbc);
+//		gbc.gridx = 1;
+//		gbc.gridy = 2;
+//		gbc.anchor = EAST;
+//		this.add(this.argsPanel, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 3;
+		gbc.gridwidth = 1;
+		gbc.anchor = WEST;
+		this.add(this.cancelBtn, gbc);
+		this.cancelBtn.addActionListener(new ConstructorCancelListener());
+		gbc.gridx = 2;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
 		gbc.anchor = EAST;
-		this.add(new ConstructorOkButton(), gbc);
-		// okBtn.addActionListener(this);
-
+		this.add(this.okBtn, gbc);
+		this.okBtn.addActionListener(new ConstructorOkListener());
 		// addWindowListener(new MenuWindowAdapter());
 	}
 
@@ -106,11 +112,13 @@ public class ConstructorDialog extends JDialog implements ItemListener {
 			this.argsPanel.add(new JTextField(5));
 		}
 		this.gbc.gridx = 0;
-		this.gbc.gridy = 1;
+		this.gbc.gridy = 2;
+		this.gbc.gridwidth = 1;
 		this.gbc.anchor = WEST;
 		this.add(this.argsLabel, gbc);
 		this.gbc.gridx = 1;
-		this.gbc.gridy = 1;
+		this.gbc.gridy = 2;
+		this.gbc.gridwidth = 2;
 		this.gbc.anchor = EAST;
 		this.add(this.argsPanel, gbc);
 		this.repaint();
@@ -125,6 +133,26 @@ public class ConstructorDialog extends JDialog implements ItemListener {
 	public void itemStateChanged(ItemEvent e) {
 		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
 		this.createArgumentPanel(reflectionService.getConstructorArgments());
+	}
 
+//	@Override
+//	public void actionPerformed(ActionEvent e) {
+//		try {
+//			reflectionService.setClazz(typeText.getText());
+//		} catch (ClassNotFoundException e1) {
+//			errorHandler.execute(e1);
+//		}
+//		// コンストラクタの項目を表示する
+//		elementConstructorPrintGenerator.execute();
+////		// メンバータブを表示する
+////		try {
+////			memberPrintGenerator.execute();
+////		} catch (Throwable e1) {
+////			errorHandler.execute(e1);
+////		}
+//	}
+
+	public JTextField getTypeText() {
+		return this.typeText;
 	}
 }

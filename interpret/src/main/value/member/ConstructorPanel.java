@@ -15,7 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import main.ArgText;
 import main.Argument;
+import main.Autowired;
 import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
@@ -26,16 +28,11 @@ import static java.awt.GridBagConstraints.*;
 import java.awt.Component;
 
 public class ConstructorPanel extends JPanel implements ActionListener, ItemListener {
-	private static final ConstructorPanel constructorPanel = new ConstructorPanel();
-	// private ConstructorPrintGenerator constructorPrintGenerator = new
-	// ConstructorPrintGenerator();
+	// private static final ConstructorPanel constructorPanel = new
+	// ConstructorPanel();
 	private ReflectionService reflectionService = ReflectionService.getInstance();
-	// private MethodPrintGenerator methodPrintGenerator =
-	// MethodPrintGenerator.getInstance();
-	// private FieldPrintGenerator fieldPrintGenerator =
-	// FieldPrintGenerator.getInstance();
-	private ConstructorCreatePrintGenerator constructorCreatePrintGenerator = ConstructorCreatePrintGenerator
-			.getInstance();
+	// private ConstructorCreatePrintGenerator constructorCreatePrintGenerator =
+	// Autowired.constructorCreatePrintGenerator;
 
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
@@ -43,11 +40,8 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 	private final JButton generateBtn = new JButton("Create");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
-	private ConstructorPanel() {
-		// コンストラクタ生成の観測者を追加
-		// constructorPrintGenerator.addObserver(this);
+	public ConstructorPanel() {
 		// レイアウト
-
 		this.setLayout(new GridBagLayout());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -76,13 +70,14 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 
 	public void createArgumentPanel(final Argument[] args) {
 		this.argsPanel.removeAll();
+		this.revalidate();
 		if (args == null) {
 			this.remove(this.argsLabel);
 			this.repaint();
 			return;
 		}
 		for (Argument arg : args) {
-			this.argsPanel.add(new JTextField(5));
+			this.argsPanel.add(new ArgText(8));
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
@@ -92,13 +87,12 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		this.gbc.gridy = 1;
 		this.gbc.anchor = EAST;
 		this.add(this.argsPanel, gbc);
-		this.repaint();
-		this.argsPanel.repaint();
+		this.argsPanel.revalidate();
 	}
 
-	public static ConstructorPanel getInstance() {
-		return constructorPanel;
-	}
+//	public static ConstructorPanel getInstance() {
+//		return constructorPanel;
+//	}
 
 	public JPanel getArgsPanel() {
 		return this.argsPanel;
@@ -107,7 +101,7 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			constructorCreatePrintGenerator.execute();
+			Autowired.constructorCreatePrintGenerator.execute();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e1) {
 			ErrorHandler.getInstance().execute(e1);

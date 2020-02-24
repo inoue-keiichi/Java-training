@@ -13,24 +13,28 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import main.Autowired;
 import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class FieldPanel extends JPanel implements Observer, ActionListener {
-	private static final FieldPanel fieldPanel = new FieldPanel();
+	// private static final FieldPanel fieldPanel = new FieldPanel();
 
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
-	private final FieldPrintGenerator fieldPrintGenerator = FieldPrintGenerator.getInstance();
-	private final FieldUpdatePrintGenerator fieldUpdatePrintGenerator = FieldUpdatePrintGenerator.getInstance();
+	// private final ReflectionService reflectionService =
+	// ReflectionService.getInstance();
+	// private final FieldPrintGenerator fieldPrintGenerator =
+	// Autowired.fieldPrintGenerator;
+	// private final FieldUpdatePrintGenerator fieldUpdatePrintGenerator =
+	// Autowired.fieldUpdatePrintGenerator;
 
 	private final JComboBox<String> fieldComboBox = new JComboBox<>();
 	private final JTextField fieldText = new JTextField(10);
 	private final JButton updateBtn = new JButton("Update");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
-	private FieldPanel() {
+	public FieldPanel() {
 		GridBagLayout layout = new GridBagLayout();
 		this.setLayout(layout);
 
@@ -70,14 +74,14 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 
 	}
 
-	public static FieldPanel getInstance() {
-		return fieldPanel;
-	}
+//	public static FieldPanel getInstance() {
+//		return fieldPanel;
+//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			fieldUpdatePrintGenerator.execute();
+			Autowired.fieldUpdatePrintGenerator.execute();
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 			ErrorHandler.getInstance().execute(e1);
 		}

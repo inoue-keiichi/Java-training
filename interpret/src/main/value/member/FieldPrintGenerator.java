@@ -2,27 +2,51 @@ package main.value.member;
 
 import static main.StringUtils.getNameAndParameter;
 import java.lang.reflect.Field;
+import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 import javax.swing.JComboBox;
 
+import main.Autowired;
+import main.ItemComparator;
 import main.PrintGenerator;
+import main.StringUtils;
 import main.value.ReflectionService;
 
 public class FieldPrintGenerator extends PrintGenerator {
-	private static final FieldPrintGenerator fieldPrintGenerator = new FieldPrintGenerator();
+	// private static final FieldPrintGenerator fieldPrintGenerator = new
+	// FieldPrintGenerator();
 
 	private ReflectionService reflectionService = ReflectionService.getInstance();
-	private FieldPanel fieldPanel = FieldPanel.getInstance();
+	private FieldPanel fieldPanel = Autowired.fieldPanel;
 
-	private FieldPrintGenerator() {
-
-	}
+//	private FieldPrintGenerator() {
+//
+//	}
 
 	@Override
 	public void execute() {
-		//インスタンスからFieldを取得してプルダウンに表示する
-		JComboBox<String> fieldComboBox = fieldPanel.getFieldComboBox();
-		Field[] fields = reflectionService.getNewInstance().getClass().getDeclaredFields();
+	}
+
+	public void execute(final Object instance) {
+		// インスタンスからFieldを取得してプルダウンに表示する
+		final JComboBox<String> fieldComboBox = fieldPanel.getFieldComboBox();
+		List<Field> fieldList = Arrays.asList(instance.getClass().getDeclaredFields());
+		fieldList = new ArrayList<Field>(fieldList);
+		// superClassのfieldもあれば追加する
+		Class<?> clazz = instance.getClass();
+		while (Objects.nonNull(clazz) && !Objects.equals(clazz.getName(), Object.class.getName())) {
+			clazz = clazz.getSuperclass();
+			Field[] superFields = clazz.getDeclaredFields();
+			List<Field> superFieldList = Arrays.asList(superFields);
+			fieldList.addAll(superFieldList);
+		}
+		fieldList.sort(new ItemComparator());
 		// fieldを保存
+		final Field[] fields = fieldList.toArray(new Field[fieldList.size()]);
 		reflectionService.setFields(fields);
 		// 元々あった選択肢を削除
 		if (fieldComboBox.getItemCount() != 0) {
@@ -34,9 +58,9 @@ public class FieldPrintGenerator extends PrintGenerator {
 		this.notifyObservers();
 	}
 
-	public static FieldPrintGenerator getInstance() {
-		return fieldPrintGenerator;
-	}
+//	public static FieldPrintGenerator getInstance() {
+//		return fieldPrintGenerator;
+//	}
 
 	@Override
 	public String getLog() {
