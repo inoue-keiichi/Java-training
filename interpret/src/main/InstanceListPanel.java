@@ -1,10 +1,13 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,13 +18,16 @@ import javax.swing.event.ListSelectionListener;
 
 import main.value.ReflectionService;
 
-public class InstanceListPanel extends JPanel {
+public class InstanceListPanel extends JPanel implements ActionListener {
 	private static final InstanceListPanel instanceListPanel = new InstanceListPanel();
 
 	private final ReflectionService reflectionService = ReflectionService.getInstance();
 
 	private final DefaultListModel<String> model = new DefaultListModel<>();
 	private final JList<String> list = new JList<>(model);
+	// private final JTextField textField = new JTextField();
+	private final JButton displayBtn = new JButton();
+	private InstanceDialog instanceDialog;
 
 	private InstanceListPanel() {
 		setLayout(new BorderLayout());
@@ -29,8 +35,10 @@ public class InstanceListPanel extends JPanel {
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.addListSelectionListener(new InstanceListSelectionListener());
 		list.setDragEnabled(true);
+		displayBtn.addActionListener(this);
 		// list.setTransferHandler(new TransferHandler("text"));
 		add(scrollPane, BorderLayout.CENTER);
+		add(displayBtn, BorderLayout.SOUTH);
 	}
 
 	public void addList(final String str) {
@@ -52,9 +60,15 @@ public class InstanceListPanel extends JPanel {
 			String instanceName = list.getSelectedValue();
 			Object instance = reflectionService.getInstances().get(instanceName);
 			if (instanceName != null) {
-				InstanceDialog instanceDialog = new InstanceDialog(instance);
-				instanceDialog.setVisible(true);
+				displayBtn.setText(instanceName);
+				instanceDialog = new InstanceDialog(instance);
+//				instanceDialog.setVisible(true);
 			}
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		instanceDialog.setVisible(true);
 	}
 }

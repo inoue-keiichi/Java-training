@@ -31,6 +31,7 @@ public class ReflectionService {
 	private String referenceName;
 	private Object[] arrayInstance;
 	private Argument[] elementArgments;
+	private String instanceType;
 
 	public void setClazz(final String clazzName) throws ClassNotFoundException {
 		this.clazzName = clazzName;
@@ -315,5 +316,13 @@ public class ReflectionService {
 			arg.type = type;
 		}
 		this.elementArgments = args;
+	}
+
+	public void setInstanceType(final String instanceType) {
+		this.instanceType = instanceType;
+	}
+
+	public String getInstanceType() {
+		return instanceType;
 	}
 }

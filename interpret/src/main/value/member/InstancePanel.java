@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 
 import main.Autowired;
 import main.InstanceListPanel;
-import main.array.member.ArrayTypeMemberTab;
 import main.array.type.ArrayTypeInputPanel;
 import main.value.ReflectionService;
 import main.value.type.ObjectTypeInputPanel;

@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.ErrorHandler;
+import main.Observer;
+import main.PrintGenerator;
 import main.array.member.ConstructorDialogPrintGenerator;
 import main.value.ReflectionService;
 

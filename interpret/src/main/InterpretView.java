@@ -37,7 +37,6 @@ import javax.swing.JTextField;
 
 import main.array.type.ArrayTypeInputPanel;
 import main.value.type.ObjectTypeInputPanel;
-import main.array.member.ArrayTypeMemberTab;
 import main.value.ReflectionService;
 import main.value.member.ConstructorPanel;
 import main.value.member.InstancePanel;
@@ -55,11 +54,11 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 //	// 型入力パネル
 //	final CardLayout typeInputCardLayout = new CardLayout();
 //	final JPanel typeInputCardPanel = new JPanel();
-	// コンストラクターパネル
-	ConstructorPanel constructorPanel = Autowired.constructorPanel;
-	// メンバータブパネル
-	final CardLayout memberTabCardLayout = new CardLayout();
-	final JPanel memberTabCardPanel = new JPanel();
+//	// コンストラクターパネル
+//	ConstructorPanel constructorPanel = Autowired.constructorPanel;
+//	// メンバータブパネル
+//	final CardLayout memberTabCardLayout = new CardLayout();
+//	final JPanel memberTabCardPanel = new JPanel();
 	// ログテキストエリア
 	final JTextArea logTextArea = LogTextArea.getInstance();
 
@@ -70,11 +69,11 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 //		typeInputCardPanel.setLayout(typeInputCardLayout);
 //		typeInputCardPanel.add(ObjectTypeInputPanel.getInstance(), "Type");
 //		typeInputCardPanel.add(new ArrayTypeInputPanel(), "Array");
-		// memberTabCardのレイアウト定義
-		memberTabCardPanel.setLayout(memberTabCardLayout);
-		// memberTabCardPanel.add(new JPanel(), "Null");
-		memberTabCardPanel.add(Autowired.objectMemberTab, "Type");
-		memberTabCardPanel.add(ArrayTypeMemberTab.getInstance(), "Array");
+//		// memberTabCardのレイアウト定義
+//		memberTabCardPanel.setLayout(memberTabCardLayout);
+//		// memberTabCardPanel.add(new JPanel(), "Null");
+//		memberTabCardPanel.add(Autowired.objectMemberTab, "Type");
+//		memberTabCardPanel.add(ArrayTypeMemberTab.getInstance(), "Array");
 		// InterpretViewの配置決め
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
@@ -118,14 +117,14 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 		gbc.anchor = GridBagConstraints.CENTER;
 		pane.add(new InstancePanel(), gbc);
 		// メンバタブ
-		final JPanel tabbedPane = memberTabCardPanel;
+		// final JPanel tabbedPane = memberTabCardPanel;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		// gbc.gridwidth = 2;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
 		// pane.add(tabbedPane, gbc);
-		pane.add(new MemberPanel(), gbc);
+		pane.add(Autowired.memberPanel, gbc);
 		// ログパネル
 		this.logTextArea.setEditable(false);
 		final JScrollPane scrollpane = new JScrollPane(logTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

@@ -1,24 +1,26 @@
-package main;
+package main.array.member;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
+import javax.swing.TransferHandler.TransferSupport;
 
+import main.PrintGenerator;
 import main.value.ReflectionService;
 
-public class ArgText extends JTextField {
+public class InstanceField extends PrintGenerator {
 	final ReflectionService reflectionService = ReflectionService.getInstance();
 
-	public ArgText(final int num) {
-		super(num);
-		this.setTransferHandler(new InstanceTransferHandler(this));
+	public final JTextField text;
+	private String key = null;
+
+	public InstanceField() {
+		text = new JTextField(8);
+		text.setTransferHandler(new InstanceTransferHandler(text));
 	}
 
 	private class InstanceTransferHandler extends TransferHandler {
@@ -60,15 +62,34 @@ public class ArgText extends JTextField {
 			Transferable t = support.getTransferable();
 			try {
 				// instanceKeyを受け取る
-				String key = (String) t.getTransferData(DataFlavor.stringFlavor);
-
+				key = (String) t.getTransferData(DataFlavor.stringFlavor);
 				// テキストにインスタンスキーを表示する
 				field.setText("${" + key + "}");
-			} catch (UnsupportedFlavorException | IOException e) {
+				execute();
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 			return true;
 		}
+	}
+
+	@Override
+	public void execute() throws Throwable {
+		// インスタンスが配列かオブジェクトかを知らせる
+		final Object instance = reflectionService.getInstances().get(this.key);
+		if (instance instanceof Object[]) {
+			reflectionService.setInstanceType("Array");
+		} else {
+			reflectionService.setInstanceType("Object");
+		}
+
+		this.notifyObservers();
+	}
+
+	@Override
+	public String getLog() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 }
