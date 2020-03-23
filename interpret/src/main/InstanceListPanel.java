@@ -3,16 +3,12 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -58,10 +54,10 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 				return;
 			}
 			String instanceName = list.getSelectedValue();
-			Object instance = reflectionService.getInstances().get(instanceName);
+			//Object instance = reflectionService.getInstances().get(instanceName);
 			if (instanceName != null) {
 				displayBtn.setText(instanceName);
-				instanceDialog = new InstanceDialog(instance);
+				//instanceDialog = new InstanceDialog(instance);
 //				instanceDialog.setVisible(true);
 			}
 		}
@@ -69,6 +65,9 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//buttonに表示されているインスタンスを表示する
+		//Object instance = reflectionService.getInstances().get(displayBtn.getText());
+		instanceDialog = new InstanceDialog(displayBtn.getText());
 		instanceDialog.setVisible(true);
 	}
 }

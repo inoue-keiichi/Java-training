@@ -1,6 +1,5 @@
 package main;
 
-import main.array.member.InstanceField;
 import main.array.member.SetterPanel;
 import main.value.ReflectionService;
 import main.value.member.ConstructorCreatePrintGenerator;

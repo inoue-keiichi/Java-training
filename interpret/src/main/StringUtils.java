@@ -1,7 +1,17 @@
 package main;
 
-import java.lang.reflect.*;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import main.clazz.FieldInfo;
+import main.clazz.MethodInfo;
 
 public class StringUtils {
 	public static String getNameAndParameter(Field field) {
@@ -75,21 +85,79 @@ public class StringUtils {
 		return instanceName.substring(2, instanceName.length() - 1);
 	}
 
+	public static List<FieldInfo> createFieldInfos(final Object instance)
+			throws IllegalArgumentException, IllegalAccessException {
+		final Class<?> clazz = instance.getClass();
+		final List<FieldInfo> fieldInfos = new ArrayList<>();
+		boolean accessible;
+		int modifier;
+		Type type;
+
+		// フィールドは修飾子、型つける。public以外も表示する
+		for (Field field : clazz.getDeclaredFields()) {
+			accessible = field.isAccessible();
+			try {
+				field.setAccessible(true);
+				modifier = field.getModifiers();
+				type = field.getGenericType();
+				FieldInfo fieldInfo = new FieldInfo();
+				StringBuilder prefix = new StringBuilder();
+				prefix.append(stringConverter(modifier));
+				prefix.append(stringConverter(type));
+				fieldInfo.setPrefix(prefix.toString());
+				fieldInfo.setName(field.getName());
+				fieldInfo.setValue(field.get(instance));
+				fieldInfos.add(fieldInfo);
+			} finally {
+				field.setAccessible(accessible);
+			}
+		}
+		return fieldInfos;
+	}
+
+	public static List<MethodInfo> createMethodInfos(final Object instance)
+			throws IllegalArgumentException, IllegalAccessException {
+		final Class<?> clazz = instance.getClass();
+		final List<MethodInfo> methodInfos = new ArrayList<>();
+		boolean accessible;
+		int modifier;
+		Type type;
+
+		// メソッドは修飾子、返り値の型つける。public以外も表示する
+		for (Method method : clazz.getDeclaredMethods()) {
+			accessible = method.isAccessible();
+			try {
+				method.setAccessible(true);
+				modifier = method.getModifiers();
+				type = method.getGenericReturnType();
+				MethodInfo methodInfo = new MethodInfo();
+				StringBuilder prefix = new StringBuilder();
+				prefix.append(stringConverter(modifier));
+				prefix.append(stringConverter(type));
+
+				methodInfo.setPrefix(prefix.toString());
+				methodInfo.setName(method.getName());
+				methodInfo.setArguments(method.getGenericParameterTypes());
+				methodInfo.setExceptions(method.getGenericExceptionTypes());
+				methodInfos.add(methodInfo);
+			} finally {
+				method.setAccessible(accessible);
+			}
+		}
+		return methodInfos;
+	}
+
 	public static StringBuilder printClass(final Object instance)
 			throws SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
 		final StringBuilder classContent = new StringBuilder();
-		// final Class<?> clazz = Class.forName(className);
 		final Class<?> clazz = instance.getClass();
 		classContent.append(clazz.getPackage());
 		classContent.append("\n\n");
-//		System.out.println(clazz.getPackage());
-//		System.out.println("");
 		return printClass(instance, "", classContent);
 	}
 
 	private static StringBuilder printClass(final Object instance, final String space, final StringBuilder classContent)
 			throws SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
-		// final Class<?> clazz = Class.forName(className);
 		final Class<?> clazz = instance.getClass();
 		boolean accessible;
 		int modifier;
@@ -104,29 +172,22 @@ public class StringUtils {
 		classContent.append(stringConverter(clazz.getModifiers()));
 		classContent.append("class ");
 		classContent.append(clazz.getSimpleName());
-		// System.out.print(space + stringConverter(clazz.getModifiers()) + "class " +
-		// clazz.getSimpleName());
 		if (Objects.nonNull(superClazz) && !superClazz.getType().getTypeName().equals("java.lang.Object")) {
 			classContent.append(" extends ");
 			classContent.append(superClazz.getType().getTypeName());
-			// System.out.print(" extends " + superClazz.getType().getTypeName());
 		}
 		if (interfaceClazzes.length > 0) {
 			classContent.append(" implements ");
-			// System.out.print(" implements ");
 			for (int i = 0; i < interfaceClazzes.length; i++) {
 				classContent.append(interfaceClazzes[i].getType().getTypeName());
-				// System.out.print(interfaceClazzes[i].getType().getTypeName());
 				if (i != interfaceClazzes.length - 1) {
 					classContent.append(" ,");
-					// System.out.print(" ,");
 				}
 			}
 		}
 		spaceTab += "	";
 		classContent.append(" {");
 		classContent.append("\n");
-		// System.out.println(" {");
 		// フィールドは修飾子、型つける。public以外も表示する
 		for (Field field : clazz.getDeclaredFields()) {
 			accessible = field.isAccessible();
@@ -142,8 +203,6 @@ public class StringUtils {
 				classContent.append(" = ");
 				classContent.append(field.get(instance));
 				classContent.append("\n");
-				// System.out.println(spaceTab + stringConverter(modifier) +
-				// stringConverter(type) + name);
 			} finally {
 				field.setAccessible(accessible);
 			}
@@ -155,7 +214,6 @@ public class StringUtils {
 				method.setAccessible(true);
 				modifier = method.getModifiers();
 				type = method.getGenericReturnType();
-				// exception = method.getGenericExceptionTypes();
 				name = method.getName();
 				Type[] params = method.getGenericParameterTypes();
 				if (params.length < 1) {
@@ -164,53 +222,38 @@ public class StringUtils {
 					classContent.append(stringConverter(type));
 					classContent.append(name);
 					classContent.append("() ");
-					// System.out.print(spaceTab + stringConverter(modifier) + stringConverter(type)
-					// + name + "() ");
 				} else {
 					classContent.append(spaceTab);
 					classContent.append(stringConverter(modifier));
 					classContent.append(stringConverter(type));
 					classContent.append(name);
 					classContent.append("( ");
-					// System.out.print(spaceTab + stringConverter(modifier) + stringConverter(type)
-					// + name + "( ");
 					for (int i = 0; i < params.length; i++) {
 						classContent.append(stringConverter(params[i]));
-						// System.out.print(stringConverter(params[i]));
 						if (i < params.length - 1) {
 							classContent.append(" ,");
-							// System.out.print(" ,");
 						}
 					}
 					classContent.append(") ");
-					// System.out.print(") ");
 				}
 				if (method.getGenericExceptionTypes().length > 1) {
 					classContent.append("throws ");
-					// System.out.print("throws ");
 					Type[] errorClazzes = method.getGenericExceptionTypes();
 					for (int i = 0; i < errorClazzes.length; i++) {
 						classContent.append(errorClazzes[i].getTypeName());
-						// System.out.print(errorClazzes[i].getTypeName());
 						if (i < errorClazzes.length - 1) {
 							classContent.append(" ,");
-							// System.out.print(" ,");
 						}
 					}
 				}
 			} finally {
 				classContent.append("\n");
-				// System.out.println("");
 				method.setAccessible(accessible);
 			}
 		}
 
-//		for (Class<?> innerClazz : clazz.getDeclaredClasses()) {
-//			printClass(innerClazz.getName(), spaceTab, classContent);
-//		}
 		classContent.append(space + "}");
 		classContent.append("\n");
-		// System.out.println(space + "}");
 		return classContent;
 	}
 

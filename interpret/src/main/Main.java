@@ -1,21 +1,13 @@
 package main;
 
+import static main.Autowired.*;
+
 import main.array.member.ConstructorDialogCreatePrintGenerator;
 import main.array.member.ConstructorDialogPrintGenerator;
 import main.array.member.ElementButton;
 import main.array.member.ElementButtonPrintGenerator;
 import main.array.member.SetterPrintGenerator;
 import main.array.type.ArrayCreatePrintGenerator;
-import main.value.member.ConstructorCreatePrintGenerator;
-import main.value.member.ConstructorPanel;
-import main.value.member.ConstructorPrintGenerator;
-import main.value.member.FieldPanel;
-import main.value.member.FieldPrintGenerator;
-import main.value.member.FieldUpdatePrintGenerator;
-import main.value.member.MethodExecutePrintGenerator;
-import main.value.member.MethodPanel;
-import main.value.member.MethodPrintGenerator;
-import static main.Autowired.*;
 
 public class Main {
 	public static void main(String[] args) {
