@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import main.ArgText;
 import main.Argument;
@@ -67,7 +66,7 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 		}
 		for (Argument arg : args) {
 			// this.argsPanel.add(new JTextField(5));
-			this.argsPanel.add(new ArgText(8));
+			this.argsPanel.add(new ArgText().text);
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
@@ -97,9 +96,9 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 		return argsPanel;
 	}
 
-//	public static MethodPanel getInstance() {
-//		return methodPanel;
-//	}
+	//	public static MethodPanel getInstance() {
+	//		return methodPanel;
+	//	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
@@ -111,7 +110,7 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	public void actionPerformed(ActionEvent e) {
 		try {
 			Autowired.methodExecutePrintGenerator.execute();
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException | SecurityException e1) {
 			ErrorHandler.getInstance().execute(e1);
 		}
 	}

@@ -12,6 +12,7 @@ import main.array.type.ArrayCreatePrintGenerator;
 public class Main {
 	public static void main(String[] args) {
 		// オブジェクトの方
+		//final InterpretView interpretView = InterpretView.getInstance();
 		final InterpretView interpretView = InterpretView.getInstance();
 		// final FieldPrintGenerator fieldPrintGenerator =
 		// FieldPrintGenerator.getInstance();
@@ -23,15 +24,15 @@ public class Main {
 		// methodExecutePrintGenerator;
 		// final ConstructorPrintGenerator constructorPrintGenerator =
 		// ConstructorPrintGenerator.getInstance();
-//		final ConstructorCreatePrintGenerator constructorCreatePrintGenerator = ConstructorCreatePrintGenerator
-//				.getInstance();
+		//		final ConstructorCreatePrintGenerator constructorCreatePrintGenerator = ConstructorCreatePrintGenerator
+		//				.getInstance();
 		// 配列の方
-//		final ElementFieldPrintGenerator elementFieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
-//		final ElementFieldUpdatePrintGenerator elementFieldUpdatePrintGenerator = ElementFieldUpdatePrintGenerator
-//				.getInstance();
-//		final ElementMethodPrintGenerator elementMethodPrintGenerator = ElementMethodPrintGenerator.getInstance();
-//		final ElementMethodExecutePrintGenerator elementMethodExecutePrintGenerator = ElementMethodExecutePrintGenerator
-//				.getInstance();
+		//		final ElementFieldPrintGenerator elementFieldPrintGenerator = ElementFieldPrintGenerator.getInstance();
+		//		final ElementFieldUpdatePrintGenerator elementFieldUpdatePrintGenerator = ElementFieldUpdatePrintGenerator
+		//				.getInstance();
+		//		final ElementMethodPrintGenerator elementMethodPrintGenerator = ElementMethodPrintGenerator.getInstance();
+		//		final ElementMethodExecutePrintGenerator elementMethodExecutePrintGenerator = ElementMethodExecutePrintGenerator
+		//				.getInstance();
 		final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = ConstructorDialogPrintGenerator
 				.getInstance();
 		final ConstructorDialogCreatePrintGenerator constructorDialogCreatePrintGenerator = ConstructorDialogCreatePrintGenerator
@@ -45,7 +46,7 @@ public class Main {
 		// final MemberPrintGenerator memberPrintGenerator =
 		// MemberPrintGenerator.getInstance();
 		// Observer
-		final LogTextArea logTextArea = LogTextArea.getInstance();
+		final Observer logTextArea = (Observer) interpretView.logTextArea;
 		final ElementButton elementButton = ElementButton.getInstance();
 		// オブジェクトの方
 		constructorPrintGenerator.addObserver(logTextArea);
@@ -55,10 +56,10 @@ public class Main {
 		fieldPrintGenerator.addObserver(logTextArea);
 		fieldUpdatePrintGenerator.addObserver(logTextArea);
 		// 配列の方
-//		elementFieldPrintGenerator.addObserver(logTextArea);
-//		elementFieldUpdatePrintGenerator.addObserver(logTextArea);
-//		elementMethodPrintGenerator.addObserver(logTextArea);
-//		elementMethodExecutePrintGenerator.addObserver(logTextArea);
+		//		elementFieldPrintGenerator.addObserver(logTextArea);
+		//		elementFieldUpdatePrintGenerator.addObserver(logTextArea);
+		//		elementMethodPrintGenerator.addObserver(logTextArea);
+		//		elementMethodExecutePrintGenerator.addObserver(logTextArea);
 		constructorDialogPrintGenerator.addObserver(logTextArea);
 		constructorDialogCreatePrintGenerator.addObserver(logTextArea);
 		elementButtonPrintGenerator.addObserver(elementButton);

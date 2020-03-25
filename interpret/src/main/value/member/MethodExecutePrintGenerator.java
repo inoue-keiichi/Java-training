@@ -20,7 +20,7 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 	private Object returnValue;
 
 	@Override
-	public void execute() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void execute() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException, SecurityException {
 		// クリア
 		this.methodName = null;
 		this.returnValue = null;

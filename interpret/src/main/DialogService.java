@@ -254,6 +254,10 @@ public class DialogService {
 	}
 
 	private String stringConverter(Object value) {
+		if (Objects.isNull(value)) {
+			return null;
+		}
+
 		if (!value.getClass().isArray()) {
 			return value.toString();
 		}

@@ -1,31 +1,25 @@
 package main.value.member;
 
+import static java.awt.GridBagConstraints.*;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import main.ArgText;
 import main.Argument;
 import main.Autowired;
 import main.ErrorHandler;
-import main.Observer;
-import main.PrintGenerator;
 import main.value.ReflectionService;
-
-import static java.awt.GridBagConstraints.*;
-
-import java.awt.Component;
 
 public class ConstructorPanel extends JPanel implements ActionListener, ItemListener {
 	// private static final ConstructorPanel constructorPanel = new
@@ -59,10 +53,10 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		generateBtn.addActionListener(this);
 	}
 
-//	@Override
-//	public void update(PrintGenerator printGenerator) {
-//
-//	}
+	//	@Override
+	//	public void update(PrintGenerator printGenerator) {
+	//
+	//	}
 
 	public JComboBox<String> getConstructorComboBox() {
 		return constructorComboBox;
@@ -77,7 +71,7 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 			return;
 		}
 		for (Argument arg : args) {
-			this.argsPanel.add(new ArgText(8));
+			this.argsPanel.add(new ArgText().text);
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
@@ -90,9 +84,9 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		this.argsPanel.revalidate();
 	}
 
-//	public static ConstructorPanel getInstance() {
-//		return constructorPanel;
-//	}
+	//	public static ConstructorPanel getInstance() {
+	//		return constructorPanel;
+	//	}
 
 	public JPanel getArgsPanel() {
 		return this.argsPanel;
@@ -103,7 +97,7 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		try {
 			Autowired.constructorCreatePrintGenerator.execute();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e1) {
+				| InvocationTargetException | NoSuchFieldException | SecurityException e1) {
 			ErrorHandler.getInstance().execute(e1);
 		}
 	}

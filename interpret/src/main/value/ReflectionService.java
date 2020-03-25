@@ -1,13 +1,11 @@
 package main.value;
 
-import java.lang.reflect.*;
-import java.rmi.NoSuchObjectException;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import main.Argument;
 import main.StringUtils;
@@ -46,23 +44,92 @@ public class ReflectionService {
 		return constructors;
 	}
 
-	public Object[] validateArguments(final Argument[] args) {
+	public Object validateArgument(final Argument arg)
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Object validatedArg = null;
+		if (arg == null) {
+			return validatedArg;
+		}
+
+		// 入力された引数は、文字列またはインスタンスへのアクセスキーとして利用する
+		if (!StringUtils.macthRegex(arg.value)) {
+			validatedArg = parsePrimitive(arg);
+			return validatedArg;
+		}
+		// ${}の中身を取り出す
+		String key = arg.value.substring(2, arg.value.length() - 1);
+		Object obj;
+		String[] keys;
+		//インスタンスフィールドの場合
+		if (key.matches(".*\\..*")) {
+			keys = key.split("\\.");
+			obj = this.instances.get(keys[0]);
+			Field field = obj.getClass().getDeclaredField(keys[1]);
+			validatedArg = field.get(obj);
+		} else if (key.matches(".*\\[[0-9]*\\](|_)[0-9]*")) {// 配列要素の場合
+			keys = new String[2];
+			keys[0] = key.substring(0, key.indexOf("["))+"[]";
+			keys[1] = key.substring(key.indexOf("[") + 1, key.indexOf("]"));
+			obj = this.instances.get(keys[0]);
+			validatedArg = Array.get(obj, Integer.parseInt(keys[1]));
+		} else {
+			validatedArg = this.instances.get(key);
+		}
+		return validatedArg;
+	}
+
+	public Object[] validateArguments(final Argument[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Object[] validatedArgs = null;
 		if (args == null) {
 			return validatedArgs;
 		}
 		validatedArgs = new Object[args.length];
 		for (int i = 0; i < args.length; i++) {
-			if (StringUtils.macthRegex(args[i].value)) {
-				// ${}の中身を取り出す
-				String key = args[i].value.substring(2, args[i].value.length() - 1);
-				validatedArgs[i] = this.instances.get(key);
-			} else {
-				validatedArgs[i] = parsePrimitive(args[i]);
-			}
+			validatedArgs[i] = validateArgument(args[i]);
 		}
 		return validatedArgs;
 	}
+
+	public Object validateArray(final String arrayKey) {
+		Object instance = this.instances.get(arrayKey.substring(2, arrayKey.length() - 1));
+		if(!instance.getClass().isArray()) {
+			throw new IllegalArgumentException("This is not array.");
+		}
+		return instance;
+	}
+
+	//	public Object[] validateArguments(final Argument[] args) throws NoSuchFieldException, SecurityException {
+	//		Object[] validatedArgs = null;
+	//		if (args == null) {
+	//			return validatedArgs;
+	//		}
+	//		validatedArgs = new Object[args.length];
+	//		for (int i = 0; i < args.length; i++) {
+	//			// 入力された引数は、文字列またはインスタンスへのアクセスキーとして利用する
+	//			if (!StringUtils.macthRegex(args[i].value)) {
+	//				validatedArgs[i] = parsePrimitive(args[i]);
+	//				continue;
+	//			}
+	//			// ${}の中身を取り出す
+	//			String key = args[i].value.substring(2, args[i].value.length() - 1);
+	//			//インスタンスフィールドの場合
+	//			if (key.matches(".")) {
+	//				String[] keys = key.split(".");
+	//				Object obj = this.instances.get(keys[0]);
+	//				Field field = obj.getClass().getDeclaredField(keys[1]);
+	//			} else if (key.matches("\\[\\]")) {// 配列要素の場合
+	//				String[] keys = new String[2];
+	//				keys[0] = key.substring(0, key.indexOf("["));
+	//				keys[1] = key.substring(key.indexOf("[") + 1, key.indexOf("]"));
+	//				Object obj = this.instances.get(keys[0]);
+	//				validatedArgs[i] = Array.get(obj, Integer.parseInt(keys[1]));
+	//			} else {
+	//				validatedArgs[i] = this.instances.get(key);
+	//			}
+	//		}
+	//		return validatedArgs;
+	//
+	//	}
 
 	public Object parsePrimitive(final Argument arg) {
 		// 引数が配列の場合に使う
@@ -300,15 +367,15 @@ public class ReflectionService {
 	}
 
 	public void setElementArgTypes(Object[] instance) {
-//		if (constructorsIndex == -1) {
-//			return;
-//		}
-//		Class<?>[] types = constructors[constructorsIndex].getParameterTypes();
-//		// 引き数なし
-//		if (types.length < 1) {
-//			this.constructorArgments = null;
-//			return;
-//		}
+		//		if (constructorsIndex == -1) {
+		//			return;
+		//		}
+		//		Class<?>[] types = constructors[constructorsIndex].getParameterTypes();
+		//		// 引き数なし
+		//		if (types.length < 1) {
+		//			this.constructorArgments = null;
+		//			return;
+		//		}
 		final Class<?> type = instance.getClass().getComponentType();
 		final int length = Array.getLength(instance);
 		final Argument[] args = new Argument[length];

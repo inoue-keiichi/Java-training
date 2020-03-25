@@ -32,8 +32,8 @@ public class ArrayCreatePrintGenerator extends PrintGenerator {
 
 	/**
 	 * インスタンスに紐づく適切なキーを返します。
-	 * 
-	 * 
+	 *
+	 *
 	 * @param key
 	 * @return
 	 */
@@ -42,11 +42,11 @@ public class ArrayCreatePrintGenerator extends PrintGenerator {
 			return key;
 		}
 		int i = 1;
-		String changedKey = key + "_" + i;
+		String changedKey = key.substring(0, key.indexOf("[")) + "_" + i + "[]";
 		// keyが被らないようにする
 		while (reflectionService.getInstances().containsKey(changedKey)) {
 			i++;
-			changedKey = key + "_" + i;
+			changedKey = key.substring(0, key.indexOf("[")) + "_" + i + "[]";
 		}
 		return changedKey;
 	}

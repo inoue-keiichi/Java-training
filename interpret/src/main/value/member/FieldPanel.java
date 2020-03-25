@@ -11,13 +11,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
+import main.ArgText;
 import main.Autowired;
 import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
-import main.value.ReflectionService;
 
 public class FieldPanel extends JPanel implements Observer, ActionListener {
 	// private static final FieldPanel fieldPanel = new FieldPanel();
@@ -30,7 +29,8 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 	// Autowired.fieldUpdatePrintGenerator;
 
 	private final JComboBox<String> fieldComboBox = new JComboBox<>();
-	private final JTextField fieldText = new JTextField(10);
+	private final ArgText fieldText = new ArgText();
+	//private final JTextField fieldText = new JTextField(10);
 	private final JButton updateBtn = new JButton("Update");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -53,7 +53,7 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		gbc.anchor = EAST;
-		this.add(fieldText, gbc);
+		this.add(fieldText.text, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
@@ -66,7 +66,7 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 	}
 
 	public String getInputText() {
-		return this.fieldText.getText();
+		return this.fieldText.text.getText();
 	}
 
 	@Override
@@ -74,9 +74,9 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 
 	}
 
-//	public static FieldPanel getInstance() {
-//		return fieldPanel;
-//	}
+	//	public static FieldPanel getInstance() {
+	//		return fieldPanel;
+	//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

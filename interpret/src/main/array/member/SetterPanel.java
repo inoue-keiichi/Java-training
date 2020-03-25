@@ -1,14 +1,11 @@
 package main.array.member;
 
+import static java.awt.GridBagConstraints.*;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -18,16 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.ArgText;
-import main.Argument;
+import main.ArrayField;
 import main.ErrorHandler;
-import main.Observer;
-import main.PrintGenerator;
 import main.StringUtils;
 import main.value.ReflectionService;
-
-import static java.awt.GridBagConstraints.*;
-
-import java.awt.Component;
 
 public class SetterPanel extends JPanel implements ActionListener {
 	// private static final SetterPanel setterPanel = new SetterPanel();
@@ -45,13 +36,15 @@ public class SetterPanel extends JPanel implements ActionListener {
 	private SetterPrintGenerator setterPrintGenerator = SetterPrintGenerator.getInstance();
 
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
-	private final ArgText instanceText = new ArgText(8);
-	private final JTextField indexText = new JTextField(8);
-	private final JTextField elementText = new ArgText(8);
+	//	private final ArgText instanceText = new ArgText();
+	private final ArrayField instanceText = new ArrayField();
+	//private final JTextField indexText = new JTextField(8);
+	private final IndexComboBox indexComboBox = new IndexComboBox();
+	private final JTextField elementText = new ArgText().text;
 	private final JButton elementBtn = new ElementButton();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
-	private final JTextField argText = new ArgText(8);
+	private final JTextField argText = new ArgText().text;
 	private final JButton setBtn = new JButton("Set");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -67,7 +60,8 @@ public class SetterPanel extends JPanel implements ActionListener {
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
-		this.add(this.instanceText, gbc);
+		this.instanceText.addObserver(this.indexComboBox);
+		this.add(this.instanceText.text, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = WEST;
@@ -75,7 +69,8 @@ public class SetterPanel extends JPanel implements ActionListener {
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		gbc.anchor = EAST;
-		this.add(this.indexText, gbc);
+		//this.add(this.indexText, gbc);
+		this.add(this.indexComboBox.comboBox, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.anchor = WEST;
@@ -93,40 +88,40 @@ public class SetterPanel extends JPanel implements ActionListener {
 		this.setBtn.addActionListener(this);
 	}
 
-//	@Override
-//	public void update(PrintGenerator printGenerator) {
-//
-//	}
+	//	@Override
+	//	public void update(PrintGenerator printGenerator) {
+	//
+	//	}
 
 	public JComboBox<String> getConstructorComboBox() {
 		return constructorComboBox;
 	}
 
-//	public void createArgumentPanel(final Argument[] args) {
-//		this.argsPanel.removeAll();
-//		if (args == null) {
-//			this.remove(this.argsLabel);
-//			this.repaint();
-//			return;
-//		}
-//		for (Argument arg : args) {
-//			this.argsPanel.add(new JTextField(5));
-//		}
-//		this.gbc.gridx = 2;
-//		this.gbc.gridy = 1;
-//		this.gbc.anchor = WEST;
-//		this.add(this.argsLabel, gbc);
-//		this.gbc.gridx = 3;
-//		this.gbc.gridy = 1;
-//		this.gbc.anchor = EAST;
-//		this.add(this.argsPanel, gbc);
-//		this.repaint();
-//		this.argsPanel.repaint();
-//	}
+	//	public void createArgumentPanel(final Argument[] args) {
+	//		this.argsPanel.removeAll();
+	//		if (args == null) {
+	//			this.remove(this.argsLabel);
+	//			this.repaint();
+	//			return;
+	//		}
+	//		for (Argument arg : args) {
+	//			this.argsPanel.add(new JTextField(5));
+	//		}
+	//		this.gbc.gridx = 2;
+	//		this.gbc.gridy = 1;
+	//		this.gbc.anchor = WEST;
+	//		this.add(this.argsLabel, gbc);
+	//		this.gbc.gridx = 3;
+	//		this.gbc.gridy = 1;
+	//		this.gbc.anchor = EAST;
+	//		this.add(this.argsPanel, gbc);
+	//		this.repaint();
+	//		this.argsPanel.repaint();
+	//	}
 
-//	public static SetterPanel getInstance() {
-//		return setterPanel;
-//	}
+	//	public static SetterPanel getInstance() {
+	//		return setterPanel;
+	//	}
 
 	public JPanel getArgsPanel() {
 		return this.argsPanel;
@@ -134,7 +129,7 @@ public class SetterPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String instanceName = instanceText.getText();
+		String instanceName = instanceText.text.getText();
 		//  instanceのkeyがなかったらエラー
 		if (!StringUtils.macthRegex(instanceName)) {
 			throw new IllegalArgumentException();
@@ -148,15 +143,15 @@ public class SetterPanel extends JPanel implements ActionListener {
 
 		String element = this.elementText.getText();
 		try {
-			setterPrintGenerator.execute(instance, this.indexText.getText(), element);
+			setterPrintGenerator.execute(instance, (int) this.indexComboBox.comboBox.getSelectedItem(), element);
 		} catch (Throwable e1) {
 			ErrorHandler.getInstance().execute(e1);
 		}
 	}
 
-//	@Override
-//	public void itemStateChanged(ItemEvent e) {
-//		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
-//		constructorPanel.createArgumentPanel(reflectionService.getConstructorArgments());
-//	}
+	//	@Override
+	//	public void itemStateChanged(ItemEvent e) {
+	//		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
+	//		constructorPanel.createArgumentPanel(reflectionService.getConstructorArgments());
+	//	}
 }

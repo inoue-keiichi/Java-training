@@ -40,7 +40,7 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 		}
 		// fieldを更新する。
 		Object instance = reflectionService.getNewInstance();
-		field.set(instance, reflectionService.parsePrimitive(reflectionService.getFieldArgument()));
+		field.set(instance, reflectionService.validateArgument(reflectionService.getFieldArgument()));
 		// ログ用にfield名と値を保持。
 		this.fieldName = field.getName();
 		this.fieldValue = field.get(instance);

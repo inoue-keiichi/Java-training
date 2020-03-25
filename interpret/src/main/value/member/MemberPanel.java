@@ -1,5 +1,7 @@
 package main.value.member;
 
+import static main.Autowired.*;
+
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.reflect.Array;
-import java.rmi.NoSuchObjectException;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -18,15 +19,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import main.ArgText;
 import main.Autowired;
 import main.ErrorHandler;
+import main.InstanceField;
 import main.Observer;
 import main.PrintGenerator;
-
-import static main.Autowired.*;
 import main.StringUtils;
-import main.array.member.InstanceField;
 import main.value.ReflectionService;
 
 public class MemberPanel extends JPanel implements ActionListener, ItemListener, Observer {
@@ -102,14 +100,6 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 			throw new NullPointerException(key);
 		}
 
-//		// Arrayだったら要素を取り出す
-//		if (instance instanceof Object[]) {
-//			// System.out.println("This type is Object[].");
-//			// int i = Integer.parseInt(sizeText.getText());
-//			int i = indexComboBox.getItemAt(indexComboBox.getSelectedIndex());
-//			instance = Array.get(instance, i);
-//		}
-
 		reflectionService.setNewInstance(instance);
 		fieldPrintGenerator.execute(instance);
 		methodPrintGenerator.execute(instance);
@@ -145,12 +135,6 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-//		if (i == 1) {
-//			i = 0;
-//			return;
-//		}
-//		i++;
-
 		try {
 			final String item = (String) indexComboBox.getSelectedItem();
 			if (item == "") {

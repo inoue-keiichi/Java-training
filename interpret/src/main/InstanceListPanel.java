@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -28,6 +29,7 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 	private InstanceListPanel() {
 		setLayout(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setPreferredSize(new Dimension(50, 100));
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.addListSelectionListener(new InstanceListSelectionListener());
 		list.setDragEnabled(true);
@@ -58,7 +60,7 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 			if (instanceName != null) {
 				displayBtn.setText(instanceName);
 				//instanceDialog = new InstanceDialog(instance);
-//				instanceDialog.setVisible(true);
+				//				instanceDialog.setVisible(true);
 			}
 		}
 	}

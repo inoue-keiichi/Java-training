@@ -8,8 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.ErrorHandler;
-import main.Observer;
-import main.PrintGenerator;
 import main.array.member.ConstructorDialogPrintGenerator;
 import main.value.ReflectionService;
 
@@ -42,13 +40,6 @@ public class ArrayTypeInputPanel extends JPanel implements ActionListener {
 			arrayCreatePrintGenerator.execute();
 		} catch (ClassNotFoundException e1) {
 			ErrorHandler.getInstance().execute(e1);
-		}
-//		 メンバータブを表示
-		try {
-			// memberPrintGenerator.execute();
-		} catch (Throwable e1) {
-			// TODO 自動生成された catch ブロック
-			e1.printStackTrace();
 		}
 	}
 
