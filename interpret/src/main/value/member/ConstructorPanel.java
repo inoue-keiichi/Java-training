@@ -18,16 +18,12 @@ import javax.swing.JPanel;
 import main.ArgText;
 import main.Argument;
 import main.Autowired;
-import main.ErrorHandler;
 import main.value.ReflectionService;
 
 public class ConstructorPanel extends JPanel implements ActionListener, ItemListener {
-	// private static final ConstructorPanel constructorPanel = new
-	// ConstructorPanel();
-	private ReflectionService reflectionService = ReflectionService.getInstance();
-	// private ConstructorCreatePrintGenerator constructorCreatePrintGenerator =
-	// Autowired.constructorCreatePrintGenerator;
+	//private final ConstructorService constructorService = Autowired.constructorService;
 
+	private ReflectionService reflectionService = Autowired.reflectionService;
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
@@ -52,11 +48,6 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		this.add(generateBtn, gbc);
 		generateBtn.addActionListener(this);
 	}
-
-	//	@Override
-	//	public void update(PrintGenerator printGenerator) {
-	//
-	//	}
 
 	public JComboBox<String> getConstructorComboBox() {
 		return constructorComboBox;
@@ -84,10 +75,6 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		this.argsPanel.revalidate();
 	}
 
-	//	public static ConstructorPanel getInstance() {
-	//		return constructorPanel;
-	//	}
-
 	public JPanel getArgsPanel() {
 		return this.argsPanel;
 	}
@@ -95,17 +82,18 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
+			//constructorService.setConstructorPanel(this);
 			Autowired.constructorCreatePrintGenerator.execute();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchFieldException | SecurityException e1) {
-			ErrorHandler.getInstance().execute(e1);
+			Autowired.errorHandler.execute(e1);
 		}
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		//constructorService.setConstructorComboBox(constructorComboBox);
 		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
 		this.createArgumentPanel(reflectionService.getConstructorArgments());
-		// constructorPanel.createArgumentPanel(reflectionService.getConstructorArgments());
 	}
 }

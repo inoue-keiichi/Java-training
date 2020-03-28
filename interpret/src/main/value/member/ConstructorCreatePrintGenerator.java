@@ -6,22 +6,28 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JTextField;
 
 import main.Autowired;
-import main.InstanceListPanel;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
+/**
+ * You can create a instance by the constuctor. The instance is printed
+ * in the InstanceListPanel and saved in ReflectionService.
+ *
+ * @author inoue-keiichi
+ *
+ */
 public class ConstructorCreatePrintGenerator extends PrintGenerator {
 
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	private String constructorName;
 
 	@Override
 	public void execute()
-			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException, SecurityException {
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchFieldException, SecurityException {
 		// 入力された文字列を保存
 		final ConstructorPanel constructorPanel = Autowired.constructorPanel;
-		constructorPanel.getArgsPanel();
 		int i = 0;
 		for (Component comp : constructorPanel.getArgsPanel().getComponents()) {
 			JTextField field = (JTextField) comp;
@@ -38,10 +44,11 @@ public class ConstructorCreatePrintGenerator extends PrintGenerator {
 		// 同じキーがあれば番号を付加する
 		key = arrangeKey(key);
 		reflectionService.getInstances().put(key, instance);
-		InstanceListPanel.getInstance().addList(key);
+		//instanceListPanel.addList(key);
 		// ログ用
 		this.constructorName = reflectionService.getConstructors()[index].toGenericString();
-		this.notifyObservers();
+		//this.notifyObservers();
+		this.notifyObservers(key);
 
 	}
 

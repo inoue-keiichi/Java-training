@@ -11,16 +11,14 @@ import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class MethodExecutePrintGenerator extends PrintGenerator {
-	// private static final MethodExecutePrintGenerator methodExecutePrintGenerator
-	// = new MethodExecutePrintGenerator();
-
-	private static final ReflectionService reflectionService = ReflectionService.getInstance();
+	private static final ReflectionService reflectionService = Autowired.reflectionService;
 
 	private String methodName;
 	private Object returnValue;
 
 	@Override
-	public void execute() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException, SecurityException {
+	public void execute() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchFieldException, SecurityException {
 		// クリア
 		this.methodName = null;
 		this.returnValue = null;
@@ -56,9 +54,4 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 		}
 		return "Success!\n" + this.methodName + "() => " + this.returnValue.toString() + ".\n";
 	}
-
-//	public static MethodExecutePrintGenerator getInstance() {
-//		return methodExecutePrintGenerator;
-//	}
-
 }

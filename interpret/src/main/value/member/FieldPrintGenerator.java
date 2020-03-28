@@ -1,8 +1,8 @@
 package main.value.member;
 
-import static main.StringUtils.getNameAndParameter;
+import static main.StringUtils.*;
+
 import java.lang.reflect.Field;
-import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,19 +13,11 @@ import javax.swing.JComboBox;
 import main.Autowired;
 import main.ItemComparator;
 import main.PrintGenerator;
-import main.StringUtils;
 import main.value.ReflectionService;
 
 public class FieldPrintGenerator extends PrintGenerator {
-	// private static final FieldPrintGenerator fieldPrintGenerator = new
-	// FieldPrintGenerator();
-
-	private ReflectionService reflectionService = ReflectionService.getInstance();
+	private ReflectionService reflectionService = Autowired.reflectionService;
 	private FieldPanel fieldPanel = Autowired.fieldPanel;
-
-//	private FieldPrintGenerator() {
-//
-//	}
 
 	@Override
 	public void execute() {
@@ -57,10 +49,6 @@ public class FieldPrintGenerator extends PrintGenerator {
 		}
 		this.notifyObservers();
 	}
-
-//	public static FieldPrintGenerator getInstance() {
-//		return fieldPrintGenerator;
-//	}
 
 	@Override
 	public String getLog() {

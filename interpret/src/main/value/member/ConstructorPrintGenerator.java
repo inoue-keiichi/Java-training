@@ -1,22 +1,17 @@
 package main.value.member;
 
-import java.lang.annotation.Annotation;
+import static main.StringUtils.*;
+
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Type;
 
 import javax.swing.JComboBox;
 
 import main.Autowired;
 import main.PrintGenerator;
 import main.value.ReflectionService;
-import static main.StringUtils.*;
 
 public class ConstructorPrintGenerator extends PrintGenerator {
-	// private static final ConstructorPrintGenerator constructorPrintGenerator =
-	// new ConstructorPrintGenerator();
-
-	// private final ConstructorPanel constructorPanel = Autowired.constructorPanel;
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	@Override
 	public void execute() {
@@ -31,10 +26,6 @@ public class ConstructorPrintGenerator extends PrintGenerator {
 		}
 		this.notifyObservers();
 	}
-
-//	public static ConstructorPrintGenerator getInstance() {
-//		return constructorPrintGenerator;
-//	}
 
 	@Override
 	public String getLog() {

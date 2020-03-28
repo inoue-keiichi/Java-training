@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import main.ArgText;
 import main.Argument;
 import main.Autowired;
-import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
 import main.value.ReflectionService;
@@ -26,9 +25,7 @@ import main.value.ReflectionService;
 public class MethodPanel extends JPanel implements Observer, ItemListener, ActionListener {
 	// private static final MethodPanel methodPanel = new MethodPanel();
 
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
-	// private final MethodExecutePrintGenerator methodExecutePrintGenerator =
-	// MethodExecutePrintGenerator.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	private final JComboBox<String> memberComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
@@ -96,10 +93,6 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 		return argsPanel;
 	}
 
-	//	public static MethodPanel getInstance() {
-	//		return methodPanel;
-	//	}
-
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		reflectionService.setMethodArgTypes(memberComboBox.getSelectedIndex());
@@ -110,8 +103,9 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	public void actionPerformed(ActionEvent e) {
 		try {
 			Autowired.methodExecutePrintGenerator.execute();
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException | SecurityException e1) {
-			ErrorHandler.getInstance().execute(e1);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException
+				| SecurityException e1) {
+			Autowired.errorHandler.execute(e1);
 		}
 	}
 }

@@ -7,18 +7,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import main.ErrorHandler;
+import main.Autowired;
 import main.value.ReflectionService;
 
 public class ArrayTypeInputPanel extends JPanel implements ActionListener {
-	private static final ArrayTypeInputPanel arrayTypeInputPanel = new ArrayTypeInputPanel();
-
-	final ReflectionService reflectionService = ReflectionService.getInstance();
-	//final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = ConstructorDialogPrintGenerator
-	//		.getInstance();
-	// final MemberPrintGenerator memberPrintGenerator =
-	// MemberPrintGenerator.getInstance();
-	final ArrayCreatePrintGenerator arrayCreatePrintGenerator = ArrayCreatePrintGenerator.getInstance();
+	final ReflectionService reflectionService = Autowired.reflectionService;
+	final ArrayCreatePrintGenerator arrayCreatePrintGenerator = Autowired.arrayCreatePrintGenerator;
 
 	final JTextField typeText = new JTextField(20);
 	final JTextField sizeText = new JTextField(5);
@@ -38,11 +32,7 @@ public class ArrayTypeInputPanel extends JPanel implements ActionListener {
 		try {
 			arrayCreatePrintGenerator.execute();
 		} catch (ClassNotFoundException e1) {
-			ErrorHandler.getInstance().execute(e1);
+			Autowired.errorHandler.execute(e1);
 		}
-	}
-
-	public static ArrayTypeInputPanel getInstance() {
-		return arrayTypeInputPanel;
 	}
 }

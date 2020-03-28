@@ -11,7 +11,6 @@ import main.Argument;
 import main.StringUtils;
 
 public class ReflectionService {
-	private static ReflectionService reflectionService = new ReflectionService();
 	// objectタイプ
 	private String clazzName;
 	private Constructor<?>[] constructors;
@@ -68,7 +67,7 @@ public class ReflectionService {
 			validatedArg = field.get(obj);
 		} else if (key.matches(".*\\[[0-9]*\\](|_)[0-9]*")) {// 配列要素の場合
 			keys = new String[2];
-			keys[0] = key.substring(0, key.indexOf("["))+"[]";
+			keys[0] = key.substring(0, key.indexOf("[")) + "[]";
 			keys[1] = key.substring(key.indexOf("[") + 1, key.indexOf("]"));
 			obj = this.instances.get(keys[0]);
 			validatedArg = Array.get(obj, Integer.parseInt(keys[1]));
@@ -78,7 +77,8 @@ public class ReflectionService {
 		return validatedArg;
 	}
 
-	public Object[] validateArguments(final Argument[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public Object[] validateArguments(final Argument[] args)
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Object[] validatedArgs = null;
 		if (args == null) {
 			return validatedArgs;
@@ -92,44 +92,11 @@ public class ReflectionService {
 
 	public Object validateArray(final String arrayKey) {
 		Object instance = this.instances.get(arrayKey.substring(2, arrayKey.length() - 1));
-		if(!instance.getClass().isArray()) {
+		if (!instance.getClass().isArray()) {
 			throw new IllegalArgumentException("This is not array.");
 		}
 		return instance;
 	}
-
-	//	public Object[] validateArguments(final Argument[] args) throws NoSuchFieldException, SecurityException {
-	//		Object[] validatedArgs = null;
-	//		if (args == null) {
-	//			return validatedArgs;
-	//		}
-	//		validatedArgs = new Object[args.length];
-	//		for (int i = 0; i < args.length; i++) {
-	//			// 入力された引数は、文字列またはインスタンスへのアクセスキーとして利用する
-	//			if (!StringUtils.macthRegex(args[i].value)) {
-	//				validatedArgs[i] = parsePrimitive(args[i]);
-	//				continue;
-	//			}
-	//			// ${}の中身を取り出す
-	//			String key = args[i].value.substring(2, args[i].value.length() - 1);
-	//			//インスタンスフィールドの場合
-	//			if (key.matches(".")) {
-	//				String[] keys = key.split(".");
-	//				Object obj = this.instances.get(keys[0]);
-	//				Field field = obj.getClass().getDeclaredField(keys[1]);
-	//			} else if (key.matches("\\[\\]")) {// 配列要素の場合
-	//				String[] keys = new String[2];
-	//				keys[0] = key.substring(0, key.indexOf("["));
-	//				keys[1] = key.substring(key.indexOf("[") + 1, key.indexOf("]"));
-	//				Object obj = this.instances.get(keys[0]);
-	//				validatedArgs[i] = Array.get(obj, Integer.parseInt(keys[1]));
-	//			} else {
-	//				validatedArgs[i] = this.instances.get(key);
-	//			}
-	//		}
-	//		return validatedArgs;
-	//
-	//	}
 
 	public Object parsePrimitive(final Argument arg) {
 		// 引数が配列の場合に使う
@@ -308,10 +275,6 @@ public class ReflectionService {
 		this.fieldArgument = arg;
 	}
 
-	public static ReflectionService getInstance() {
-		return reflectionService;
-	}
-
 	public String getClazzName() {
 		return this.clazzName;
 	}
@@ -346,7 +309,6 @@ public class ReflectionService {
 			Object[] arrayInstance = (Object[]) this.instance;
 			arrayInstance[i] = element;
 
-			// arrayInstance[i] = this.instance;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new ArrayIndexOutOfBoundsException();
 		} catch (NumberFormatException e) {
@@ -367,15 +329,6 @@ public class ReflectionService {
 	}
 
 	public void setElementArgTypes(Object[] instance) {
-		//		if (constructorsIndex == -1) {
-		//			return;
-		//		}
-		//		Class<?>[] types = constructors[constructorsIndex].getParameterTypes();
-		//		// 引き数なし
-		//		if (types.length < 1) {
-		//			this.constructorArgments = null;
-		//			return;
-		//		}
 		final Class<?> type = instance.getClass().getComponentType();
 		final int length = Array.getLength(instance);
 		final Argument[] args = new Argument[length];

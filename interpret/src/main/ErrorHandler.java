@@ -3,7 +3,7 @@ package main;
 import java.lang.reflect.InvocationTargetException;
 
 public class ErrorHandler extends PrintGenerator {
-	private static final ErrorHandler errorHandler = new ErrorHandler();
+	//private static final ErrorHandler errorHandler = new ErrorHandler();
 	Throwable exception;
 
 	@Override
@@ -30,9 +30,4 @@ public class ErrorHandler extends PrintGenerator {
 		sb.append("\n");
 		return sb.toString();
 	}
-
-	public static ErrorHandler getInstance() {
-		return errorHandler;
-	}
-
 }

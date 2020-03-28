@@ -14,11 +14,12 @@ import javax.swing.JTextArea;
 
 import main.value.ReflectionService;
 import main.value.member.InstancePanel;
+import main.value.member.MemberPanel;
 
 public class InterpretView extends JFrame implements Observer, Runnable, ItemListener {
 	//private static final InterpretView interpretView = new InterpretView();
 
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	private final Thread thread = new Thread(this);
 	// ログテキストエリア
@@ -46,7 +47,7 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
-		pane.add(Autowired.memberPanel, gbc);
+		pane.add(new MemberPanel(), gbc);
 		// ログパネル
 		this.logTextArea.setEditable(false);
 		final JScrollPane scrollpane = new JScrollPane(logTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -62,10 +63,6 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 		this.setVisible(true);
 		this.setMinimumSize(new Dimension(1200, 450));
 	}
-
-	//		public static final InterpretView getInstance() {
-	//			return interpretView;
-	//		}
 
 	@Override
 	public void run() {

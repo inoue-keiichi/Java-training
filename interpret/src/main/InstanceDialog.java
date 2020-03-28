@@ -19,7 +19,7 @@ public class InstanceDialog extends JDialog implements Observer {
 	private JTable fieldTable;
 	private JTable methodTable;
 	private DialogService dialogService = new DialogService();
-	private ReflectionService reflectionService = ReflectionService.getInstance();
+	private ReflectionService reflectionService = Autowired.reflectionService;
 
 	public InstanceDialog(final String instanceName) {
 		Object instance = reflectionService.getInstances().get(instanceName);
@@ -60,8 +60,6 @@ public class InstanceDialog extends JDialog implements Observer {
 		fieldTable.setTransferHandler(new Handler());
 		methodTable = memberTables[1];
 		methodTable.setAlignmentX(Component.LEFT_ALIGNMENT);
-		//methodTable.setDragEnabled(true);
-		//methodTable.setTransferHandler(new Handler());
 
 		JPanel panel = new JPanel();
 		BoxLayout layout = new BoxLayout(panel, BoxLayout.Y_AXIS);
@@ -132,10 +130,5 @@ public class InstanceDialog extends JDialog implements Observer {
 		public int getSourceActions(JComponent c) {
 			return COPY;
 		}
-
-		//		@Override
-		//		protected void exportDone(JComponent c, Transferable data, int action) {
-		//
-		//	    }
 	}
 }

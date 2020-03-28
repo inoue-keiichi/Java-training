@@ -1,7 +1,8 @@
 package main.value.member;
 
-import java.lang.reflect.*;
-import java.rmi.NoSuchObjectException;
+import static main.StringUtils.*;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,15 +13,10 @@ import javax.swing.JComboBox;
 import main.Autowired;
 import main.ItemComparator;
 import main.PrintGenerator;
-import main.StringUtils;
 import main.value.ReflectionService;
-import static main.StringUtils.*;
 
 public class MethodPrintGenerator extends PrintGenerator {
-	// private static final MethodPrintGenerator methodPrintGenerator = new
-	// MethodPrintGenerator();
-
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 	private final MethodPanel memberPanel = Autowired.methodPanel;
 
 	@Override
@@ -30,7 +26,6 @@ public class MethodPrintGenerator extends PrintGenerator {
 	public void execute(final Object instance) {
 		// インスタンスからMethodを取得してプルダウンに表示する
 		final JComboBox<String> methodComboBox = memberPanel.getMethodCoomboBox();
-		// Method[] methods = instance.getClass().getDeclaredMethods();
 		List<Method> methodList = Arrays.asList(instance.getClass().getDeclaredMethods());
 		methodList = new ArrayList<Method>(methodList);
 		// superClassのmethodがあれば追加する
@@ -54,10 +49,6 @@ public class MethodPrintGenerator extends PrintGenerator {
 		}
 		this.notifyObservers();
 	}
-
-//	public static MethodPrintGenerator getInstance() {
-//		return methodPrintGenerator;
-//	}
 
 	@Override
 	public String getLog() {

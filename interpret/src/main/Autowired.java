@@ -1,6 +1,7 @@
 package main;
 
-import main.array.member.SetterPanel;
+import main.array.member.SetterPrintGenerator;
+import main.array.type.ArrayCreatePrintGenerator;
 import main.value.ReflectionService;
 import main.value.member.ConstructorCreatePrintGenerator;
 import main.value.member.ConstructorPanel;
@@ -8,35 +9,55 @@ import main.value.member.ConstructorPrintGenerator;
 import main.value.member.FieldPanel;
 import main.value.member.FieldPrintGenerator;
 import main.value.member.FieldUpdatePrintGenerator;
-import main.value.member.MemberPanel;
 import main.value.member.MethodExecutePrintGenerator;
 import main.value.member.MethodPanel;
 import main.value.member.MethodPrintGenerator;
-import main.value.member.ObjectMemberTab;
-import main.value.type.ObjectTypeInputPanel;
 
 public class Autowired {
 	// Panel
-	public static final ObjectMemberTab objectMemberTab = new ObjectMemberTab();
-	public static final MethodPanel methodPanel = new MethodPanel();
-	public static final FieldPanel fieldPanel = new FieldPanel();
-	public static final ConstructorPanel constructorPanel = new ConstructorPanel();
-	public static final SetterPanel setterPanel = new SetterPanel();
-	public static final ObjectTypeInputPanel objectTypeInputPanel = new ObjectTypeInputPanel();
-	public static final MemberPanel memberPanel = new MemberPanel();
+	public static MethodPanel methodPanel;
+	public static FieldPanel fieldPanel;
+	public static ConstructorPanel constructorPanel;
 
 	// Generator
-	public static final FieldPrintGenerator fieldPrintGenerator = new FieldPrintGenerator();
-	public static final FieldUpdatePrintGenerator fieldUpdatePrintGenerator = new FieldUpdatePrintGenerator();
-	public static final MethodPrintGenerator methodPrintGenerator = new MethodPrintGenerator();
-	public static final MethodExecutePrintGenerator methodExecutePrintGenerator = new MethodExecutePrintGenerator();
-	public static final ConstructorCreatePrintGenerator constructorCreatePrintGenerator = new ConstructorCreatePrintGenerator();
-	public static final ConstructorPrintGenerator constructorPrintGenerator = new ConstructorPrintGenerator();
-	public static final InstanceField instanceField = new InstanceField();
-	//public static final SetterPrintGenerator setterPrintGenerator = new SetterPrintGenerator();
+	public static FieldPrintGenerator fieldPrintGenerator;
+	public static FieldUpdatePrintGenerator fieldUpdatePrintGenerator;
+	public static MethodPrintGenerator methodPrintGenerator;
+	public static MethodExecutePrintGenerator methodExecutePrintGenerator;
+	public static ConstructorCreatePrintGenerator constructorCreatePrintGenerator;
+	public static ArrayCreatePrintGenerator arrayCreatePrintGenerator;
+	public static ConstructorPrintGenerator constructorPrintGenerator;
+	//public static InstanceField instanceField;
+	public static SetterPrintGenerator setterPrintGenerator;
 
-	public static final ReflectionService reflectionService = new ReflectionService();
+	//Other
+	public static ErrorHandler errorHandler;
+	//Service
+	public static ReflectionService reflectionService;
+	//public static ConstructorService constructorService;
 
+	public Autowired() {
+		//Service
+		reflectionService = new ReflectionService();
+		//constructorService = new ConstructorService();
 
+		// Panel
+		methodPanel = new MethodPanel();
+		fieldPanel = new FieldPanel();
+		constructorPanel = new ConstructorPanel();
 
+		// Generator
+		fieldPrintGenerator = new FieldPrintGenerator();
+		fieldUpdatePrintGenerator = new FieldUpdatePrintGenerator();
+		methodPrintGenerator = new MethodPrintGenerator();
+		methodExecutePrintGenerator = new MethodExecutePrintGenerator();
+		constructorCreatePrintGenerator = new ConstructorCreatePrintGenerator();
+		arrayCreatePrintGenerator = new ArrayCreatePrintGenerator();
+		constructorPrintGenerator = new ConstructorPrintGenerator();
+		//instanceField = new InstanceField();
+		setterPrintGenerator = new SetterPrintGenerator();
+
+		//Other
+		errorHandler = new ErrorHandler();
+	}
 }

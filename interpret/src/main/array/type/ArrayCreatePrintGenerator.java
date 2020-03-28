@@ -2,16 +2,12 @@ package main.array.type;
 
 import java.lang.reflect.Array;
 
-import main.InstanceListPanel;
+import main.Autowired;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class ArrayCreatePrintGenerator extends PrintGenerator {
-	private static final ArrayCreatePrintGenerator arrayCreatePrintGenerator = new ArrayCreatePrintGenerator();
-
-	// private final ArrayReflectionService reflectionService =
-	// ArrayReflectionService.getInstance();
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	@Override
 	public void execute() throws ClassNotFoundException {
@@ -19,15 +15,13 @@ public class ArrayCreatePrintGenerator extends PrintGenerator {
 		final int arraySize = reflectionService.getArraySize();
 		final Class<?> clazz = Class.forName(referenceName);
 		final Object[] arrayInstance = (Object[]) Array.newInstance(clazz, arraySize);
-		// reflectionService.setArrayNewInstance(arrayInstance);
 
 		// 作ったインスタンスは再利用できるようにする
 		String key = arrayInstance.getClass().getSimpleName();
 		// 同じキーがあれば番号を付加する
 		key = arrangeKey(key);
 		reflectionService.getInstances().put(key, arrayInstance);
-		InstanceListPanel.getInstance().addList(key);
-		this.notifyObservers();
+		this.notifyObservers(key);
 	}
 
 	/**
@@ -55,9 +49,4 @@ public class ArrayCreatePrintGenerator extends PrintGenerator {
 	public String getLog() {
 		return "Success!\nAn array was created whose type was " + reflectionService.getReferenceName() + ".\n";
 	}
-
-	public static ArrayCreatePrintGenerator getInstance() {
-		return arrayCreatePrintGenerator;
-	}
-
 }

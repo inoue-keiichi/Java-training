@@ -14,23 +14,12 @@ import javax.swing.JPanel;
 
 import main.ArgText;
 import main.Autowired;
-import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
 
 public class FieldPanel extends JPanel implements Observer, ActionListener {
-	// private static final FieldPanel fieldPanel = new FieldPanel();
-
-	// private final ReflectionService reflectionService =
-	// ReflectionService.getInstance();
-	// private final FieldPrintGenerator fieldPrintGenerator =
-	// Autowired.fieldPrintGenerator;
-	// private final FieldUpdatePrintGenerator fieldUpdatePrintGenerator =
-	// Autowired.fieldUpdatePrintGenerator;
-
 	private final JComboBox<String> fieldComboBox = new JComboBox<>();
 	private final ArgText fieldText = new ArgText();
-	//private final JTextField fieldText = new JTextField(10);
 	private final JButton updateBtn = new JButton("Update");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -74,16 +63,12 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 
 	}
 
-	//	public static FieldPanel getInstance() {
-	//		return fieldPanel;
-	//	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
 			Autowired.fieldUpdatePrintGenerator.execute();
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			ErrorHandler.getInstance().execute(e1);
+			Autowired.errorHandler.execute(e1);
 		}
 	}
 }

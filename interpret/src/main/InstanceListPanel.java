@@ -15,10 +15,10 @@ import javax.swing.event.ListSelectionListener;
 
 import main.value.ReflectionService;
 
-public class InstanceListPanel extends JPanel implements ActionListener {
-	private static final InstanceListPanel instanceListPanel = new InstanceListPanel();
+public class InstanceListPanel extends JPanel implements Observer, ActionListener {
+	//private static final InstanceListPanel instanceListPanel = new InstanceListPanel();
 
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	private final DefaultListModel<String> model = new DefaultListModel<>();
 	private final JList<String> list = new JList<>(model);
@@ -26,7 +26,10 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 	private final JButton displayBtn = new JButton();
 	private InstanceDialog instanceDialog;
 
-	private InstanceListPanel() {
+	public InstanceListPanel() {
+		Autowired.constructorCreatePrintGenerator.addObserver(this);
+		Autowired.arrayCreatePrintGenerator.addObserver(this);
+
 		setLayout(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(list);
 		scrollPane.setPreferredSize(new Dimension(50, 100));
@@ -41,10 +44,6 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 
 	public void addList(final String str) {
 		model.addElement(str);
-	}
-
-	public static InstanceListPanel getInstance() {
-		return instanceListPanel;
 	}
 
 	private class InstanceListSelectionListener implements ListSelectionListener {
@@ -71,5 +70,10 @@ public class InstanceListPanel extends JPanel implements ActionListener {
 		//Object instance = reflectionService.getInstances().get(displayBtn.getText());
 		instanceDialog = new InstanceDialog(displayBtn.getText());
 		instanceDialog.setVisible(true);
+	}
+
+	@Override
+	public void update(PrintGenerator printGenerator) {
+		model.addElement((String) printGenerator.getItem());
 	}
 }

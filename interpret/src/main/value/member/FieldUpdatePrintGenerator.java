@@ -8,9 +8,7 @@ import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class FieldUpdatePrintGenerator extends PrintGenerator {
-	//private static final FieldUpdatePrintGenerator fieldUpdatePrintGenerator = new FieldUpdatePrintGenerator();
-
-	private final ReflectionService reflectionService = ReflectionService.getInstance();
+	private final ReflectionService reflectionService = Autowired.reflectionService;
 
 	private String fieldName;
 	private Object fieldValue;
@@ -56,8 +54,4 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 		}
 		return "Success!\n" + fieldName + " = " + fieldValue.toString() + ".\n";
 	}
-
-//	public static FieldUpdatePrintGenerator getInstance() {
-//		return fieldUpdatePrintGenerator;
-//	}
 }
