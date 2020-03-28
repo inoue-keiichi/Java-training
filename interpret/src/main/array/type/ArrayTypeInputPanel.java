@@ -8,15 +8,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.ErrorHandler;
-import main.array.member.ConstructorDialogPrintGenerator;
 import main.value.ReflectionService;
 
 public class ArrayTypeInputPanel extends JPanel implements ActionListener {
 	private static final ArrayTypeInputPanel arrayTypeInputPanel = new ArrayTypeInputPanel();
 
 	final ReflectionService reflectionService = ReflectionService.getInstance();
-	final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = ConstructorDialogPrintGenerator
-			.getInstance();
+	//final ConstructorDialogPrintGenerator constructorDialogPrintGenerator = ConstructorDialogPrintGenerator
+	//		.getInstance();
 	// final MemberPrintGenerator memberPrintGenerator =
 	// MemberPrintGenerator.getInstance();
 	final ArrayCreatePrintGenerator arrayCreatePrintGenerator = ArrayCreatePrintGenerator.getInstance();

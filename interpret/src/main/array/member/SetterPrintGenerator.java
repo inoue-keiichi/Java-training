@@ -15,9 +15,9 @@ public class SetterPrintGenerator extends PrintGenerator {
 
 	private int index;
 
-	private SetterPrintGenerator() {
+		private SetterPrintGenerator() {
 
-	}
+		}
 
 	@Override
 	public void execute() throws Throwable {

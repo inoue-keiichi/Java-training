@@ -31,9 +31,10 @@ public class SetterPanel extends JPanel implements ActionListener {
 	// ElementMethodPrintGenerator.getInstance();
 	// private ElementFieldPrintGenerator fieldPrintGenerator =
 	// ElementFieldPrintGenerator.getInstance();
-	private ConstructorDialogCreatePrintGenerator constructorDialogCreatePrintGenerator = ConstructorDialogCreatePrintGenerator
-			.getInstance();
+	//	private ConstructorDialogCreatePrintGenerator constructorDialogCreatePrintGenerator = ConstructorDialogCreatePrintGenerator
+	//			.getInstance();
 	private SetterPrintGenerator setterPrintGenerator = SetterPrintGenerator.getInstance();
+	//private SetterPrintGenerator setterPrintGenerator = Autowired.setterPrintGenerator;
 
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
 	//	private final ArgText instanceText = new ArgText();
@@ -41,7 +42,7 @@ public class SetterPanel extends JPanel implements ActionListener {
 	//private final JTextField indexText = new JTextField(8);
 	private final IndexComboBox indexComboBox = new IndexComboBox();
 	private final JTextField elementText = new ArgText().text;
-	private final JButton elementBtn = new ElementButton();
+	//private final JButton elementBtn = new ElementButton();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
 	private final JTextField argText = new ArgText().text;
@@ -80,7 +81,7 @@ public class SetterPanel extends JPanel implements ActionListener {
 		gbc.anchor = EAST;
 		this.add(elementText, gbc);
 		// this.add(this.elementBtn, gbc);
-		this.elementBtn.addActionListener(new ConstructorListener());
+		//this.elementBtn.addActionListener(new ConstructorListener());
 		gbc.gridx = 1;
 		gbc.gridy = 3;
 		gbc.anchor = EAST;

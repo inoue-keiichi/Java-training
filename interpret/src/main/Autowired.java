@@ -33,6 +33,10 @@ public class Autowired {
 	public static final ConstructorCreatePrintGenerator constructorCreatePrintGenerator = new ConstructorCreatePrintGenerator();
 	public static final ConstructorPrintGenerator constructorPrintGenerator = new ConstructorPrintGenerator();
 	public static final InstanceField instanceField = new InstanceField();
+	//public static final SetterPrintGenerator setterPrintGenerator = new SetterPrintGenerator();
 
 	public static final ReflectionService reflectionService = new ReflectionService();
+
+
+
 }

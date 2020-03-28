@@ -16,7 +16,7 @@ import main.value.ReflectionService;
 import main.value.member.InstancePanel;
 
 public class InterpretView extends JFrame implements Observer, Runnable, ItemListener {
-	private static final InterpretView interpretView = new InterpretView();
+	//private static final InterpretView interpretView = new InterpretView();
 
 	private final ReflectionService reflectionService = ReflectionService.getInstance();
 
@@ -63,9 +63,9 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 		this.setMinimumSize(new Dimension(1200, 450));
 	}
 
-		public static final InterpretView getInstance() {
-			return interpretView;
-		}
+	//		public static final InterpretView getInstance() {
+	//			return interpretView;
+	//		}
 
 	@Override
 	public void run() {
