@@ -3,12 +3,19 @@ package main.value.member;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import main.Autowired;
+import main.AutowiredService;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class FieldUpdatePrintGenerator extends PrintGenerator {
-	private final ReflectionService reflectionService = Autowired.reflectionService;
+	private final ReflectionService reflectionService;
+	private final MemberService memberService;
+
+	public FieldUpdatePrintGenerator(AutowiredService service) {
+		super(service);
+		reflectionService = service.reflectionService;
+		memberService = service.memberService;
+	}
 
 	private String fieldName;
 	private Object fieldValue;
@@ -20,7 +27,7 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 		this.fieldName = null;
 		this.fieldValue = null;
 		// text取得
-		final FieldPanel fieldPanel = Autowired.memberService.getFieldPanel();
+		final FieldPanel fieldPanel = memberService.getFieldPanel();
 		// fieldと値を保存
 		reflectionService.setFieldArgments(fieldPanel.getInputText(), fieldPanel.getFieldComboBox().getSelectedIndex());
 		// fieldを更新するための準備。

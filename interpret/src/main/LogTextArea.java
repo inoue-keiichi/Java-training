@@ -1,33 +1,30 @@
 package main;
 
-import static main.Autowired.*;
-
 import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
-public class LogTextArea extends JTextArea implements Observer {
+public class LogTextArea extends View implements Observer {
 	private final StringBuilder logStrBuilder = new StringBuilder();
 
-	public LogTextArea(final int i, final int j) {
-		super(i, j);
-
+	public LogTextArea(final AutowiredGenerator generator, AutowiredService service) {
+		super(new JTextArea(10, 40), generator, service);
 		// オブジェクトの方
-		constructorPrintGenerator.addObserver(this);
-		constructorCreatePrintGenerator.addObserver(this);
-		methodPrintGenerator.addObserver(this);
-		methodExecutePrintGenerator.addObserver(this);
-		fieldPrintGenerator.addObserver(this);
-		fieldUpdatePrintGenerator.addObserver(this);
+		this.generator.constructorPrintGenerator.addObserver(this);
+		this.generator.constructorCreatePrintGenerator.addObserver(this);
+		this.generator.methodPrintGenerator.addObserver(this);
+		this.generator.methodExecutePrintGenerator.addObserver(this);
+		this.generator.fieldPrintGenerator.addObserver(this);
+		this.generator.fieldUpdatePrintGenerator.addObserver(this);
 		// 配列の方
-		setterPrintGenerator.addObserver(this);
-		arrayCreatePrintGenerator.addObserver(this);
+		this.generator.setterPrintGenerator.addObserver(this);
+		this.generator.arrayCreatePrintGenerator.addObserver(this);
 		// エラー
-		errorHandler.addObserver(this);
+		this.generator.errorHandler.addObserver(this);
 	}
 
 	@Override
 	public void update(PrintGenerator printGenerator) {
 		this.logStrBuilder.append(printGenerator.getLog());
-		this.setText(this.logStrBuilder.toString());
-
+		((JTextComponent) this.view).setText(this.logStrBuilder.toString());
 	}
 }

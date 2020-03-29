@@ -1,7 +1,6 @@
 package main.value.member;
 
 import static java.awt.GridBagConstraints.*;
-import static main.Autowired.*;
 import static main.StringUtils.*;
 
 import java.awt.GridBagConstraints;
@@ -20,43 +19,57 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.ArgText;
-import main.Autowired;
+import main.AutowiredGenerator;
+import main.AutowiredService;
+import main.ErrorHandler;
 import main.ItemComparator;
 import main.Observer;
 import main.PrintGenerator;
+import main.View;
+import main.value.ReflectionService;
 
-public class FieldPanel extends JPanel implements Observer, ActionListener {
+public class FieldPanel extends View implements Observer, ActionListener {
 	private final JComboBox<String> fieldComboBox = new JComboBox<>();
 	private final ArgText fieldText = new ArgText();
 	private final JButton updateBtn = new JButton("Update");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
-	public FieldPanel() {
-		Autowired.fieldPrintGenerator.addObserver(this);
+	private final ReflectionService reflectionService;
+	private final MemberService memberService;
+	private final ErrorHandler errorHandler;
+	private final FieldUpdatePrintGenerator fieldUpdatePrintGenerator;
+
+	public FieldPanel(final AutowiredGenerator generator, final AutowiredService service) {
+		super(new JPanel(), generator, service);
+		this.reflectionService = this.service.reflectionService;
+		this.memberService = this.service.memberService;
+		this.errorHandler = this.generator.errorHandler;
+		this.fieldUpdatePrintGenerator = this.generator.fieldUpdatePrintGenerator;
+		this.generator.fieldPrintGenerator.addObserver(this);
 
 		GridBagLayout layout = new GridBagLayout();
-		this.setLayout(layout);
+		this.view.setLayout(layout);
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Field: "), gbc);
+		this.view.add(new JLabel("Field: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
-		this.add(fieldComboBox, gbc);
+		this.view.add(fieldComboBox, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Value: "), gbc);
+		this.view.add(new JLabel("Value: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		gbc.anchor = EAST;
-		this.add(fieldText.text, gbc);
+		this.view.add(fieldText.text, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
-		this.add(updateBtn, gbc);
+		this.view.add(updateBtn, gbc);
 		updateBtn.addActionListener(this);
 	}
 
@@ -99,10 +112,10 @@ public class FieldPanel extends JPanel implements Observer, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			Autowired.memberService.setFieldPanel(this);
-			Autowired.fieldUpdatePrintGenerator.execute();
+			memberService.setFieldPanel(this);
+			fieldUpdatePrintGenerator.execute();
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			Autowired.errorHandler.execute(e1);
+			errorHandler.execute(e1);
 		}
 	}
 }

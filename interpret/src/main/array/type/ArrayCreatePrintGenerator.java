@@ -2,12 +2,17 @@ package main.array.type;
 
 import java.lang.reflect.Array;
 
-import main.Autowired;
+import main.AutowiredService;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class ArrayCreatePrintGenerator extends PrintGenerator {
-	private final ReflectionService reflectionService = Autowired.reflectionService;
+	private final ReflectionService reflectionService;
+
+	public ArrayCreatePrintGenerator(AutowiredService service) {
+		super(service);
+		reflectionService = service.reflectionService;
+	}
 
 	@Override
 	public void execute() throws ClassNotFoundException {

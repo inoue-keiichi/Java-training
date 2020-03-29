@@ -18,9 +18,12 @@ import main.value.member.MemberPanel;
 public class InterpretView extends JFrame implements Runnable, ItemListener {
 	private final Thread thread = new Thread(this);
 	// ログテキストエリア
-	public final JTextArea logTextArea = new LogTextArea(10, 40);
+	public final View logTextArea;
 
 	public InterpretView() {
+		AutowiredService service = new AutowiredService();
+		AutowiredGenerator generator = new AutowiredGenerator(service);
+
 		final JPanel pane = new JPanel(new GridBagLayout());
 		this.setContentPane(pane);
 		// InterpretViewの配置決め
@@ -34,17 +37,19 @@ public class InterpretView extends JFrame implements Runnable, ItemListener {
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
-		pane.add(new InstancePanel(), gbc);
+		pane.add(new InstancePanel(generator, service).view, gbc);
 		// メンバタブ
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
-		pane.add(new MemberPanel(), gbc);
+		pane.add(new MemberPanel(generator, service).view, gbc);
 		// ログパネル
-		this.logTextArea.setEditable(false);
-		final JScrollPane scrollpane = new JScrollPane(logTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		this.logTextArea = new LogTextArea(generator, service);
+		JTextArea textArea = (JTextArea) this.logTextArea.view;
+		textArea.setEditable(false);
+		final JScrollPane scrollpane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		gbc.gridx = 0;
 		gbc.gridy = 1;

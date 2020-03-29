@@ -19,39 +19,51 @@ import javax.swing.JPanel;
 
 import main.ArgText;
 import main.Argument;
-import main.Autowired;
+import main.AutowiredGenerator;
+import main.AutowiredService;
+import main.ErrorHandler;
 import main.Observer;
 import main.PrintGenerator;
+import main.View;
 import main.value.ReflectionService;
 
-public class ConstructorPanel extends JPanel implements ActionListener, ItemListener, Observer {
-	private final ConstructorService constructorService = Autowired.constructorService;
+public class ConstructorPanel extends View implements ActionListener, ItemListener, Observer {
+	private final ConstructorService constructorService;
+	private final ReflectionService reflectionService;
+	private final ConstructorPrintGenerator constructorPrintGenerator;
+	private final ConstructorCreatePrintGenerator constructorCreatePrintGenerator;
+	private final ErrorHandler errorHandler;
 
-	private ReflectionService reflectionService = Autowired.reflectionService;
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
 	private final JButton generateBtn = new JButton("Create");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
-	public ConstructorPanel() {
-		Autowired.constructorPrintGenerator.addObserver(this);
+	public ConstructorPanel(final AutowiredGenerator generator, final AutowiredService service) {
+		super(new JPanel(), generator, service);
+		this.constructorService = this.service.constructorService;
+		this.reflectionService = this.service.reflectionService;
+		this.constructorCreatePrintGenerator = this.generator.constructorCreatePrintGenerator;
+		this.errorHandler = this.generator.errorHandler;
+		this.constructorPrintGenerator = this.generator.constructorPrintGenerator;
+		this.constructorPrintGenerator.addObserver(this);
 
 		// レイアウト
-		this.setLayout(new GridBagLayout());
+		this.view.setLayout(new GridBagLayout());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Constructor: "), gbc);
+		this.view.add(new JLabel("Constructor: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
-		this.add(constructorComboBox, gbc);
+		this.view.add(constructorComboBox, gbc);
 		constructorComboBox.addItemListener(this);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
-		this.add(generateBtn, gbc);
+		this.view.add(generateBtn, gbc);
 		generateBtn.addActionListener(this);
 	}
 
@@ -61,10 +73,10 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 
 	public void createArgumentPanel(final Argument[] args) {
 		this.argsPanel.removeAll();
-		this.revalidate();
+		this.view.revalidate();
 		if (args == null) {
-			this.remove(this.argsLabel);
-			this.repaint();
+			this.view.remove(this.argsLabel);
+			this.view.repaint();
 			return;
 		}
 		for (Argument arg : args) {
@@ -73,11 +85,11 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
 		this.gbc.anchor = WEST;
-		this.add(this.argsLabel, gbc);
+		this.view.add(this.argsLabel, gbc);
 		this.gbc.gridx = 1;
 		this.gbc.gridy = 1;
 		this.gbc.anchor = EAST;
-		this.add(this.argsPanel, gbc);
+		this.view.add(this.argsPanel, gbc);
 		this.argsPanel.revalidate();
 	}
 
@@ -89,16 +101,15 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 	public void actionPerformed(ActionEvent e) {
 		try {
 			constructorService.setConstructorPanel(this);
-			Autowired.constructorCreatePrintGenerator.execute();
+			this.constructorCreatePrintGenerator.execute();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchFieldException | SecurityException e1) {
-			Autowired.errorHandler.execute(e1);
+			this.errorHandler.execute(e1);
 		}
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		//constructorService.setConstructorComboBox(constructorComboBox);
 		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
 		this.createArgumentPanel(reflectionService.getConstructorArgments());
 	}

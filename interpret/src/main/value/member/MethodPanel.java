@@ -23,16 +23,22 @@ import javax.swing.JPanel;
 
 import main.ArgText;
 import main.Argument;
-import main.Autowired;
+import main.AutowiredGenerator;
+import main.AutowiredService;
+import main.ErrorHandler;
 import main.ItemComparator;
 import main.Observer;
 import main.PrintGenerator;
+import main.View;
 import main.value.ReflectionService;
 
-public class MethodPanel extends JPanel implements Observer, ItemListener, ActionListener {
+public class MethodPanel extends View implements Observer, ItemListener, ActionListener {
 	// private static final MethodPanel methodPanel = new MethodPanel();
 
-	private final ReflectionService reflectionService = Autowired.reflectionService;
+	private final ReflectionService reflectionService;
+	private final MemberService memberService;
+	private final MethodExecutePrintGenerator methodExecutePrintGenerator;
+	private final ErrorHandler errorHandler;
 
 	private final JComboBox<String> methodComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
@@ -41,47 +47,52 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	private final GridBagConstraints gbc = new GridBagConstraints();
 	private final GridBagLayout layout = new GridBagLayout();
 
-	public MethodPanel() {
-		Autowired.methodPrintGenerator.addObserver(this);
+	public MethodPanel(final AutowiredGenerator generator, final AutowiredService service) {
+		super(new JPanel(), generator, service);
+		this.reflectionService = this.service.reflectionService;
+		this.memberService = this.service.memberService;
+		this.methodExecutePrintGenerator = this.generator.methodExecutePrintGenerator;
+		this.errorHandler = this.generator.errorHandler;
 
-		this.setLayout(layout);
+		this.generator.methodPrintGenerator.addObserver(this);
+
+		this.view.setLayout(layout);
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Method: "), gbc);
+		this.view.add(new JLabel("Method: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
-		this.add(methodComboBox, gbc);
+		this.view.add(methodComboBox, gbc);
 		methodComboBox.addItemListener(this);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
-		this.add(executeBtn, gbc);
+		this.view.add(executeBtn, gbc);
 		executeBtn.addActionListener(this);
 	}
 
 	public void createArgumentPanel(final Argument[] args) {
 		this.argsPanel.removeAll();
-		this.revalidate();
+		this.view.revalidate();
 		if (args == null) {
-			this.remove(this.argsLabel);
-			this.repaint();
+			this.view.remove(this.argsLabel);
+			this.view.repaint();
 			return;
 		}
 		for (Argument arg : args) {
-			// this.argsPanel.add(new JTextField(5));
 			this.argsPanel.add(new ArgText().text);
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
 		this.gbc.anchor = WEST;
-		this.add(this.argsLabel, gbc);
+		this.view.add(this.argsLabel, gbc);
 		this.gbc.gridx = 1;
 		this.gbc.gridy = 1;
 		this.gbc.anchor = EAST;
-		this.add(this.argsPanel, gbc);
+		this.view.add(this.argsPanel, gbc);
 		this.argsPanel.revalidate();
 	}
 
@@ -91,7 +102,7 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 
 	@Override
 	public void update(PrintGenerator printGenerator) {
-		final Object instance = Autowired.memberService.getInstance();
+		final Object instance = memberService.getInstance();
 
 		// インスタンスからMethodを取得してプルダウンに表示する
 		final JComboBox<String> methodComboBox = this.methodComboBox;
@@ -135,11 +146,11 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			Autowired.memberService.setMethodPanel(this);
-			Autowired.methodExecutePrintGenerator.execute();
+			memberService.setMethodPanel(this);
+			methodExecutePrintGenerator.execute();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException
 				| SecurityException e1) {
-			Autowired.errorHandler.execute(e1);
+			errorHandler.execute(e1);
 		}
 	}
 }

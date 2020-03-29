@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JTextField;
 
-import main.Autowired;
+import main.AutowiredService;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
@@ -17,8 +17,14 @@ import main.value.ReflectionService;
  *
  */
 public class ConstructorCreatePrintGenerator extends PrintGenerator {
+	private final ReflectionService reflectionService;
+	private final ConstructorService constructorService;
 
-	private final ReflectionService reflectionService = Autowired.reflectionService;
+	public ConstructorCreatePrintGenerator(AutowiredService service) {
+		super(service);
+		reflectionService = service.reflectionService;
+		constructorService = service.constructorService;
+	}
 
 	private String constructorName;
 
@@ -27,7 +33,7 @@ public class ConstructorCreatePrintGenerator extends PrintGenerator {
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 			NoSuchFieldException, SecurityException {
 		// 入力された文字列を保存
-		final ConstructorPanel constructorPanel = Autowired.constructorService.getconstructorPanel();
+		final ConstructorPanel constructorPanel = constructorService.getconstructorPanel();
 		int i = 0;
 		for (Component comp : constructorPanel.getArgsPanel().getComponents()) {
 			JTextField field = (JTextField) comp;

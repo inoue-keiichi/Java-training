@@ -1,11 +1,16 @@
 package main.value.member;
 
-import main.Autowired;
+import main.AutowiredService;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class ConstructorPrintGenerator extends PrintGenerator {
-	private final ReflectionService reflectionService = Autowired.reflectionService;
+	private final ReflectionService reflectionService;
+
+	public ConstructorPrintGenerator(AutowiredService service) {
+		super(service);
+		reflectionService = service.reflectionService;
+	}
 
 	@Override
 	public void execute() {

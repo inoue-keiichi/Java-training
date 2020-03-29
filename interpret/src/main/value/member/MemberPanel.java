@@ -1,7 +1,5 @@
 package main.value.member;
 
-import static main.Autowired.*;
-
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,38 +17,60 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import main.Autowired;
+import main.AutowiredGenerator;
+import main.AutowiredService;
+import main.ErrorHandler;
 import main.InstanceField;
 import main.Observer;
 import main.PrintGenerator;
 import main.StringUtils;
+import main.View;
 import main.value.ReflectionService;
 
-public class MemberPanel extends JPanel implements ActionListener, ItemListener, Observer {
+public class MemberPanel extends View implements ActionListener, ItemListener, Observer {
 
-	final ReflectionService reflectionService = Autowired.reflectionService;
+	final ReflectionService reflectionService;
+	final MemberService memberService;
+	final FieldPrintGenerator fieldPrintGenerator;
+	final MethodPrintGenerator methodPrintGenerator;
+	final ErrorHandler errorHandler;
 
-	final InstanceField instanceField = new InstanceField();
-	final JTextField instanceText = instanceField.text;
-	final JPanel typeCardPanel = new JPanel();
-	final JComboBox<String> indexComboBox = new JComboBox<>();
-	final CardLayout typeCardLayout = new CardLayout();
-	final JButton setBtn = new JButton("Set");
-	final JTabbedPane memberTab = new JTabbedPane();
+	final InstanceField instanceField;
+	final JTextField instanceText;
+	final JPanel typeCardPanel;
+	final JComboBox<String> indexComboBox;
+	final CardLayout typeCardLayout;
+	final JButton setBtn;
+	final JTabbedPane memberTab;
 
 	private static int i = 0;
 
-	public MemberPanel() {
+	public MemberPanel(final AutowiredGenerator generator, final AutowiredService service) {
+		super(new JPanel(), generator, service);
+		this.reflectionService = this.service.reflectionService;
+		this.memberService = this.service.memberService;
+		this.fieldPrintGenerator = this.generator.fieldPrintGenerator;
+		this.methodPrintGenerator = this.generator.methodPrintGenerator;
+		this.errorHandler = this.generator.errorHandler;
+
+		this.instanceField = new InstanceField(this.service);
+		this.instanceText = this.instanceField.text;
+		this.typeCardPanel = new JPanel();
+		this.indexComboBox = new JComboBox<>();
+		this.typeCardLayout = new CardLayout();
+		this.setBtn = new JButton("Set");
+		this.memberTab = new JTabbedPane();
+
 		// observer追加
 		instanceField.addObserver(this);
-		this.memberTab.addTab("field", new FieldPanel());
-		this.memberTab.addTab("method", new MethodPanel());
+		this.memberTab.addTab("field", new FieldPanel(this.generator, this.service).view);
+		this.memberTab.addTab("method", new MethodPanel(this.generator, this.service).view);
 		// CardLayout定義
 		this.typeCardPanel.setLayout(this.typeCardLayout);
 		this.typeCardPanel.add(setBtn, "Object");
 		this.typeCardPanel.add(indexComboBox, "Array");
 		// レイアウト定義
-		this.setLayout(new GridBagLayout());
+		this.view.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
@@ -58,22 +78,22 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.EAST;
-		this.add(new JLabel("Instance: "), gbc);
+		this.view.add(new JLabel("Instance: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
-		this.add(instanceText, gbc);
+		this.view.add(instanceText, gbc);
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.WEST;
 		setBtn.addActionListener(this);
 		indexComboBox.addItemListener(this);
-		this.add(this.typeCardPanel, gbc);
+		this.view.add(this.typeCardPanel, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 3;
 		gbc.anchor = GridBagConstraints.CENTER;
-		this.add(memberTab, gbc);
+		this.view.add(memberTab, gbc);
 	}
 
 	@Override
@@ -92,7 +112,7 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 
 		//delete it later.
 		reflectionService.setNewInstance(instance);
-		Autowired.memberService.setInstance(instance);
+		memberService.setInstance(instance);
 		fieldPrintGenerator.execute(instance);
 		methodPrintGenerator.execute(instance);
 	}
@@ -151,7 +171,7 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 			}
 			//delete it later.
 			reflectionService.setNewInstance(instance);
-			Autowired.memberService.setInstance(instance);
+			memberService.setInstance(instance);
 			fieldPrintGenerator.execute(instance);
 			methodPrintGenerator.execute(instance);
 		} catch (IllegalArgumentException | NullPointerException e1) {

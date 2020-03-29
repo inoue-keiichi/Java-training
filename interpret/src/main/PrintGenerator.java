@@ -6,10 +6,11 @@ import java.util.List;
 public abstract class PrintGenerator {
 	private List<Observer> observers = new ArrayList<>();
 	private Object item;
+	protected AutowiredService service;
 
-	//	public PrintGenerator(final Object service) {
-	//
-	//	}
+	public PrintGenerator(final AutowiredService service) {
+		this.service = service;
+	}
 
 	public void addObserver(final Observer observer) {
 		observers.add(observer);

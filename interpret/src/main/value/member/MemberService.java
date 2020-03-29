@@ -1,6 +1,8 @@
 package main.value.member;
 
-public class MemberService {
+import main.Service;
+
+public class MemberService implements Service {
 	private Object instance;
 	private FieldPanel fieldPanel;
 	private MethodPanel methodPanel;

@@ -3,6 +3,10 @@ package main;
 import java.lang.reflect.InvocationTargetException;
 
 public class ErrorHandler extends PrintGenerator {
+	public ErrorHandler(AutowiredService service) {
+		super(service);
+	}
+
 	Throwable exception;
 
 	@Override

@@ -1,6 +1,8 @@
 package main.value.member;
 
-public class ConstructorService {
+import main.Service;
+
+public class ConstructorService implements Service {
 	private ConstructorPanel constructorPanel;
 
 	public ConstructorPanel getconstructorPanel() {

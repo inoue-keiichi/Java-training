@@ -15,18 +15,21 @@ import javax.swing.TransferHandler;
 
 import main.value.ReflectionService;
 
-public class InstanceDialog extends JDialog implements Observer {
+public class InstanceDialog extends View implements Observer {
 	private JTable fieldTable;
 	private JTable methodTable;
-	private DialogService dialogService = new DialogService();
-	private ReflectionService reflectionService = Autowired.reflectionService;
+	private final DialogService dialogService = new DialogService();
+	private final ReflectionService reflectionService;
 
-	public InstanceDialog(final String instanceName) {
+	public InstanceDialog(final String instanceName, final AutowiredGenerator generator,
+			final AutowiredService service) {
+		super(new JDialog(), generator, service);
+		reflectionService = service.reflectionService;
 		Object instance = reflectionService.getInstances().get(instanceName);
 		dialogService.setInstance(instance);
 		dialogService.setInstanceName(instanceName);
-		this.setSize(500, 400);
-		this.add(createMemberInfoPanel(instance));
+		view.setSize(500, 400);
+		view.add(createMemberInfoPanel(instance));
 	}
 
 	private JPanel createMemberInfoPanel(final Object instance) {

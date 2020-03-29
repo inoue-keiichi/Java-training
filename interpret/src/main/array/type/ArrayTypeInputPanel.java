@@ -7,21 +7,30 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import main.Autowired;
+import main.AutowiredGenerator;
+import main.AutowiredService;
+import main.ErrorHandler;
+import main.View;
 import main.value.ReflectionService;
 
-public class ArrayTypeInputPanel extends JPanel implements ActionListener {
-	final ReflectionService reflectionService = Autowired.reflectionService;
-	final ArrayCreatePrintGenerator arrayCreatePrintGenerator = Autowired.arrayCreatePrintGenerator;
+public class ArrayTypeInputPanel extends View implements ActionListener {
+	final ReflectionService reflectionService;
+	final ArrayCreatePrintGenerator arrayCreatePrintGenerator;
+	final ErrorHandler errorHandler;
 
 	final JTextField typeText = new JTextField(20);
 	final JTextField sizeText = new JTextField(5);
 	final JButton setBtn = new JButton("Create");
 
-	public ArrayTypeInputPanel() {
-		this.add(typeText);
-		this.add(sizeText);
-		this.add(setBtn);
+	public ArrayTypeInputPanel(final AutowiredGenerator generator, final AutowiredService service) {
+		super(new JPanel(), generator, service);
+		this.reflectionService = this.service.reflectionService;
+		this.arrayCreatePrintGenerator = this.generator.arrayCreatePrintGenerator;
+		this.errorHandler = this.generator.errorHandler;
+
+		this.view.add(typeText);
+		this.view.add(sizeText);
+		this.view.add(setBtn);
 		setBtn.addActionListener(this);
 	}
 
@@ -32,7 +41,7 @@ public class ArrayTypeInputPanel extends JPanel implements ActionListener {
 		try {
 			arrayCreatePrintGenerator.execute();
 		} catch (ClassNotFoundException e1) {
-			Autowired.errorHandler.execute(e1);
+			errorHandler.execute(e1);
 		}
 	}
 }

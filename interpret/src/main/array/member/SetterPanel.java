@@ -16,16 +16,20 @@ import javax.swing.JTextField;
 
 import main.ArgText;
 import main.ArrayField;
-import main.Autowired;
+import main.AutowiredGenerator;
+import main.AutowiredService;
+import main.ErrorHandler;
 import main.StringUtils;
+import main.View;
 import main.value.ReflectionService;
 
-public class SetterPanel extends JPanel implements ActionListener {
-	private ReflectionService reflectionService = Autowired.reflectionService;
-	private SetterPrintGenerator setterPrintGenerator = Autowired.setterPrintGenerator;
+public class SetterPanel extends View implements ActionListener {
+	private ReflectionService reflectionService;
+	private SetterPrintGenerator setterPrintGenerator;
+	private ErrorHandler errorHandler;
 
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
-	private final ArrayField instanceText = new ArrayField();
+	private final ArrayField instanceText = new ArrayField(this.service);
 	private final IndexComboBox indexComboBox = new IndexComboBox();
 	private final JTextField elementText = new ArgText().text;
 	private final JLabel argsLabel = new JLabel("Argument: ");
@@ -34,38 +38,43 @@ public class SetterPanel extends JPanel implements ActionListener {
 	private final JButton setBtn = new JButton("Set");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
-	public SetterPanel() {
+	public SetterPanel(AutowiredGenerator generator, AutowiredService service) {
+		super(new JPanel(), generator, service);
+		reflectionService = this.service.reflectionService;
+		setterPrintGenerator = this.generator.setterPrintGenerator;
+		errorHandler = this.generator.errorHandler;
+
 		// レイアウト
-		this.setLayout(new GridBagLayout());
+		this.view.setLayout(new GridBagLayout());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Array: "), gbc);
+		this.view.add(new JLabel("Array: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
 		this.instanceText.addObserver(this.indexComboBox);
-		this.add(this.instanceText.text, gbc);
+		this.view.add(this.instanceText.text, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Index: "), gbc);
+		this.view.add(new JLabel("Index: "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		gbc.anchor = EAST;
-		this.add(this.indexComboBox.comboBox, gbc);
+		this.view.add(this.indexComboBox.comboBox, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.anchor = WEST;
-		this.add(new JLabel("Element : "), gbc);
+		this.view.add(new JLabel("Element : "), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
-		this.add(elementText, gbc);
+		this.view.add(elementText, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 3;
 		gbc.anchor = EAST;
-		this.add(this.setBtn, gbc);
+		this.view.add(this.setBtn, gbc);
 		this.setBtn.addActionListener(this);
 	}
 
@@ -95,7 +104,7 @@ public class SetterPanel extends JPanel implements ActionListener {
 		try {
 			setterPrintGenerator.execute(instance, (int) this.indexComboBox.comboBox.getSelectedItem(), element);
 		} catch (Throwable e1) {
-			Autowired.errorHandler.execute(e1);
+			errorHandler.execute(e1);
 		}
 	}
 }

@@ -8,14 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import main.Argument;
+import main.Service;
 import main.StringUtils;
 
-public class ReflectionService {
+public class ReflectionService implements Service {
 	// objectタイプ
 	private String clazzName;
 	private Constructor<?>[] constructors;
 	private Argument[] constructorArgments = null;
-	private Argument[][] constructorArgs = null;
+	//private Argument[][] constructorArgs = null;
 	private Argument[] methodArguments = null;
 	private Argument fieldArgument;
 	private Map<String, Object> instances = new HashMap<>();

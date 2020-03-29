@@ -6,15 +6,23 @@ import java.lang.reflect.Method;
 
 import javax.swing.JTextField;
 
-import main.Autowired;
+import main.AutowiredService;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class MethodExecutePrintGenerator extends PrintGenerator {
-	private static final ReflectionService reflectionService = Autowired.reflectionService;
+	private final ReflectionService reflectionService;
+	private final MemberService memberService;
 
 	private String methodName;
 	private Object returnValue;
+
+	public MethodExecutePrintGenerator(AutowiredService servise) {
+		super(servise);
+		reflectionService = this.service.reflectionService;
+		memberService = this.service.memberService;
+
+	}
 
 	@Override
 	public void execute() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
@@ -23,7 +31,7 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 		this.methodName = null;
 		this.returnValue = null;
 
-		final MethodPanel methodPanel = Autowired.memberService.getMethodPanel();
+		final MethodPanel methodPanel = memberService.getMethodPanel();
 		// メソッドの引数を保存する。
 		int i = 0;
 		for (Component comp : methodPanel.getArgsPanel().getComponents()) {

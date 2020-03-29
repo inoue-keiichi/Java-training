@@ -13,12 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import main.value.ReflectionService;
-
-public class InstanceListPanel extends JPanel implements Observer, ActionListener {
+public class InstanceListPanel extends View implements Observer, ActionListener {
 	//private static final InstanceListPanel instanceListPanel = new InstanceListPanel();
-
-	private final ReflectionService reflectionService = Autowired.reflectionService;
+	//private final ReflectionService reflectionService;
 
 	private final DefaultListModel<String> model = new DefaultListModel<>();
 	private final JList<String> list = new JList<>(model);
@@ -26,11 +23,13 @@ public class InstanceListPanel extends JPanel implements Observer, ActionListene
 	private final JButton displayBtn = new JButton();
 	private InstanceDialog instanceDialog;
 
-	public InstanceListPanel() {
-		Autowired.constructorCreatePrintGenerator.addObserver(this);
-		Autowired.arrayCreatePrintGenerator.addObserver(this);
+	public InstanceListPanel(final AutowiredGenerator generator, final AutowiredService service) {
+		super(new JPanel(), generator, service);
+		generator.constructorCreatePrintGenerator.addObserver(this);
+		generator.arrayCreatePrintGenerator.addObserver(this);
+		//reflectionService = service.reflectionService;
 
-		setLayout(new BorderLayout());
+		view.setLayout(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(list);
 		scrollPane.setPreferredSize(new Dimension(50, 100));
 		list.setLayoutOrientation(JList.VERTICAL);
@@ -38,8 +37,8 @@ public class InstanceListPanel extends JPanel implements Observer, ActionListene
 		list.setDragEnabled(true);
 		displayBtn.addActionListener(this);
 		// list.setTransferHandler(new TransferHandler("text"));
-		add(scrollPane, BorderLayout.CENTER);
-		add(displayBtn, BorderLayout.SOUTH);
+		view.add(scrollPane, BorderLayout.CENTER);
+		view.add(displayBtn, BorderLayout.SOUTH);
 	}
 
 	public void addList(final String str) {
@@ -68,8 +67,8 @@ public class InstanceListPanel extends JPanel implements Observer, ActionListene
 	public void actionPerformed(ActionEvent e) {
 		//buttonに表示されているインスタンスを表示する
 		//Object instance = reflectionService.getInstances().get(displayBtn.getText());
-		instanceDialog = new InstanceDialog(displayBtn.getText());
-		instanceDialog.setVisible(true);
+		instanceDialog = new InstanceDialog(displayBtn.getText(), generator, service);
+		instanceDialog.view.setVisible(true);
 	}
 
 	@Override

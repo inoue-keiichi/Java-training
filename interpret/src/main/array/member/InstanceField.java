@@ -6,17 +6,19 @@ import java.awt.datatransfer.Transferable;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 
-import main.Autowired;
+import main.AutowiredService;
 import main.PrintGenerator;
 import main.value.ReflectionService;
 
 public class InstanceField extends PrintGenerator {
-	final ReflectionService reflectionService = Autowired.reflectionService;
+	final ReflectionService reflectionService;
 
 	public final JTextField text;
 	private String key = null;
 
-	public InstanceField() {
+	public InstanceField(AutowiredService service) {
+		super(service);
+		reflectionService = service.reflectionService;
 		text = new JTextField(8);
 		text.setTransferHandler(new InstanceTransferHandler(text));
 	}

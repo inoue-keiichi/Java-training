@@ -8,12 +8,14 @@ import javax.swing.TransferHandler;
 import main.value.ReflectionService;
 
 public class ArrayField extends PrintGenerator {
-	final ReflectionService reflectionService = Autowired.reflectionService;
+	private final ReflectionService reflectionService;
 
 	public final JTextField text;
 	private final TransferHandler transferHandler;
 
-	public ArrayField() {
+	public ArrayField(final AutowiredService service) {
+		super(service);
+		reflectionService = service.reflectionService;
 		text = new JTextField(8);
 		transferHandler = new InstanceTransferHandler(this, text);
 		text.setTransferHandler(transferHandler);
