@@ -23,7 +23,7 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 		this.methodName = null;
 		this.returnValue = null;
 
-		final MethodPanel methodPanel = Autowired.methodPanel;
+		final MethodPanel methodPanel = Autowired.memberService.getMethodPanel();
 		// メソッドの引数を保存する。
 		int i = 0;
 		for (Component comp : methodPanel.getArgsPanel().getComponents()) {

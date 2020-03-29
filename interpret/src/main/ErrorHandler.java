@@ -3,7 +3,6 @@ package main;
 import java.lang.reflect.InvocationTargetException;
 
 public class ErrorHandler extends PrintGenerator {
-	//private static final ErrorHandler errorHandler = new ErrorHandler();
 	Throwable exception;
 
 	@Override

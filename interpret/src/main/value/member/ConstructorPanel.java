@@ -1,6 +1,7 @@
 package main.value.member;
 
 import static java.awt.GridBagConstraints.*;
+import static main.StringUtils.*;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
@@ -18,10 +20,12 @@ import javax.swing.JPanel;
 import main.ArgText;
 import main.Argument;
 import main.Autowired;
+import main.Observer;
+import main.PrintGenerator;
 import main.value.ReflectionService;
 
-public class ConstructorPanel extends JPanel implements ActionListener, ItemListener {
-	//private final ConstructorService constructorService = Autowired.constructorService;
+public class ConstructorPanel extends JPanel implements ActionListener, ItemListener, Observer {
+	private final ConstructorService constructorService = Autowired.constructorService;
 
 	private ReflectionService reflectionService = Autowired.reflectionService;
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
@@ -31,6 +35,8 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
 	public ConstructorPanel() {
+		Autowired.constructorPrintGenerator.addObserver(this);
+
 		// レイアウト
 		this.setLayout(new GridBagLayout());
 		gbc.gridx = 0;
@@ -82,7 +88,7 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			//constructorService.setConstructorPanel(this);
+			constructorService.setConstructorPanel(this);
 			Autowired.constructorCreatePrintGenerator.execute();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchFieldException | SecurityException e1) {
@@ -95,5 +101,18 @@ public class ConstructorPanel extends JPanel implements ActionListener, ItemList
 		//constructorService.setConstructorComboBox(constructorComboBox);
 		reflectionService.setArgTypes(constructorComboBox.getSelectedIndex());
 		this.createArgumentPanel(reflectionService.getConstructorArgments());
+	}
+
+	@Override
+	public void update(PrintGenerator printGenerator) {
+		final Constructor<?>[] constructors = reflectionService.getConstructor();
+		final JComboBox<String> constructorComboBox = this.getConstructorComboBox();
+		// 元々あった選択肢を削除
+		if (constructorComboBox.getItemCount() > 0) {
+			constructorComboBox.removeAllItems();
+		}
+		for (Constructor<?> constructor : constructors) {
+			constructorComboBox.addItem(getNameAndParameter(constructor));
+		}
 	}
 }

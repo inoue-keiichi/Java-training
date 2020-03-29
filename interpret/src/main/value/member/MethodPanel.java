@@ -1,6 +1,7 @@
 package main.value.member;
 
 import static java.awt.GridBagConstraints.*;
+import static main.StringUtils.*;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,6 +24,7 @@ import javax.swing.JPanel;
 import main.ArgText;
 import main.Argument;
 import main.Autowired;
+import main.ItemComparator;
 import main.Observer;
 import main.PrintGenerator;
 import main.value.ReflectionService;
@@ -27,7 +34,7 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 
 	private final ReflectionService reflectionService = Autowired.reflectionService;
 
-	private final JComboBox<String> memberComboBox = new JComboBox<>();
+	private final JComboBox<String> methodComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
 	private final JButton executeBtn = new JButton("Execute");
@@ -35,6 +42,8 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 	private final GridBagLayout layout = new GridBagLayout();
 
 	public MethodPanel() {
+		Autowired.methodPrintGenerator.addObserver(this);
+
 		this.setLayout(layout);
 
 		gbc.gridx = 0;
@@ -44,8 +53,8 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
-		this.add(memberComboBox, gbc);
-		memberComboBox.addItemListener(this);
+		this.add(methodComboBox, gbc);
+		methodComboBox.addItemListener(this);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
@@ -76,17 +85,41 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 		this.argsPanel.revalidate();
 	}
 
-	public JComboBox<String> getMethodCoomboBox() {
-		return memberComboBox;
-	}
+	//	public JComboBox<String> getMethodCoomboBox() {
+	//		return methodComboBox;
+	//	}
 
 	@Override
 	public void update(PrintGenerator printGenerator) {
+		final Object instance = Autowired.memberService.getInstance();
 
+		// インスタンスからMethodを取得してプルダウンに表示する
+		final JComboBox<String> methodComboBox = this.methodComboBox;
+		List<Method> methodList = Arrays.asList(instance.getClass().getDeclaredMethods());
+		methodList = new ArrayList<Method>(methodList);
+		// superClassのmethodがあれば追加する
+		Class<?> clazz = instance.getClass();
+		while (Objects.nonNull(clazz) && !Objects.equals(clazz.getName(), Object.class.getName())) {
+			clazz = clazz.getSuperclass();
+			Method[] superMethods = clazz.getDeclaredMethods();
+			List<Method> superMethodList = Arrays.asList(superMethods);
+			methodList.addAll(superMethodList);
+		}
+		methodList.sort(new ItemComparator());
+		// methodを保存
+		Method[] methods = methodList.toArray(new Method[methodList.size()]);
+		reflectionService.setMethods(methods);
+		// 元々あった選択肢を削除
+		if (methodComboBox.getItemCount() != 0) {
+			methodComboBox.removeAllItems();
+		}
+		for (Method method : methods) {
+			methodComboBox.addItem(getNameAndParameter(method));
+		}
 	}
 
 	public JComboBox<String> getMethodComboBox() {
-		return memberComboBox;
+		return methodComboBox;
 	}
 
 	public JPanel getArgsPanel() {
@@ -95,13 +128,14 @@ public class MethodPanel extends JPanel implements Observer, ItemListener, Actio
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		reflectionService.setMethodArgTypes(memberComboBox.getSelectedIndex());
+		reflectionService.setMethodArgTypes(methodComboBox.getSelectedIndex());
 		createArgumentPanel(reflectionService.getMethodArgments());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
+			Autowired.memberService.setMethodPanel(this);
 			Autowired.methodExecutePrintGenerator.execute();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException
 				| SecurityException e1) {

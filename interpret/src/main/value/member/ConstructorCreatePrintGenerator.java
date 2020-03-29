@@ -27,7 +27,7 @@ public class ConstructorCreatePrintGenerator extends PrintGenerator {
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 			NoSuchFieldException, SecurityException {
 		// 入力された文字列を保存
-		final ConstructorPanel constructorPanel = Autowired.constructorPanel;
+		final ConstructorPanel constructorPanel = Autowired.constructorService.getconstructorPanel();
 		int i = 0;
 		for (Component comp : constructorPanel.getArgsPanel().getComponents()) {
 			JTextField field = (JTextField) comp;
@@ -44,12 +44,9 @@ public class ConstructorCreatePrintGenerator extends PrintGenerator {
 		// 同じキーがあれば番号を付加する
 		key = arrangeKey(key);
 		reflectionService.getInstances().put(key, instance);
-		//instanceListPanel.addList(key);
 		// ログ用
 		this.constructorName = reflectionService.getConstructors()[index].toGenericString();
-		//this.notifyObservers();
 		this.notifyObservers(key);
-
 	}
 
 	/**

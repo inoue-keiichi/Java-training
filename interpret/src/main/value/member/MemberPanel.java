@@ -43,8 +43,8 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 	public MemberPanel() {
 		// observer追加
 		instanceField.addObserver(this);
-		this.memberTab.addTab("field", Autowired.fieldPanel);
-		this.memberTab.addTab("method", Autowired.methodPanel);
+		this.memberTab.addTab("field", new FieldPanel());
+		this.memberTab.addTab("method", new MethodPanel());
 		// CardLayout定義
 		this.typeCardPanel.setLayout(this.typeCardLayout);
 		this.typeCardPanel.add(setBtn, "Object");
@@ -90,7 +90,9 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 			throw new NullPointerException(key);
 		}
 
+		//delete it later.
 		reflectionService.setNewInstance(instance);
+		Autowired.memberService.setInstance(instance);
 		fieldPrintGenerator.execute(instance);
 		methodPrintGenerator.execute(instance);
 	}
@@ -147,7 +149,9 @@ public class MemberPanel extends JPanel implements ActionListener, ItemListener,
 			if (Objects.isNull(instance)) {
 				throw new NullPointerException(key);
 			}
+			//delete it later.
 			reflectionService.setNewInstance(instance);
+			Autowired.memberService.setInstance(instance);
 			fieldPrintGenerator.execute(instance);
 			methodPrintGenerator.execute(instance);
 		} catch (IllegalArgumentException | NullPointerException e1) {

@@ -20,7 +20,7 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 		this.fieldName = null;
 		this.fieldValue = null;
 		// text取得
-		final FieldPanel fieldPanel = Autowired.fieldPanel;
+		final FieldPanel fieldPanel = Autowired.memberService.getFieldPanel();
 		// fieldと値を保存
 		reflectionService.setFieldArgments(fieldPanel.getInputText(), fieldPanel.getFieldComboBox().getSelectedIndex());
 		// fieldを更新するための準備。

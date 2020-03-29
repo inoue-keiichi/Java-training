@@ -9,7 +9,6 @@ import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import main.Autowired;
 import main.InstanceListPanel;
 import main.array.member.SetterPanel;
 import main.array.type.ArrayTypeInputPanel;
@@ -33,7 +32,8 @@ public class InstancePanel extends JPanel implements ItemListener {
 		typeInputCardPanel.add(new ArrayTypeInputPanel(), "Array");
 		// instanceCreateCardのレイアウト定義
 		instanceCreateCardPanel.setLayout(instanceCreateCardLayout);
-		instanceCreateCardPanel.add(Autowired.constructorPanel, "Type");
+		//instanceCreateCardPanel.add(Autowired.constructorPanel, "Type");
+		instanceCreateCardPanel.add(new ConstructorPanel(), "Type");
 		instanceCreateCardPanel.add(new SetterPanel(), "Array");
 		// InterpretViewの配置決め
 		GridBagConstraints gbc = new GridBagConstraints();

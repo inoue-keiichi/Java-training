@@ -12,15 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import main.value.ReflectionService;
 import main.value.member.InstancePanel;
 import main.value.member.MemberPanel;
 
-public class InterpretView extends JFrame implements Observer, Runnable, ItemListener {
-	//private static final InterpretView interpretView = new InterpretView();
-
-	private final ReflectionService reflectionService = Autowired.reflectionService;
-
+public class InterpretView extends JFrame implements Runnable, ItemListener {
 	private final Thread thread = new Thread(this);
 	// ログテキストエリア
 	public final JTextArea logTextArea = new LogTextArea(10, 40);
@@ -41,7 +36,6 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 		gbc.anchor = GridBagConstraints.CENTER;
 		pane.add(new InstancePanel(), gbc);
 		// メンバタブ
-		// final JPanel tabbedPane = memberTabCardPanel;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
@@ -74,12 +68,5 @@ public class InterpretView extends JFrame implements Observer, Runnable, ItemLis
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		String cmd = (String) e.getItem();
-	}
-
-	@Override
-	public void update(PrintGenerator printGenerator) {
-		//		final String item = this.tabChangeComboBox.getSelectedItem().toString();
-		//		memberTabCardLayout.show(memberTabCardPanel, item);
-
 	}
 }

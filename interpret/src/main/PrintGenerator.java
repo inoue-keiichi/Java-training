@@ -7,6 +7,10 @@ public abstract class PrintGenerator {
 	private List<Observer> observers = new ArrayList<>();
 	private Object item;
 
+	//	public PrintGenerator(final Object service) {
+	//
+	//	}
+
 	public void addObserver(final Observer observer) {
 		observers.add(observer);
 	}
