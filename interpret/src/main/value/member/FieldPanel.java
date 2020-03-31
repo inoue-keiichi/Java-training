@@ -10,7 +10,10 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -22,7 +25,6 @@ import main.ArgText;
 import main.AutowiredGenerator;
 import main.AutowiredService;
 import main.ErrorHandler;
-import main.ItemComparator;
 import main.Observer;
 import main.PrintGenerator;
 import main.View;
@@ -96,16 +98,21 @@ public class FieldPanel extends View implements Observer, ActionListener {
 			List<Field> superFieldList = Arrays.asList(superFields);
 			fieldList.addAll(superFieldList);
 		}
-		fieldList.sort(new ItemComparator());
 		// fieldを保存
-		final Field[] fields = fieldList.toArray(new Field[fieldList.size()]);
-		reflectionService.setFields(fields);
+		final Map<String, Field> fieldMap = new HashMap<>();
+		for (Field field : fieldList) {
+			fieldMap.put(getNameAndParameter(field), field);
+		}
+		reflectionService.setFieldMap(fieldMap);
 		// 元々あった選択肢を削除
 		if (fieldComboBox.getItemCount() != 0) {
 			fieldComboBox.removeAllItems();
 		}
-		for (Field field : fields) {
-			fieldComboBox.addItem(getNameAndParameter(field));
+		// プルダウンにfield名を追加
+		final List<String> fieldKeys = new ArrayList<>(fieldMap.keySet());
+		Collections.sort(fieldKeys);
+		for (String key : fieldKeys) {
+			fieldComboBox.addItem(key);
 		}
 	}
 

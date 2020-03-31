@@ -14,12 +14,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class InstanceListPanel extends View implements Observer, ActionListener {
-	//private static final InstanceListPanel instanceListPanel = new InstanceListPanel();
-	//private final ReflectionService reflectionService;
-
 	private final DefaultListModel<String> model = new DefaultListModel<>();
 	private final JList<String> list = new JList<>(model);
-	// private final JTextField textField = new JTextField();
 	private final JButton displayBtn = new JButton();
 	private InstanceDialog instanceDialog;
 
@@ -27,7 +23,6 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 		super(new JPanel(), generator, service);
 		generator.constructorCreatePrintGenerator.addObserver(this);
 		generator.arrayCreatePrintGenerator.addObserver(this);
-		//reflectionService = service.reflectionService;
 
 		view.setLayout(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(list);
@@ -36,7 +31,6 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 		list.addListSelectionListener(new InstanceListSelectionListener());
 		list.setDragEnabled(true);
 		displayBtn.addActionListener(this);
-		// list.setTransferHandler(new TransferHandler("text"));
 		view.add(scrollPane, BorderLayout.CENTER);
 		view.add(displayBtn, BorderLayout.SOUTH);
 	}
@@ -54,11 +48,8 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 				return;
 			}
 			String instanceName = list.getSelectedValue();
-			//Object instance = reflectionService.getInstances().get(instanceName);
 			if (instanceName != null) {
 				displayBtn.setText(instanceName);
-				//instanceDialog = new InstanceDialog(instance);
-				//				instanceDialog.setVisible(true);
 			}
 		}
 	}
@@ -66,7 +57,6 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//buttonに表示されているインスタンスを表示する
-		//Object instance = reflectionService.getInstances().get(displayBtn.getText());
 		instanceDialog = new InstanceDialog(displayBtn.getText(), generator, service);
 		instanceDialog.view.setVisible(true);
 	}

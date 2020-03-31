@@ -33,12 +33,12 @@ public class InstancePanel extends View implements ItemListener {
 		this.view.setLayout(new GridBagLayout());
 		// typeInputCardのレイアウト定義
 		typeInputCardPanel.setLayout(typeInputCardLayout);
-		typeInputCardPanel.add(new ObjectTypeInputPanel(this.generator, this.service).view, "Type");
+		typeInputCardPanel.add(new ObjectTypeInputPanel(this.generator, this.service).view, "Object");
 		typeInputCardPanel.add(new ArrayTypeInputPanel(this.generator, this.service).view, "Array");
 		// instanceCreateCardのレイアウト定義
 		instanceCreateCardPanel.setLayout(instanceCreateCardLayout);
 		//instanceCreateCardPanel.add(Autowired.constructorPanel, "Type");
-		instanceCreateCardPanel.add(new ConstructorPanel(this.generator, this.service).view, "Type");
+		instanceCreateCardPanel.add(new ConstructorPanel(this.generator, this.service).view, "Object");
 		instanceCreateCardPanel.add(new SetterPanel(this.generator, this.service).view, "Array");
 		// InterpretViewの配置決め
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -46,7 +46,7 @@ public class InstancePanel extends View implements ItemListener {
 		gbc.gridheight = 1;
 		// 型と配列の切り替えプルダウン
 		tabChangeComboBox.addItemListener(this);
-		tabChangeComboBox.addItem("Type");
+		tabChangeComboBox.addItem("Object");
 		tabChangeComboBox.addItem("Array");
 		gbc.gridx = 0;
 		gbc.gridy = 0;

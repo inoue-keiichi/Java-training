@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import main.Argument;
 import main.Service;
@@ -22,7 +23,9 @@ public class ReflectionService implements Service {
 	private Map<String, Object> instances = new HashMap<>();
 	private Object instance;
 	private Field[] fields;
-	private Method[] methods;
+	//private Method[] methods;
+	private Map<String, Field> fieldMap;
+	private Map<String, Method> methodMap;
 
 	// arrayタイプ
 	private int arraySize;
@@ -199,11 +202,11 @@ public class ReflectionService implements Service {
 		this.constructorArgments = args;
 	}
 
-	public void setMethodArgTypes(final int methodsIndex) {
-		if (methodsIndex == -1) {
+	public void setMethodArgTypes(final String methodName) {
+		if (Objects.isNull(methodName)) {
 			return;
 		}
-		Class<?>[] types = methods[methodsIndex].getParameterTypes();
+		Class<?>[] types = methodMap.get(methodName).getParameterTypes();
 		// 引き数なし
 		if (types.length < 1) {
 			this.methodArguments = null;
@@ -228,12 +231,12 @@ public class ReflectionService implements Service {
 		this.fieldArgument = arg;
 	}
 
-	public Field[] getFields() {
-		return fields;
+	public Map<String, Field> getFieldMap() {
+		return fieldMap;
 	}
 
-	public Method[] getMethods() {
-		return methods;
+	public Map<String, Method> getMethodMap() {
+		return methodMap;
 	}
 
 	public Constructor<?>[] getConstructors() {
@@ -248,12 +251,12 @@ public class ReflectionService implements Service {
 		this.instance = instance;
 	}
 
-	public void setFields(final Field[] fields) {
-		this.fields = fields;
+	public void setFieldMap(final Map<String, Field> fieldMap) {
+		this.fieldMap = fieldMap;
 	}
 
-	public void setMethods(final Method[] methods) {
-		this.methods = methods;
+	public void setMethodMap(final Map<String, Method> methodMap) {
+		this.methodMap = methodMap;
 	}
 
 	public Argument getFieldArgument() {
@@ -268,9 +271,9 @@ public class ReflectionService implements Service {
 		return methodArguments;
 	}
 
-	public void setFieldArgments(final String value, final int fieldsIndex) {
+	public void setFieldArgments(final String value, final String fieldName) {
 		final Argument arg = new Argument();
-		final Field field = fields[fieldsIndex];
+		final Field field = this.fieldMap.get(fieldName);
 		arg.type = field.getType();
 		arg.value = value;
 		this.fieldArgument = arg;

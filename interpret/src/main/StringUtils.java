@@ -18,9 +18,9 @@ public class StringUtils {
 		StringBuilder sb = new StringBuilder();
 		String typeName = field.getType().getName();
 		String name = field.getName();
-		sb.append(omitType(typeName));
-		sb.append(" ");
 		sb.append(name);
+		sb.append("  - ");
+		sb.append(omitType(typeName));
 		return sb.toString();
 	}
 
@@ -29,8 +29,6 @@ public class StringUtils {
 		final String name = method.getName();
 		final Type[] paramTypes = method.getGenericParameterTypes();
 		final String returnTypeName = omitType(method.getGenericReturnType().getTypeName());
-		sb.append(returnTypeName);
-		sb.append(" ");
 		sb.append(name);
 		sb.append("(");
 		for (Type paramType : paramTypes) {
@@ -43,6 +41,8 @@ public class StringUtils {
 			sb.delete(sb.length() - 2, sb.length());
 		}
 		sb.append(")");
+		sb.append("  - ");
+		sb.append(returnTypeName);
 		return sb.toString();
 	}
 

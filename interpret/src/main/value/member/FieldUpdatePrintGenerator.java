@@ -29,9 +29,11 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 		// text取得
 		final FieldPanel fieldPanel = memberService.getFieldPanel();
 		// fieldと値を保存
-		reflectionService.setFieldArgments(fieldPanel.getInputText(), fieldPanel.getFieldComboBox().getSelectedIndex());
+		reflectionService.setFieldArgments(fieldPanel.getInputText(),
+				(String) fieldPanel.getFieldComboBox().getSelectedItem());
 		// fieldを更新するための準備。
-		final Field field = reflectionService.getFields()[fieldPanel.getFieldComboBox().getSelectedIndex()];
+		final Field field = reflectionService.getFieldMap()
+				.get((String) fieldPanel.getFieldComboBox().getSelectedItem());
 		if (!Modifier.isStatic(field.getModifiers())) {
 			// staticフィールドじゃない
 			field.setAccessible(true);

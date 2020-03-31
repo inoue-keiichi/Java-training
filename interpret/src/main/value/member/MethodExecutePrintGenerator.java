@@ -40,7 +40,8 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 			i++;
 		}
 		// メソッドを実行する。
-		final Method method = reflectionService.getMethods()[methodPanel.getMethodComboBox().getSelectedIndex()];
+		final Method method = reflectionService.getMethodMap().get(methodPanel.getMethodComboBox().getSelectedItem());
+		//final Method method = reflectionService.getMethods()[methodPanel.getMethodComboBox().getSelectedIndex()];
 		final Object[] args = reflectionService.validateArguments(reflectionService.getMethodArgments());
 		method.setAccessible(true);
 		Object returnValue = method.invoke(reflectionService.getNewInstance(), args);

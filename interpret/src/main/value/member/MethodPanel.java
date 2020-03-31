@@ -13,7 +13,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -26,7 +29,6 @@ import main.Argument;
 import main.AutowiredGenerator;
 import main.AutowiredService;
 import main.ErrorHandler;
-import main.ItemComparator;
 import main.Observer;
 import main.PrintGenerator;
 import main.View;
@@ -116,17 +118,28 @@ public class MethodPanel extends View implements Observer, ItemListener, ActionL
 			List<Method> superMethodList = Arrays.asList(superMethods);
 			methodList.addAll(superMethodList);
 		}
-		methodList.sort(new ItemComparator());
-		// methodを保存
+		//methodList.sort(new ItemComparator());
 		Method[] methods = methodList.toArray(new Method[methodList.size()]);
-		reflectionService.setMethods(methods);
 		// 元々あった選択肢を削除
 		if (methodComboBox.getItemCount() != 0) {
 			methodComboBox.removeAllItems();
 		}
+		// MethodのMapを保存する
+		Map<String, Method> methodMap = new HashMap<>();
 		for (Method method : methods) {
-			methodComboBox.addItem(getNameAndParameter(method));
+			methodMap.put(getNameAndParameter(method), method);
 		}
+		reflectionService.setMethodMap(methodMap);
+		// ソートしてプルダウンに追加する
+		final List<String> methodKey = new ArrayList<>(methodMap.keySet());
+		Collections.sort(methodKey);
+		for (String key : methodKey) {
+			methodComboBox.addItem(key);
+		}
+
+		//		for (Method method : methods) {
+		//			methodComboBox.addItem(getNameAndParameter(method));
+		//		}
 	}
 
 	public JComboBox<String> getMethodComboBox() {
@@ -139,7 +152,7 @@ public class MethodPanel extends View implements Observer, ItemListener, ActionL
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		reflectionService.setMethodArgTypes(methodComboBox.getSelectedIndex());
+		reflectionService.setMethodArgTypes((String) methodComboBox.getSelectedItem());
 		createArgumentPanel(reflectionService.getMethodArgments());
 	}
 
