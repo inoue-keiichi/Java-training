@@ -3,6 +3,7 @@ package main.value.member;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -72,6 +73,7 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 		// レイアウト定義
 		this.view.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(0, 20, 0, 0);
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
 		// 配置

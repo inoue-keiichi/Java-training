@@ -21,7 +21,7 @@ public class ObjectTypeInputPanel extends View implements ActionListener {
 	final ConstructorPrintGenerator constructorPrintGenerator;
 	final ErrorHandler errorHandler;
 
-	final JTextField typeText = new JTextField(30);
+	final JTextField typeText = new JTextField(15);
 	final JButton setBtn = new JButton("Set");
 
 	public ObjectTypeInputPanel(final AutowiredGenerator generator, final AutowiredService service) {
@@ -50,10 +50,10 @@ public class ObjectTypeInputPanel extends View implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			reflectionService.setClazz(typeText.getText());
+			// コンストラクタの項目を表示する
+			this.constructorPrintGenerator.execute();
 		} catch (ClassNotFoundException e1) {
 			this.errorHandler.execute(e1);
 		}
-		// コンストラクタの項目を表示する
-		this.constructorPrintGenerator.execute();
 	}
 }

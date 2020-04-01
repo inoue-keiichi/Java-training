@@ -7,7 +7,7 @@ public class LogTextArea extends View implements Observer {
 	private final StringBuilder logStrBuilder = new StringBuilder();
 
 	public LogTextArea(final AutowiredGenerator generator, AutowiredService service) {
-		super(new JTextArea(10, 40), generator, service);
+		super(new JTextArea(10, 50), generator, service);
 		// オブジェクトの方
 		this.generator.constructorPrintGenerator.addObserver(this);
 		this.generator.constructorCreatePrintGenerator.addObserver(this);

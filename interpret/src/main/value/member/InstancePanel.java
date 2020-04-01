@@ -37,7 +37,6 @@ public class InstancePanel extends View implements ItemListener {
 		typeInputCardPanel.add(new ArrayTypeInputPanel(this.generator, this.service).view, "Array");
 		// instanceCreateCardのレイアウト定義
 		instanceCreateCardPanel.setLayout(instanceCreateCardLayout);
-		//instanceCreateCardPanel.add(Autowired.constructorPanel, "Type");
 		instanceCreateCardPanel.add(new ConstructorPanel(this.generator, this.service).view, "Object");
 		instanceCreateCardPanel.add(new SetterPanel(this.generator, this.service).view, "Array");
 		// InterpretViewの配置決め

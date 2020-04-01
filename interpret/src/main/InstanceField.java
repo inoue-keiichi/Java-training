@@ -14,7 +14,7 @@ public class InstanceField extends PrintGenerator {
 	public InstanceField(final AutowiredService service) {
 		super(service);
 		reflectionService = service.reflectionService;
-		text = new JTextField(8);
+		text = new JTextField(15);
 		transferHandler = new InstanceTransferHandler(this, text);
 		text.setTransferHandler(transferHandler);
 	}

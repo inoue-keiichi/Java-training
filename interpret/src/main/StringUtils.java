@@ -20,6 +20,8 @@ public class StringUtils {
 		String name = field.getName();
 		sb.append(name);
 		sb.append("  - ");
+		sb.append(stringConverter(field.getModifiers()));
+		sb.append(" ");
 		sb.append(omitType(typeName));
 		return sb.toString();
 	}
@@ -42,6 +44,8 @@ public class StringUtils {
 		}
 		sb.append(")");
 		sb.append("  - ");
+		sb.append(stringConverter(method.getModifiers()));
+		sb.append(" ");
 		sb.append(returnTypeName);
 		return sb.toString();
 	}
