@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,24 +29,23 @@ import main.AutowiredGenerator;
 import main.AutowiredService;
 import main.ErrorHandler;
 import main.Observer;
+import main.ObserverButton;
 import main.PrintGenerator;
 import main.View;
 import main.value.ReflectionService;
 
 public class MethodPanel extends View implements Observer, ItemListener, ActionListener {
-	// private static final MethodPanel methodPanel = new MethodPanel();
-
 	private final ReflectionService reflectionService;
 	private final MemberService memberService;
 	private final MethodExecutePrintGenerator methodExecutePrintGenerator;
 	private final ErrorHandler errorHandler;
 
-	private final JComboBox<String> methodComboBox = new JComboBox<>();
-	private final JLabel argsLabel = new JLabel("Argument: ");
-	private final JPanel argsPanel = new JPanel();
-	private final JButton executeBtn = new JButton("Execute");
-	private final GridBagConstraints gbc = new GridBagConstraints();
-	private final GridBagLayout layout = new GridBagLayout();
+	private final JComboBox<String> methodComboBox;
+	private final JLabel argsLabel;
+	private final JPanel argsPanel;
+	private final ObserverButton executeBtn;
+	private final GridBagConstraints gbc;
+	private final GridBagLayout layout;
 
 	public MethodPanel(final AutowiredGenerator generator, final AutowiredService service) {
 		super(new JPanel(), generator, service);
@@ -55,11 +53,18 @@ public class MethodPanel extends View implements Observer, ItemListener, ActionL
 		this.memberService = this.service.memberService;
 		this.methodExecutePrintGenerator = this.generator.methodExecutePrintGenerator;
 		this.errorHandler = this.generator.errorHandler;
-
 		this.generator.methodPrintGenerator.addObserver(this);
 
-		this.view.setLayout(layout);
+		//構成要素
+		this.methodComboBox = new JComboBox<>();
+		this.argsLabel = new JLabel("Argument: ");
+		this.argsPanel = new JPanel();
+		this.executeBtn = new ObserverButton("Execute");
+		this.generator.methodPrintGenerator.addObserver(executeBtn);
 
+		this.gbc = new GridBagConstraints();
+		this.layout = new GridBagLayout();
+		this.view.setLayout(layout);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = WEST;
@@ -72,8 +77,8 @@ public class MethodPanel extends View implements Observer, ItemListener, ActionL
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
-		this.view.add(executeBtn, gbc);
-		executeBtn.addActionListener(this);
+		this.view.add(executeBtn.btn, gbc);
+		executeBtn.btn.addActionListener(this);
 	}
 
 	public void createArgumentPanel(final Argument[] args) {
@@ -85,7 +90,7 @@ public class MethodPanel extends View implements Observer, ItemListener, ActionL
 			return;
 		}
 		for (Argument arg : args) {
-			this.argsPanel.add(new ArgText().text);
+			this.argsPanel.add(new ArgText(this.generator.errorHandler).text);
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
@@ -101,6 +106,11 @@ public class MethodPanel extends View implements Observer, ItemListener, ActionL
 	//	public JComboBox<String> getMethodCoomboBox() {
 	//		return methodComboBox;
 	//	}
+
+	public void clearMethod() {
+		this.methodComboBox.removeAllItems();
+		this.executeBtn.btn.setEnabled(false);
+	}
 
 	@Override
 	public void update(PrintGenerator printGenerator) {

@@ -26,19 +26,29 @@ public class InstancePanel extends View implements ItemListener {
 	// コンストラクターパネル
 	final CardLayout instanceCreateCardLayout = new CardLayout();
 	final JPanel instanceCreateCardPanel = new JPanel();
+	final ObjectTypeInputPanel objectTypeInputPanel;
+	final ArrayTypeInputPanel arrayTypeInputPanel;
+	final ConstructorPanel constructorPanel;
+	final SetterPanel setterPanel;
 
 	public InstancePanel(final AutowiredGenerator generator, final AutowiredService service) {
 		super(new JPanel(), generator, service);
 
+		// 構成要素
+		this.objectTypeInputPanel = new ObjectTypeInputPanel(this.generator, this.service);
+		this.arrayTypeInputPanel = new ArrayTypeInputPanel(this.generator, this.service);
+		this.constructorPanel = new ConstructorPanel(this.generator, this.service);
+		this.setterPanel = new SetterPanel(this.generator, this.service);
+
 		this.view.setLayout(new GridBagLayout());
 		// typeInputCardのレイアウト定義
 		typeInputCardPanel.setLayout(typeInputCardLayout);
-		typeInputCardPanel.add(new ObjectTypeInputPanel(this.generator, this.service).view, "Object");
-		typeInputCardPanel.add(new ArrayTypeInputPanel(this.generator, this.service).view, "Array");
+		typeInputCardPanel.add(this.objectTypeInputPanel.view, "Object");
+		typeInputCardPanel.add(this.arrayTypeInputPanel.view, "Array");
 		// instanceCreateCardのレイアウト定義
 		instanceCreateCardPanel.setLayout(instanceCreateCardLayout);
-		instanceCreateCardPanel.add(new ConstructorPanel(this.generator, this.service).view, "Object");
-		instanceCreateCardPanel.add(new SetterPanel(this.generator, this.service).view, "Array");
+		instanceCreateCardPanel.add(this.constructorPanel.view, "Object");
+		instanceCreateCardPanel.add(this.setterPanel.view, "Array");
 		// InterpretViewの配置決め
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;

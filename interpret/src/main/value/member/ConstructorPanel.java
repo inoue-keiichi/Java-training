@@ -31,6 +31,7 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 	private final ConstructorService constructorService;
 	private final ReflectionService reflectionService;
 	private final ConstructorPrintGenerator constructorPrintGenerator;
+	private final ConstructorClearPrintGenerator constructorClearPrintGenerator;
 	private final ConstructorCreatePrintGenerator constructorCreatePrintGenerator;
 	private final ErrorHandler errorHandler;
 
@@ -48,6 +49,8 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 		this.errorHandler = this.generator.errorHandler;
 		this.constructorPrintGenerator = this.generator.constructorPrintGenerator;
 		this.constructorPrintGenerator.addObserver(this);
+		this.constructorClearPrintGenerator = this.generator.constructorClearPrintGenerator;
+		this.constructorClearPrintGenerator.addObserver(this);
 
 		// レイアウト
 		this.view.setLayout(new GridBagLayout());
@@ -64,11 +67,17 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
 		this.view.add(generateBtn, gbc);
+		generateBtn.setEnabled(false);
 		generateBtn.addActionListener(this);
 	}
 
 	public JComboBox<String> getConstructorComboBox() {
 		return constructorComboBox;
+	}
+
+	public void clearConstructor() {
+		this.constructorComboBox.removeAllItems();
+		this.generateBtn.setEnabled(false);
 	}
 
 	public void createArgumentPanel(final Argument[] args) {
@@ -80,7 +89,7 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 			return;
 		}
 		for (Argument arg : args) {
-			this.argsPanel.add(new ArgText().text);
+			this.argsPanel.add(new ArgText(this.errorHandler).text);
 		}
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 1;
@@ -116,6 +125,12 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 
 	@Override
 	public void update(PrintGenerator printGenerator) {
+		// コンストラクタを消去する命令がくるかもしれない。
+		if (printGenerator instanceof ConstructorClearPrintGenerator) {
+			update((ConstructorClearPrintGenerator) printGenerator);
+			return;
+		}
+
 		final Constructor<?>[] constructors = reflectionService.getConstructor();
 		final JComboBox<String> constructorComboBox = this.getConstructorComboBox();
 		// 元々あった選択肢を削除
@@ -125,5 +140,15 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 		for (Constructor<?> constructor : constructors) {
 			constructorComboBox.addItem(getNameAndParameter(constructor));
 		}
+		if (constructorComboBox.getItemCount() > 0) {
+			this.generateBtn.setEnabled(true);
+		} else {
+			this.generateBtn.setEnabled(false);
+		}
+	}
+
+	public void update(ConstructorClearPrintGenerator printGenerator) {
+		this.getConstructorComboBox().removeAllItems();
+		this.generateBtn.setEnabled(false);
 	}
 }

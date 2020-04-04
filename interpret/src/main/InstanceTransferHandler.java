@@ -10,15 +10,19 @@ import javax.swing.TransferHandler;
 public class InstanceTransferHandler extends TransferHandler {
 	final JTextField field;
 	final PrintGenerator instanceField;
+	final ErrorHandler errorhandler;
 
-	public InstanceTransferHandler(final PrintGenerator instanceField, final JTextField field) {
+	public InstanceTransferHandler(final ErrorHandler errorhandler, final PrintGenerator instanceField,
+			final JTextField field) {
 		this.field = field;
 		this.instanceField = instanceField;
+		this.errorhandler = errorhandler;
 	}
 
-	public InstanceTransferHandler(final JTextField field) {
+	public InstanceTransferHandler(final ErrorHandler errorhandler, final JTextField field) {
 		this.field = field;
 		this.instanceField = null;
+		this.errorhandler = errorhandler;
 	}
 
 	/**

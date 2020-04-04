@@ -52,6 +52,6 @@ public class ArrayCreatePrintGenerator extends PrintGenerator {
 
 	@Override
 	public String getLog() {
-		return "Success!\nAn array was created whose type was " + reflectionService.getReferenceName() + ".\n";
+		return "[Success] An array was created whose type was " + reflectionService.getReferenceName() + ".\n";
 	}
 }

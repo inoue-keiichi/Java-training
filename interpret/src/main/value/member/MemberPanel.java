@@ -4,14 +4,11 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.reflect.Array;
 import java.util.Objects;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,7 +25,7 @@ import main.StringUtils;
 import main.View;
 import main.value.ReflectionService;
 
-public class MemberPanel extends View implements ActionListener, ItemListener, Observer {
+public class MemberPanel extends View implements ItemListener, Observer {
 
 	final ReflectionService reflectionService;
 	final MemberService memberService;
@@ -41,8 +38,9 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 	final JPanel typeCardPanel;
 	final JComboBox<String> indexComboBox;
 	final CardLayout typeCardLayout;
-	final JButton setBtn;
 	final JTabbedPane memberTab;
+	final FieldPanel fieldPanel;
+	final MethodPanel methodPanel;
 
 	private static int i = 0;
 
@@ -54,21 +52,22 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 		this.methodPrintGenerator = this.generator.methodPrintGenerator;
 		this.errorHandler = this.generator.errorHandler;
 
-		this.instanceField = new InstanceField(this.service);
+		this.instanceField = new InstanceField(this.generator.errorHandler, this.service);
 		this.instanceText = this.instanceField.text;
 		this.typeCardPanel = new JPanel();
 		this.indexComboBox = new JComboBox<>();
 		this.typeCardLayout = new CardLayout();
-		this.setBtn = new JButton("Set");
 		this.memberTab = new JTabbedPane();
+		this.fieldPanel = new FieldPanel(this.generator, this.service);
+		this.methodPanel = new MethodPanel(this.generator, this.service);
 
 		// observer追加
 		instanceField.addObserver(this);
-		this.memberTab.addTab("field", new FieldPanel(this.generator, this.service).view);
-		this.memberTab.addTab("method", new MethodPanel(this.generator, this.service).view);
+		this.memberTab.addTab("field", fieldPanel.view);
+		this.memberTab.addTab("method", methodPanel.view);
 		// CardLayout定義
 		this.typeCardPanel.setLayout(this.typeCardLayout);
-		this.typeCardPanel.add(setBtn, "Object");
+		this.typeCardPanel.add(new JLabel(), "Object");
 		this.typeCardPanel.add(indexComboBox, "Array");
 		// レイアウト定義
 		this.view.setLayout(new GridBagLayout());
@@ -84,11 +83,11 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
+		instanceText.setEditable(false);
 		this.view.add(instanceText, gbc);
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.WEST;
-		setBtn.addActionListener(this);
 		indexComboBox.addItemListener(this);
 		this.view.add(this.typeCardPanel, gbc);
 		gbc.gridx = 0;
@@ -98,47 +97,13 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 		this.view.add(memberTab, gbc);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String instanceName = instanceText.getText();
-		//  instanceのkeyがなかったらエラー
-		if (!StringUtils.macthRegex(instanceName)) {
-			throw new IllegalArgumentException();
-		}
-		// インスタンスがなかったらエラー
-		String key = instanceName.substring(2, instanceName.length() - 1);
-		Object instance = reflectionService.getInstances().get(key);
-		if (Objects.isNull(instance)) {
-			throw new NullPointerException(key);
-		}
-
-		//delete it later.
-		reflectionService.setNewInstance(instance);
+	private void printMemberForObject(final Object instance) {
 		memberService.setInstance(instance);
 		fieldPrintGenerator.execute(instance);
 		methodPrintGenerator.execute(instance);
 	}
 
-	@Override
-	public void update(PrintGenerator printGenerator) {
-		String type = reflectionService.getInstanceType();
-		this.typeCardLayout.show(this.typeCardPanel, type);
-
-		if (type == "Object") {
-			return;
-		}
-		// 配列のindexのcomboBoxに値を追加する
-		String instanceName = instanceText.getText();
-		//  instanceのkeyがなかったらエラー
-		if (!StringUtils.macthRegex(instanceName)) {
-			throw new IllegalArgumentException();
-		}
-		// インスタンスがなかったらエラー
-		String key = instanceName.substring(2, instanceName.length() - 1);
-		Object instance = reflectionService.getInstances().get(key);
-		if (Objects.isNull(instance)) {
-			throw new NullPointerException(key);
-		}
+	private void printMemberForArray(final Object instance) {
 		// Itemを入れ直す
 		indexComboBox.removeAllItems();
 		indexComboBox.addItem("");
@@ -148,11 +113,42 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 	}
 
 	@Override
+	public void update(PrintGenerator printGenerator) {
+		String type = reflectionService.getInstanceType();
+		this.typeCardLayout.show(this.typeCardPanel, type);
+
+		try {
+			String instanceName = instanceText.getText();
+			//  instanceのkeyがなかったらエラー
+			if (!StringUtils.macthRegex(instanceName)) {
+				throw new IllegalArgumentException();
+			}
+			// インスタンスがなかったらエラー
+			String key = instanceName.substring(2, instanceName.length() - 1);
+			Object instance = reflectionService.getInstances().get(key);
+			if (Objects.isNull(instance)) {
+				throw new NullPointerException(key);
+			}
+
+			if (type == "Object") { // オブジェクトのフィールドとメソッドを表示
+				printMemberForObject(instance);
+			} else { // 配列の要素を選ぶプルダウンを表示
+				printMemberForArray(instance);
+			}
+		} catch (Exception e1) {
+			this.fieldPanel.clearField();
+			this.methodPanel.clearMethod();
+			errorHandler.execute(e1);
+		}
+	}
+
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		try {
 			final String item = (String) indexComboBox.getSelectedItem();
 			if (item == "") {
-				// TODO:field, methoodをクリアする命令を送る
+				this.fieldPanel.clearField();
+				this.methodPanel.clearMethod();
 				return;
 			}
 			//  instanceのkeyがなかったらエラー
@@ -171,12 +167,12 @@ public class MemberPanel extends View implements ActionListener, ItemListener, O
 			if (Objects.isNull(instance)) {
 				throw new NullPointerException(key);
 			}
-			//delete it later.
-			reflectionService.setNewInstance(instance);
 			memberService.setInstance(instance);
 			fieldPrintGenerator.execute(instance);
 			methodPrintGenerator.execute(instance);
-		} catch (IllegalArgumentException | NullPointerException e1) {
+		} catch (Exception e1) {
+			this.fieldPanel.clearField();
+			this.methodPanel.clearMethod();
 			errorHandler.execute(e1);
 		}
 	}

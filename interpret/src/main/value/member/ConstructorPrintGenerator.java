@@ -19,6 +19,6 @@ public class ConstructorPrintGenerator extends PrintGenerator {
 
 	@Override
 	public String getLog() {
-		return "Success!\nYou can select the constructor of " + reflectionService.getClazzName() + ".\n";
+		return "[Success] the constructors of " + reflectionService.getClazzName() + " were created.\n";
 	}
 }

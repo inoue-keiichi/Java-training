@@ -23,7 +23,7 @@ public class ErrorHandler extends PrintGenerator {
 	@Override
 	public String getLog() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Fail.\n");
+		sb.append("[Fail] ");
 		// InvocationTargetExceptionだったら中身の例外を見たい
 		if (this.exception instanceof InvocationTargetException) {
 			sb.append(this.exception.getCause());

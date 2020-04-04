@@ -81,7 +81,7 @@ public class ConstructorCreatePrintGenerator extends PrintGenerator {
 		if (this.constructorName == null) {
 			return "";
 		}
-		return "Success!\n" + this.constructorName + " => The instance was created.\n";
+		return "[Success] " + this.constructorName + " => The instance was created.\n";
 	}
 
 }

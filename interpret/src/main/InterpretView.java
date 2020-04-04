@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -15,16 +17,19 @@ import javax.swing.JTextArea;
 import main.value.member.InstancePanel;
 import main.value.member.MemberPanel;
 
-public class InterpretView extends JFrame implements Runnable, ItemListener {
+public class InterpretView extends JFrame implements Runnable, ItemListener, ComponentListener {
 	private final Thread thread = new Thread(this);
 	// ログテキストエリア
 	public final View logTextArea;
 	public final JPanel instancePanel;
 	public final JPanel memberPanel;
 
+	private final AutowiredService service;
+	private final AutowiredGenerator generator;
+
 	public InterpretView() {
-		AutowiredService service = new AutowiredService();
-		AutowiredGenerator generator = new AutowiredGenerator(service);
+		this.service = new AutowiredService();
+		this.generator = new AutowiredGenerator(service);
 
 		final JPanel pane = new JPanel(new GridBagLayout());
 		pane.setBackground(java.awt.Color.gray);
@@ -60,10 +65,14 @@ public class InterpretView extends JFrame implements Runnable, ItemListener {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
 		pane.add(scrollpane, gbc);
-
-		addWindowListener(new InterpretWindowAdapter());
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		addWindowListener(new InterpretWindowAdapter(service));
 		this.setVisible(true);
-		this.setMinimumSize(new Dimension(1600, 450));
+		this.setMinimumSize(new Dimension(1700, 450));
+		service.interpretViewService.x = this.getBounds().x;
+		service.interpretViewService.y = this.getBounds().y;
+		service.interpretViewService.dimension = this.getSize();
+		this.addComponentListener(this);
 	}
 
 	@Override
@@ -76,5 +85,29 @@ public class InterpretView extends JFrame implements Runnable, ItemListener {
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		String cmd = (String) e.getItem();
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		this.service.interpretViewService.dimension = this.getSize();
+
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		this.service.interpretViewService.x = this.getBounds().x;
+		this.service.interpretViewService.y = this.getBounds().y;
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.addListSelectionListener(new InstanceListSelectionListener());
 		list.setDragEnabled(true);
+		displayBtn.setEnabled(false);
 		displayBtn.addActionListener(this);
 		view.add(scrollPane, BorderLayout.CENTER);
 		view.add(displayBtn, BorderLayout.SOUTH);
@@ -50,12 +52,16 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 			String instanceName = list.getSelectedValue();
 			if (instanceName != null) {
 				displayBtn.setText(instanceName);
+				displayBtn.setEnabled(true);
 			}
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (Objects.equals(displayBtn.getText(), "")) {
+			return;
+		}
 		//buttonに表示されているインスタンスを表示する
 		instanceDialog = new InstanceDialog(displayBtn.getText(), generator, service);
 		instanceDialog.view.setVisible(true);

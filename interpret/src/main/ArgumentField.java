@@ -7,9 +7,9 @@ public class ArgumentField {
 	public final JTextField text;
 	private final TransferHandler transferHandler;
 
-	public ArgumentField() {
+	public ArgumentField(final ErrorHandler errorHandler) {
 		text = new JTextField(10);
-		transferHandler = new InstanceTransferHandler(text);
+		transferHandler = new InstanceTransferHandler(errorHandler, text);
 		text.setTransferHandler(transferHandler);
 	}
 }

@@ -41,10 +41,9 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 		}
 		// メソッドを実行する。
 		final Method method = reflectionService.getMethodMap().get(methodPanel.getMethodComboBox().getSelectedItem());
-		//final Method method = reflectionService.getMethods()[methodPanel.getMethodComboBox().getSelectedIndex()];
 		final Object[] args = reflectionService.validateArguments(reflectionService.getMethodArgments());
 		method.setAccessible(true);
-		Object returnValue = method.invoke(reflectionService.getNewInstance(), args);
+		Object returnValue = method.invoke(memberService.getInstance(), args);
 		// ログ用
 		this.methodName = method.getName();
 		this.returnValue = returnValue;
@@ -59,8 +58,8 @@ public class MethodExecutePrintGenerator extends PrintGenerator {
 			return "";
 		} else if (this.methodName != null && this.returnValue == null) {
 			// returnがvoid
-			return "Success!\n" + this.methodName + "() was executed.\n";
+			return "[Success] " + this.methodName + "() was executed.\n";
 		}
-		return "Success!\n" + this.methodName + "() => " + this.returnValue.toString() + ".\n";
+		return "[Success] " + this.methodName + "() => " + this.returnValue.toString() + ".\n";
 	}
 }

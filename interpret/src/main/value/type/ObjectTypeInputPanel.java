@@ -14,11 +14,13 @@ import main.AutowiredService;
 import main.ErrorHandler;
 import main.View;
 import main.value.ReflectionService;
+import main.value.member.ConstructorClearPrintGenerator;
 import main.value.member.ConstructorPrintGenerator;
 
 public class ObjectTypeInputPanel extends View implements ActionListener {
 	final ReflectionService reflectionService;
 	final ConstructorPrintGenerator constructorPrintGenerator;
+	final ConstructorClearPrintGenerator constructorClearPrintGenerator;
 	final ErrorHandler errorHandler;
 
 	final JTextField typeText = new JTextField(15);
@@ -28,6 +30,7 @@ public class ObjectTypeInputPanel extends View implements ActionListener {
 		super(new JPanel(), generator, service);
 		this.reflectionService = this.service.reflectionService;
 		this.constructorPrintGenerator = this.generator.constructorPrintGenerator;
+		this.constructorClearPrintGenerator = this.generator.constructorClearPrintGenerator;
 		this.errorHandler = this.generator.errorHandler;
 
 		GridBagLayout layout = new GridBagLayout();
@@ -53,6 +56,7 @@ public class ObjectTypeInputPanel extends View implements ActionListener {
 			// コンストラクタの項目を表示する
 			this.constructorPrintGenerator.execute();
 		} catch (ClassNotFoundException e1) {
+			this.constructorClearPrintGenerator.execute();
 			this.errorHandler.execute(e1);
 		}
 	}

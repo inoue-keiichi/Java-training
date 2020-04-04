@@ -11,11 +11,11 @@ public class InstanceField extends PrintGenerator {
 	public final JTextField text;
 	private final TransferHandler transferHandler;
 
-	public InstanceField(final AutowiredService service) {
+	public InstanceField(final ErrorHandler errorHandler, final AutowiredService service) {
 		super(service);
 		reflectionService = service.reflectionService;
 		text = new JTextField(15);
-		transferHandler = new InstanceTransferHandler(this, text);
+		transferHandler = new InstanceTransferHandler(errorHandler, this, text);
 		text.setTransferHandler(transferHandler);
 	}
 

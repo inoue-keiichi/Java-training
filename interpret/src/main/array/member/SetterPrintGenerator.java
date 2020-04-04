@@ -29,12 +29,8 @@ public class SetterPrintGenerator extends PrintGenerator {
 		final Argument arg = new Argument();
 		arg.type = type;
 		arg.value = element;
-
 		final Object parsedElement = reflectionService.validateArgument(arg);
-
 		Array.set(instance, i, parsedElement);
-
-		// this.index = index;
 		this.notifyObservers();
 	}
 

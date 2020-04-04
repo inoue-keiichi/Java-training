@@ -46,7 +46,8 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 			field.setAccessible(true);
 		}
 		// fieldを更新する。
-		Object instance = reflectionService.getNewInstance();
+		//Object instance = reflectionService.getNewInstance();
+		Object instance = memberService.getInstance();
 		field.set(instance, reflectionService.validateArgument(reflectionService.getFieldArgument()));
 		// ログ用にfield名と値を保持。
 		this.fieldName = field.getName();
@@ -61,6 +62,6 @@ public class FieldUpdatePrintGenerator extends PrintGenerator {
 		if (this.fieldName == null || this.fieldValue == null) {
 			return "";
 		}
-		return "Success!\n" + fieldName + " = " + fieldValue.toString() + ".\n";
+		return "[Success] " + fieldName + " = " + fieldValue.toString() + ".\n";
 	}
 }

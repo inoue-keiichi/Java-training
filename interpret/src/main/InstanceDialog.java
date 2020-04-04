@@ -20,16 +20,21 @@ public class InstanceDialog extends View implements Observer {
 	private JTable methodTable;
 	private final DialogService dialogService = new DialogService();
 	private final ReflectionService reflectionService;
+	private final InterpretViewService interpretViewService;
 
 	public InstanceDialog(final String instanceName, final AutowiredGenerator generator,
 			final AutowiredService service) {
 		super(new JDialog(), generator, service);
 		reflectionService = service.reflectionService;
+		interpretViewService = service.interpretViewService;
 		Object instance = reflectionService.getInstances().get(instanceName);
 		dialogService.setInstance(instance);
 		dialogService.setInstanceName(instanceName);
 		view.setSize(500, 400);
 		view.add(createMemberInfoPanel(instance));
+
+		this.view.setLocation(this.interpretViewService.x,
+				this.interpretViewService.y + this.interpretViewService.dimension.getSize().height);
 	}
 
 	private JPanel createMemberInfoPanel(final Object instance) {

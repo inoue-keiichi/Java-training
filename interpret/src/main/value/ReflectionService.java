@@ -247,9 +247,9 @@ public class ReflectionService implements Service {
 		return this.instance;
 	}
 
-	public void setNewInstance(final Object instance) {
-		this.instance = instance;
-	}
+	//	public void setNewInstance(final Object instance) {
+	//		this.instance = instance;
+	//	}
 
 	public void setFieldMap(final Map<String, Field> fieldMap) {
 		this.fieldMap = fieldMap;
@@ -296,7 +296,7 @@ public class ReflectionService implements Service {
 		return this.arraySize;
 	}
 
-	public void setArray(final String referenceName, final String size) {
+	public void setArray(final String referenceName, final String size) throws NumberFormatException {
 		this.referenceName = referenceName;
 		this.arraySize = Integer.parseInt(size);
 	}
@@ -324,9 +324,9 @@ public class ReflectionService implements Service {
 		return this.arrayInstance;
 	}
 
-	public void setNewArrayInstance(final Object[] arrayInstance) {
-		this.arrayInstance = arrayInstance;
-	}
+	//	public void setNewArrayInstance(final Object[] arrayInstance) {
+	//		this.arrayInstance = arrayInstance;
+	//	}
 
 	public Argument[] getElementArgments() {
 		return elementArgments;

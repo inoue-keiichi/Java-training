@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,15 +25,16 @@ import main.AutowiredGenerator;
 import main.AutowiredService;
 import main.ErrorHandler;
 import main.Observer;
+import main.ObserverButton;
 import main.PrintGenerator;
 import main.View;
 import main.value.ReflectionService;
 
 public class FieldPanel extends View implements Observer, ActionListener {
-	private final JComboBox<String> fieldComboBox = new JComboBox<>();
-	private final ArgText fieldText = new ArgText();
-	private final JButton updateBtn = new JButton("Update");
-	private final GridBagConstraints gbc = new GridBagConstraints();
+	private final JComboBox<String> fieldComboBox;
+	private final ArgText fieldText;
+	private final ObserverButton updateBtn;
+	private final GridBagConstraints gbc;
 
 	private final ReflectionService reflectionService;
 	private final MemberService memberService;
@@ -49,9 +49,15 @@ public class FieldPanel extends View implements Observer, ActionListener {
 		this.fieldUpdatePrintGenerator = this.generator.fieldUpdatePrintGenerator;
 		this.generator.fieldPrintGenerator.addObserver(this);
 
+		//構成要素
+		fieldComboBox = new JComboBox<>();
+		fieldText = new ArgText(this.generator.errorHandler);
+		updateBtn = new ObserverButton("Update");
+		this.generator.fieldPrintGenerator.addObserver(updateBtn);
+
 		GridBagLayout layout = new GridBagLayout();
 		this.view.setLayout(layout);
-
+		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = WEST;
@@ -71,8 +77,8 @@ public class FieldPanel extends View implements Observer, ActionListener {
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.anchor = EAST;
-		this.view.add(updateBtn, gbc);
-		updateBtn.addActionListener(this);
+		this.view.add(updateBtn.btn, gbc);
+		updateBtn.btn.addActionListener(this);
 	}
 
 	public JComboBox<String> getFieldComboBox() {
@@ -81,6 +87,12 @@ public class FieldPanel extends View implements Observer, ActionListener {
 
 	public String getInputText() {
 		return this.fieldText.text.getText();
+	}
+
+	public void clearField() {
+		this.fieldComboBox.removeAllItems();
+		this.fieldText.text.setText("");
+		this.updateBtn.btn.setEnabled(false);
 	}
 
 	@Override
@@ -108,6 +120,8 @@ public class FieldPanel extends View implements Observer, ActionListener {
 		if (fieldComboBox.getItemCount() != 0) {
 			fieldComboBox.removeAllItems();
 		}
+		// Value削除
+		this.fieldText.text.setText("");
 		// プルダウンにfield名を追加
 		final List<String> fieldKeys = new ArrayList<>(fieldMap.keySet());
 		Collections.sort(fieldKeys);

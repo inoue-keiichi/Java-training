@@ -36,11 +36,10 @@ public class ArrayTypeInputPanel extends View implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		reflectionService.setArray(typeText.getText(), sizeText.getText());
-
 		try {
+			reflectionService.setArray(typeText.getText(), sizeText.getText());
 			arrayCreatePrintGenerator.execute();
-		} catch (ClassNotFoundException e1) {
+		} catch (ClassNotFoundException | NumberFormatException e1) {
 			errorHandler.execute(e1);
 		}
 	}

@@ -7,9 +7,9 @@ public class ArgText {
 	public final JTextField text;
 	private final TransferHandler transferHandler;
 
-	public ArgText() {
+	public ArgText(final ErrorHandler errorHandler) {
 		text = new JTextField(10);
-		transferHandler = new InstanceTransferHandler(text);
+		transferHandler = new InstanceTransferHandler(errorHandler, text);
 		text.setTransferHandler(transferHandler);
 	}
 

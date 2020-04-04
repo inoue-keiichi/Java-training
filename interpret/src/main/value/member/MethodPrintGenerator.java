@@ -2,14 +2,13 @@ package main.value.member;
 
 import main.AutowiredService;
 import main.PrintGenerator;
-import main.value.ReflectionService;
 
 public class MethodPrintGenerator extends PrintGenerator {
-	private final ReflectionService reflectionService;
+	private final MemberService memberService;
 
 	public MethodPrintGenerator(AutowiredService service) {
 		super(service);
-		reflectionService = service.reflectionService;
+		memberService = service.memberService;
 	}
 
 	@Override
@@ -23,6 +22,6 @@ public class MethodPrintGenerator extends PrintGenerator {
 
 	@Override
 	public String getLog() {
-		return "the methods were created.\n";
+		return "[Success] the methods of " + this.memberService.getInstance().getClass().getName() + " were created.\n";
 	}
 }

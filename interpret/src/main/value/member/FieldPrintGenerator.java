@@ -4,8 +4,11 @@ import main.AutowiredService;
 import main.PrintGenerator;
 
 public class FieldPrintGenerator extends PrintGenerator {
+	MemberService memberService;
+
 	public FieldPrintGenerator(AutowiredService service) {
 		super(service);
+		this.memberService = service.memberService;
 	}
 
 	@Override
@@ -19,6 +22,7 @@ public class FieldPrintGenerator extends PrintGenerator {
 
 	@Override
 	public String getLog() {
-		return "the fields were created.\n";
+		return "[Success] the fields of " + this.memberService.getInstance().getClass().getName()
+				+ " were created.\n";
 	}
 }
