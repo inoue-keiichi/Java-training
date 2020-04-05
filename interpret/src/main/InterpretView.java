@@ -14,8 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import main.value.member.InstancePanel;
-import main.value.member.MemberPanel;
+import main.di.AutowiredGenerator;
+import main.di.AutowiredService;
+import main.view.View;
+import main.view.panel.InstancePanel;
+import main.view.panel.MemberPanel;
+import main.view.textarea.LogTextArea;
 
 public class InterpretView extends JFrame implements Runnable, ItemListener, ComponentListener {
 	private final Thread thread = new Thread(this);
@@ -68,6 +72,7 @@ public class InterpretView extends JFrame implements Runnable, ItemListener, Com
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addWindowListener(new InterpretWindowAdapter(service));
 		this.setVisible(true);
+		this.setTitle("Interpret");
 		this.setMinimumSize(new Dimension(1700, 450));
 		service.interpretViewService.x = this.getBounds().x;
 		service.interpretViewService.y = this.getBounds().y;
