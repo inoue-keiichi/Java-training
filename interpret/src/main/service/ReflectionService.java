@@ -1,13 +1,19 @@
 package main.service;
 
+import java.awt.Window;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.swing.JDialog;
+
+import main.InterpretView;
 import main.clazz.Argument;
 import main.utils.StringUtils;
 
@@ -16,15 +22,14 @@ public class ReflectionService implements Service {
 	private String clazzName;
 	private Constructor<?>[] constructors;
 	private Argument[] constructorArgments = null;
-	//private Argument[][] constructorArgs = null;
 	private Argument[] methodArguments = null;
 	private Argument fieldArgument;
 	private Map<String, Object> instances = new HashMap<>();
 	private Object instance;
 	private Field[] fields;
-	//private Method[] methods;
 	private Map<String, Field> fieldMap;
 	private Map<String, Method> methodMap;
+	public List<JDialog> instanceDialogs = new ArrayList<JDialog>();
 
 	// arrayタイプ
 	private int arraySize;
@@ -347,5 +352,20 @@ public class ReflectionService implements Service {
 
 	public String getInstanceType() {
 		return instanceType;
+	}
+
+	public void disposeAllWindows() {
+		// インスタンスの中身を表すダイアログを開放する
+		for (JDialog dialog : this.instanceDialogs) {
+			dialog.dispose();
+		}
+		// interpretViewが持つWindowクラスのオブジェクトを開放する
+		for (String key : this.instances.keySet()) {
+			if (this.instances.get(key) instanceof InterpretView) {
+				continue;
+			} else if (this.instances.get(key) instanceof Window) {
+				((Window) this.instances.get(key)).dispose();
+			}
+		}
 	}
 }

@@ -37,10 +37,10 @@ public class InstanceDialog extends View implements Observer {
 		Object instance = reflectionService.getInstances().get(instanceName);
 		dialogService.setInstance(instance);
 		dialogService.setInstanceName(instanceName);
-		view.setSize(500, 400);
+		view.setSize(800, 400);
 		view.add(createMemberInfoPanel(instance));
 		// interpretを閉じたら同時に閉じるようにする
-		service.interpretViewService.dialogs.add((JDialog) view);
+		service.reflectionService.instanceDialogs.add((JDialog) view);
 
 		this.view.setLocation(this.interpretViewService.x,
 				this.interpretViewService.y + this.interpretViewService.dimension.getSize().height);
