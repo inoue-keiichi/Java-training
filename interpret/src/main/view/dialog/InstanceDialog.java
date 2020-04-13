@@ -72,10 +72,12 @@ public class InstanceDialog extends View implements Observer {
 			e2.printStackTrace();
 		}
 		fieldTable = memberTables[0];
+		fieldTable.setDefaultEditor(Object.class, null);
 		fieldTable.setAlignmentX(Component.LEFT_ALIGNMENT);
 		fieldTable.setDragEnabled(true);
 		fieldTable.setTransferHandler(new Handler());
 		methodTable = memberTables[1];
+		methodTable.setDefaultEditor(Object.class, null);
 		methodTable.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel panel = new JPanel();
@@ -104,6 +106,7 @@ public class InstanceDialog extends View implements Observer {
 			// TODO 自動生成された catch ブロック
 			e2.printStackTrace();
 		}
+		elementTable.setDefaultEditor(Object.class, null);
 		elementTable.setAlignmentX(Component.LEFT_ALIGNMENT);
 		elementTable.setDragEnabled(true);
 		elementTable.setTransferHandler(new Handler());
