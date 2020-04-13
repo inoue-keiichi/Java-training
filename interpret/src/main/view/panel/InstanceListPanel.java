@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,12 +35,13 @@ public class InstanceListPanel extends View implements Observer, ActionListener 
 
 		view.setLayout(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setPreferredSize(new Dimension(50, 100));
+		scrollPane.setPreferredSize(new Dimension(90, 150));
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.addListSelectionListener(new InstanceListSelectionListener());
 		list.setDragEnabled(true);
 		displayBtn.setEnabled(false);
 		displayBtn.addActionListener(this);
+		view.add(new JLabel("Instance List"), BorderLayout.NORTH);
 		view.add(scrollPane, BorderLayout.CENTER);
 		view.add(displayBtn, BorderLayout.SOUTH);
 	}

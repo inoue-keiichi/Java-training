@@ -23,7 +23,7 @@ public class ObjectTypeInputPanel extends View implements ActionListener {
 	final ConstructorClearPrintGenerator constructorClearPrintGenerator;
 	final ErrorHandler errorHandler;
 
-	final JTextField typeText = new JTextField(15);
+	final JTextField typeText = new JTextField(30);
 	final JButton setBtn = new JButton("Set");
 
 	public ObjectTypeInputPanel(final AutowiredGenerator generator, final AutowiredService service) {

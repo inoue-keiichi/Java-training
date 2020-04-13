@@ -49,6 +49,8 @@ public class InterpretView extends JFrame implements Runnable, ItemListener, Com
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
 		this.instancePanel = (JPanel) new InstancePanel(generator, service).view;
+		//this.instancePanel.setMinimumSize(new Dimension(600, 200));
+		this.instancePanel.setPreferredSize(new Dimension(700, 250));
 		pane.add(this.instancePanel, gbc);
 		// メンバタブ
 		gbc.gridx = 1;
@@ -56,6 +58,8 @@ public class InterpretView extends JFrame implements Runnable, ItemListener, Com
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
 		this.memberPanel = (JPanel) new MemberPanel(generator, service).view;
+		//this.memberPanel.setMinimumSize(new Dimension(600, 200));
+		this.memberPanel.setPreferredSize(new Dimension(600, 250));
 		pane.add(this.memberPanel, gbc);
 		// ログパネル
 		this.logTextArea = new LogTextArea(generator, service);
@@ -73,7 +77,7 @@ public class InterpretView extends JFrame implements Runnable, ItemListener, Com
 		addWindowListener(new InterpretWindowAdapter(service));
 		this.setVisible(true);
 		this.setTitle("Interpret");
-		this.setMinimumSize(new Dimension(1700, 450));
+		this.setMinimumSize(new Dimension(1400, 500));
 		service.interpretViewService.x = this.getBounds().x;
 		service.interpretViewService.y = this.getBounds().y;
 		service.interpretViewService.dimension = this.getSize();

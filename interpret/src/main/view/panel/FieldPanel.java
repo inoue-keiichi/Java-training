@@ -3,6 +3,7 @@ package main.view.panel;
 import static java.awt.GridBagConstraints.*;
 import static main.utils.StringUtils.*;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -53,6 +54,7 @@ public class FieldPanel extends View implements Observer, ActionListener {
 
 		//構成要素
 		fieldComboBox = new JComboBox<>();
+		fieldComboBox.setPreferredSize(new Dimension(400,30));
 		fieldText = new ArgText(this.generator.errorHandler);
 		updateBtn = new ObserverButton("Update");
 		this.generator.fieldPrintGenerator.addObserver(updateBtn);

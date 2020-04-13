@@ -1,6 +1,7 @@
 package main.view.panel;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -61,6 +62,7 @@ public class MemberPanel extends View implements ItemListener, Observer {
 		this.indexComboBox = new JComboBox<>();
 		this.typeCardLayout = new CardLayout();
 		this.memberTab = new JTabbedPane();
+		this.memberTab.setPreferredSize(new Dimension(550, 200));
 		this.fieldPanel = new FieldPanel(this.generator, this.service);
 		this.methodPanel = new MethodPanel(this.generator, this.service);
 
@@ -130,7 +132,7 @@ public class MemberPanel extends View implements ItemListener, Observer {
 			String key = instanceName.substring(2, instanceName.length() - 1);
 			Object instance = reflectionService.getInstances().get(key);
 			if (Objects.isNull(instance)) {
-				throw new NullPointerException(key);
+				throw new NullPointerException("\"" + key + "\" is not found in Instance List.");
 			}
 
 			if (type == "Object") { // オブジェクトのフィールドとメソッドを表示

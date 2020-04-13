@@ -26,7 +26,7 @@ public class ArrayField extends PrintGenerator {
 		this.reflectionService = service.reflectionService;
 		this.errorHandler = generator.errorHandler;
 		this.setterClearPrintGenerator = generator.setterClearPrintGenerator;
-		text = new JTextField(8);
+		text = new JTextField(15);
 		transferHandler = new InstanceTransferHandler(this, text);
 		text.setTransferHandler(transferHandler);
 	}

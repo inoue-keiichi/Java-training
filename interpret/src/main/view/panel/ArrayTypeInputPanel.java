@@ -19,7 +19,7 @@ public class ArrayTypeInputPanel extends View implements ActionListener {
 	final ArrayCreatePrintGenerator arrayCreatePrintGenerator;
 	final ErrorHandler errorHandler;
 
-	final JTextField typeText = new JTextField(20);
+	final JTextField typeText = new JTextField(25);
 	final JTextField sizeText = new JTextField(5);
 	final JButton setBtn = new JButton("Create");
 

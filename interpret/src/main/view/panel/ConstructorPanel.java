@@ -3,6 +3,7 @@ package main.view.panel;
 import static java.awt.GridBagConstraints.*;
 import static main.utils.StringUtils.*;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import main.clazz.Argument;
 import main.di.AutowiredGenerator;
@@ -42,6 +44,7 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 	private final JComboBox<String> constructorComboBox = new JComboBox<>();
 	private final JLabel argsLabel = new JLabel("Argument: ");
 	private final JPanel argsPanel = new JPanel();
+	private final JScrollPane argScrollPane = new JScrollPane(argsPanel);
 	private final JButton generateBtn = new JButton("Create");
 	private final GridBagConstraints gbc = new GridBagConstraints();
 
@@ -56,6 +59,10 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 		this.constructorClearPrintGenerator = this.generator.constructorClearPrintGenerator;
 		this.constructorClearPrintGenerator.addObserver(this);
 
+		this.argScrollPane.setPreferredSize(new Dimension(450, 50));
+		this.argScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		this.argScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
 		// レイアウト
 		this.view.setLayout(new GridBagLayout());
 		gbc.gridx = 0;
@@ -66,6 +73,7 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 		gbc.gridy = 0;
 		gbc.anchor = EAST;
 		this.view.add(constructorComboBox, gbc);
+		constructorComboBox.setPreferredSize(new Dimension(450, 30));
 		constructorComboBox.addItemListener(this);
 		gbc.gridx = 1;
 		gbc.gridy = 2;
@@ -86,6 +94,10 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 
 	public void createArgumentPanel(final Argument[] args) {
 		this.argsPanel.removeAll();
+		this.argsPanel.revalidate();
+		this.argsPanel.repaint();
+		this.view.remove(this.argScrollPane);
+		//this.argScrollPane.remove(this.argsPanel);
 		this.view.revalidate();
 		if (args == null) {
 			this.view.remove(this.argsLabel);
@@ -102,8 +114,29 @@ public class ConstructorPanel extends View implements ActionListener, ItemListen
 		this.gbc.gridx = 1;
 		this.gbc.gridy = 1;
 		this.gbc.anchor = EAST;
-		this.view.add(this.argsPanel, gbc);
+		this.view.add(this.argScrollPane, gbc);
+		//this.argScrollPane.add(this.argsPanel);
 		this.argsPanel.revalidate();
+
+		//		this.argsPanel.removeAll();
+		//		this.view.revalidate();
+		//		if (args == null) {
+		//			this.view.remove(this.argsLabel);
+		//			this.view.repaint();
+		//			return;
+		//		}
+		//		for (Argument arg : args) {
+		//			this.argsPanel.add(new ArgText(this.errorHandler).text);
+		//		}
+		//		this.gbc.gridx = 0;
+		//		this.gbc.gridy = 1;
+		//		this.gbc.anchor = WEST;
+		//		this.view.add(this.argsLabel, gbc);
+		//		this.gbc.gridx = 1;
+		//		this.gbc.gridy = 1;
+		//		this.gbc.anchor = EAST;
+		//		this.view.add(this.argsPanel, gbc);
+		//		this.argsPanel.revalidate();
 	}
 
 	public JPanel getArgsPanel() {
