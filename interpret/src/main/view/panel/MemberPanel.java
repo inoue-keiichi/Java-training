@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ import main.view.Observer;
 import main.view.View;
 import main.view.field.InstanceField;
 
-public class MemberPanel extends View implements ItemListener, Observer {
+public class MemberPanel extends View implements ActionListener, Observer {
 
 	final ReflectionService reflectionService;
 	final MemberService memberService;
@@ -93,7 +93,7 @@ public class MemberPanel extends View implements ItemListener, Observer {
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.WEST;
-		indexComboBox.addItemListener(this);
+		indexComboBox.addActionListener(this);
 		this.view.add(this.typeCardPanel, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -148,10 +148,10 @@ public class MemberPanel extends View implements ItemListener, Observer {
 	}
 
 	@Override
-	public void itemStateChanged(ItemEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		try {
 			final String item = (String) indexComboBox.getSelectedItem();
-			if (item == "") {
+			if (Objects.isNull(item) || item == "") {
 				this.fieldPanel.clearField();
 				this.methodPanel.clearMethod();
 				return;
