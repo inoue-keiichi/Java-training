@@ -40,7 +40,7 @@ public class ArrayTypeInputPanel extends View implements ActionListener {
 		try {
 			reflectionService.setArray(typeText.getText(), sizeText.getText());
 			arrayCreatePrintGenerator.execute();
-		} catch (ClassNotFoundException | NumberFormatException e1) {
+		} catch (Exception e1) {
 			errorHandler.execute(e1);
 		}
 	}
