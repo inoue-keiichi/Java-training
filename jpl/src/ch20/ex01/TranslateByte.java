@@ -1,15 +1,14 @@
 package ch20.ex01;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class TranslateByte {
 	public static void translateByte(final Map<Character, Character> map, final InputStream in,
@@ -28,16 +27,29 @@ public class TranslateByte {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		Map<Character, Character> map = new HashMap<>();
 		map.put('n', 'N');
 		map.put('w', 'W');
 		String str = "niwaniwaniwaniwatorigairu";
-		OutputStream out = new ByteArrayOutputStream();
-		translateByte(map, new ByteArrayInputStream(str.getBytes("utf-8")), out);
-		System.out.println(out);
+		OutputStream out = null;
+		try {
+			out = new ByteArrayOutputStream();
+			translateByte(map, new ByteArrayInputStream(str.getBytes("utf-8")), out);
+			System.out.println(out);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			if (Objects.isNull(out)) {
+				return;
+			}
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
