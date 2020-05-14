@@ -14,14 +14,16 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import dc1_2.MenuWindowAdapter;
+import dc2_2.abstracts.PrintGenerator;
 import dc2_2.clock.utils.ActionListenerAdapter;
 import dc2_2.di.DIGenerator;
 import dc2_2.di.DIService;
+import dc2_2.interfaces.Observer;
 import dc2_2.view.DialogView;
 
-public class PropertyDialogView extends DialogView implements ActionListener {
+public class PropertyDialogView extends DialogView implements ActionListener, Observer {
 	private final PropertyService propertyService;
+	private final PropertyDialogGenerator propertyGenerator;
 	private final GridBagConstraints gbc;
 
 	private final JComboBox<String> fontComboBox;
@@ -29,12 +31,20 @@ public class PropertyDialogView extends DialogView implements ActionListener {
 	private final JComboBox<String> fontColorComboBox;
 	private final JComboBox<String> backgroundColorComboBox;
 
+	//private final JLabel fontLabel;
 	private final JPanel fontColorPanel;
 	private final JPanel backgroundColorPanel;
+
+	private String preFontColorName;
+	private String preBackgroundColorName;
+	private String preFontName;
+	private int preFontSize;
 
 	public PropertyDialogView(DIGenerator generator, DIService service) {
 		super(generator, service);
 		this.propertyService = new PropertyService();
+		this.propertyGenerator = new PropertyDialogGenerator(this.service);
+		this.propertyGenerator.addObserver(this);
 
 		//Component
 		this.fontColorPanel = new JPanel();
@@ -73,6 +83,7 @@ public class PropertyDialogView extends DialogView implements ActionListener {
 			}
 		});
 
+		//Layout
 		GridBagLayout layout = new GridBagLayout();
 		this.view.setLayout(layout);
 		gbc = new GridBagConstraints();
@@ -126,8 +137,13 @@ public class PropertyDialogView extends DialogView implements ActionListener {
 		this.view.setResizable(false);
 		this.view.setSize(600, 200);
 		this.view.setTitle("property setting");
+		this.view.addWindowListener(this.propertyGenerator.window);
 
-		this.view.addWindowListener(new MenuWindowAdapter());
+		//Init
+		this.preFontColorName = (String) this.fontColorComboBox.getSelectedItem();
+		this.preBackgroundColorName = (String) this.backgroundColorComboBox.getSelectedItem();
+		this.preFontName = (String) this.fontComboBox.getSelectedItem();
+		this.preFontSize = (int) this.fontSizeComboBox.getSelectedItem();
 	}
 
 	@Override
@@ -142,5 +158,20 @@ public class PropertyDialogView extends DialogView implements ActionListener {
 				.setBackgroundColor(colorConverter((String) this.backgroundColorComboBox.getSelectedItem()));
 		this.generator.clockFramePrintGenerator.execute();
 		this.view.dispose();
+		//To preserve the parameters which are setted now.
+		this.preFontName = (String) this.fontComboBox.getSelectedItem();
+		this.preFontSize = (int) this.fontSizeComboBox.getSelectedItem();
+		this.preFontColorName = (String) this.fontColorComboBox.getSelectedItem();
+		this.preBackgroundColorName = (String) this.backgroundColorComboBox.getSelectedItem();
+
+	}
+
+	@Override
+	public void update(PrintGenerator printGenerator) {
+		this.fontComboBox.setSelectedItem(this.preFontName);
+		this.fontSizeComboBox.setSelectedItem(this.preFontSize);
+		this.fontColorComboBox.setSelectedItem(this.preFontColorName);
+		this.backgroundColorComboBox.setSelectedItem(this.preBackgroundColorName);
+
 	}
 }

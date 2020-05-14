@@ -1,7 +1,6 @@
 package dc2_2.clock.menu;
 
 import java.awt.Choice;
-import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 
 import dc2_2.interfaces.Service;
@@ -13,15 +12,6 @@ public class PropertyService implements Service {
 			"magenta", "orange", "pink", "red", "white", "yellow" };
 	private final String[] BACKGROUND_COLOR_ARRAY = { "black", "blue", "cyan", "darkGray", "gray", "green", "lightGray",
 			"magenta", "orange", "pink", "red", "white", "yellow" };
-
-	//	private Choice fontChoice = setChoice(
-	//			GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-	//	private Choice fontSizeChoice = setChoice(FONT_SIZE_ARRAY);
-	//	private Choice fontColorChoice = setChoice(FONT_COLOR_ARRAY);
-	//	private Choice backgroundColorChoice = setChoice(BACKGROUND_COLOR_ARRAY);
-
-	private Color fontColorTip;
-	private Color backgroundColorTip;
 
 	/**
 	 * プルダウンの選択肢をセットしてChoiceオブジェクトを返します。
@@ -52,21 +42,4 @@ public class PropertyService implements Service {
 	public final String[] getBackgroundColorNames() {
 		return BACKGROUND_COLOR_ARRAY;
 	}
-
-	public final Color getFontColorTip() {
-		return fontColorTip;
-	}
-
-	public final void setFontColorTip(Color fontColorTip) {
-		this.fontColorTip = fontColorTip;
-	}
-
-	public final Color getBackgroundColorTip() {
-		return fontColorTip;
-	}
-
-	public final void setBackgroundColorTip(Color backgroundColorTip) {
-		this.backgroundColorTip = backgroundColorTip;
-	}
-
 }
