@@ -158,7 +158,7 @@ public class PropertyDialogView extends DialogView implements ActionListener, Ob
 				.setBackgroundColor(colorConverter((String) this.backgroundColorComboBox.getSelectedItem()));
 		this.generator.clockFramePrintGenerator.execute();
 		this.view.dispose();
-		//To preserve the parameters which are setted now.
+		//To preserve the parameters which are set now.
 		this.preFontName = (String) this.fontComboBox.getSelectedItem();
 		this.preFontSize = (int) this.fontSizeComboBox.getSelectedItem();
 		this.preFontColorName = (String) this.fontColorComboBox.getSelectedItem();

@@ -24,6 +24,8 @@ public class TimePanel extends JPanel implements Observer, Runnable, ComponentLi
 	private final TimeService timeService;
 	private final Thread thread;
 	private boolean resizedFlg;
+	public boolean isResize;
+	private int width;
 
 	public TimePanel(final DIGenerator generator, final DIService service) {
 		this.timeService = service.timeService;
@@ -38,6 +40,8 @@ public class TimePanel extends JPanel implements Observer, Runnable, ComponentLi
 
 		//DI
 		generator.clockFramePrintGenerator.addObserver(this);
+
+		isResize = true;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -45,13 +49,14 @@ public class TimePanel extends JPanel implements Observer, Runnable, ComponentLi
 		final Dimension size = getSize();
 		FontMetrics fontMetrics = getFontMetrics(
 				new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
-		this.setMinimumSize(new Dimension(MAX_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT,
-				fontMetrics.getHeight() + MIN_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT));
-
+		//		this.setMinimumSize(new Dimension(
+		//				fontMetrics.stringWidth(timeService.getTime()) + MAX_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT,
+		//				fontMetrics.getHeight() + MIN_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT));
 		g.setColor(timeService.getFontColor());
 		g.setFont(fontMetrics.getFont());
-		g.drawString(timeService.getTime(), (int) (size.width - fontMetrics.stringWidth(timeService.getTime())) / 2,
-				(int) (size.height + fontMetrics.getHeight()) / 2);
+		g.drawString(timeService.getTime(), MIN_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT,
+				(int) ((size.height - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent()));
+
 	}
 
 	@Override
