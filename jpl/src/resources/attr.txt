@@ -1,0 +1,5 @@
+# hogehoge
+// カナダ
+Canada=10
+// 日本
+Japan=20
