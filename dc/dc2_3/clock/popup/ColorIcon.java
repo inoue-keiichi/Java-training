@@ -6,7 +6,9 @@ import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JPanel;
 
-public class ColorIcon extends JPanel {
+import dc2_3.interfaces.ItemIcon;
+
+public class ColorIcon extends JPanel implements ItemIcon {
 	private final Icon icon;
 
 	public ColorIcon(Color color) {

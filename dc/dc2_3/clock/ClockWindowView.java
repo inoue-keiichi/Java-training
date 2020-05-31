@@ -48,8 +48,8 @@ public class ClockWindowView extends FrameView implements Observer {
 				"sizeX: " + this.service.timeService.getFontMetrics().stringWidth(this.service.timeService.getTime()));
 		System.out.println("sizeY: " + this.service.timeService.getFontMetrics().getHeight());
 
-		ClockWindowService.SPACE_X = this.view.getSize().width / 10;
-		ClockWindowService.SPACE_Y = this.view.getSize().width / 30;
+		ClockWindowService.SPACE_X = this.view.getSize().width / 5;
+		ClockWindowService.SPACE_Y = this.view.getSize().height / 30;
 
 		this.view.setSize(
 				ClockWindowService.SPACE_X

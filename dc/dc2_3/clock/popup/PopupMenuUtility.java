@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PopupMenuUtility {
 	public static final String[] FONT_SIZES = { "100", "120", "130", "140", "150", "160", "170", "180", "190", "200",
@@ -32,6 +33,14 @@ public class PopupMenuUtility {
 
 	public static final String[] FONT_FAMILY_NAMES = GraphicsEnvironment.getLocalGraphicsEnvironment()
 			.getAvailableFontFamilyNames();
+
+	public static final Map<String, Font> FONTMAP = new TreeMap<String, Font>() {
+		{
+			for (String fontName : FONT_FAMILY_NAMES) {
+				put(fontName, new Font(fontName, Font.PLAIN, 10));
+			}
+		}
+	};
 
 	/**
 	 *   文字列を整数型に変換して返します。
