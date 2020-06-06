@@ -44,8 +44,6 @@ public class TimePanel extends JPanel implements Observer, Runnable {
 		g.setFont(fontMetrics.getFont());
 		g.drawString(timeService.getTime(), this.timeService.getFontMetricsOffsetX(),
 				this.timeService.getFontMetricsOffsetY());
-		//		g.drawString(timeService.getTime(), (size.width - fontMetrics.stringWidth(this.timeService.getTime())) / 2,
-		//				(int) ((size.height - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent()));
 	}
 
 	@Override

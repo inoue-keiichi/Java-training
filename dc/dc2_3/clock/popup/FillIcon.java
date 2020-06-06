@@ -44,12 +44,11 @@ class FillIcon implements Icon {
 		g.fillRect(x, y, width, height);
 		// To draw graphics with black after drawing icon.
 		g.setColor(Color.black);
+		g.drawRect(x, y, width, height);
 	}
 
 	private void paintFontIcon(Component c, Graphics g, int x, int y) {
 		g.setColor(Color.black);
 		g.setFont(font);
-		//g.drawString(font.getName(), x, y);
-		//g.setColor(Color.white);
 	}
 }

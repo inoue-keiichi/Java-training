@@ -26,7 +26,6 @@ public class MenuTemplate implements ActionListener {
 		System.out.println("command: " + command);
 		menuView.service.timeService.convertCommand(popupName, command);
 		menuView.service.clockFrameService.convertCommand(popupName, command);
-		//		this.menuView.generator.clockFramePrintGenerator.execute();
 		this.menuView.generator.timePanelPrintGenerator.execute();
 		command = null;
 

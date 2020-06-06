@@ -23,7 +23,6 @@ public class ClockWindowView extends FrameView implements Observer {
 		this.timePanel = new TimePanelView(this.generator, this.service);
 		this.dagWindowListener = new DragWindowListener();
 		this.view.add(this.timePanel.view);
-		//this.view.setSize(500, 200);
 		this.view.setSize(
 				this.service.timeService.getFontMetrics().stringWidth(this.service.timeService.getTime()) + 10,
 				this.service.timeService.getFontMetrics().getHeight() + 10);
@@ -48,8 +47,9 @@ public class ClockWindowView extends FrameView implements Observer {
 				"sizeX: " + this.service.timeService.getFontMetrics().stringWidth(this.service.timeService.getTime()));
 		System.out.println("sizeY: " + this.service.timeService.getFontMetrics().getHeight());
 
-		ClockWindowService.SPACE_X = this.view.getSize().width / 5;
-		ClockWindowService.SPACE_Y = this.view.getSize().height / 30;
+		ClockWindowService.SPACE_X = this.service.timeService.getFontMetrics()
+				.stringWidth(this.service.timeService.getTime()) / 4;
+		ClockWindowService.SPACE_Y = this.service.timeService.getFontMetrics().getHeight() / 4;
 
 		this.view.setSize(
 				ClockWindowService.SPACE_X

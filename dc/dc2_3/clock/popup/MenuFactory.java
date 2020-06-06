@@ -22,28 +22,16 @@ public class MenuFactory {
 		final MenuView menuView = new MenuView(generator, service);
 		menuView.view.setText(name);
 		final MenuTemplate menuTemplate = new MenuTemplate(menuView);
-		final JMenuItem upButton = new JMenuItem("▲");
-		final JMenuItem downButton = new JMenuItem("▼");
-		final MouseAdapter mouse = new ScrollMouseLisner(menuView.view);
-		upButton.setEnabled(false);
-		upButton.addMouseMotionListener(mouse);
-		upButton.addMouseListener(mouse);
-		downButton.setEnabled(false);
-		downButton.addMouseMotionListener(mouse);
-		downButton.addMouseListener(mouse);
-		menuView.view.add(upButton);
 		for (int i = 0; i < menuItemNames.length; i++) {
 			final JRadioButtonMenuItem item = new JRadioButtonMenuItem(menuItemNames[i]);
 			menuView.itemList.add(item);
 			item.addActionListener(menuTemplate);
-			item.addMouseWheelListener(mouse);
 			menuView.view.add(item);
 			menuView.group.add(item);
 			if (i > 30 - 1) {
 				item.setVisible(false);
 			}
 		}
-		menuView.view.add(downButton);
 		return menuTemplate.menuView;
 	}
 
@@ -51,18 +39,6 @@ public class MenuFactory {
 		final MenuView menuView = new MenuView(generator, service);
 		menuView.view.setText(name);
 		final MenuTemplate menuTemplate = new MenuTemplate(menuView);
-		//for (String menuItemName : map.keySet()) {
-		//ColorIcon colorIcon = new ColorIcon(map.get(menuItemName));
-
-		//			ItemIcon icon = IconFactory.create(map.get(menuItemName));
-		//			final JRadioButtonMenuItem item = new JRadioButtonMenuItem(menuItemName);
-		//			item.setBackground(new Color(100, 200, 100));
-		//			item.setIcon(icon.getIcon());
-		//			menuView.itemList.add(item);
-		//			item.addActionListener(menuTemplate);
-		//			menuView.view.add(item);
-		//			menuView.group.add(item);
-		//}
 
 		JMenuItem upButton = null;
 		JMenuItem downButton = null;
@@ -70,6 +46,8 @@ public class MenuFactory {
 
 		if (map.keySet().size() > 30) {
 			upButton = new JMenuItem("▲");
+			upButton.setBackground(new Color(255, 245, 240));
+			upButton.setBounds(100, 100, 100, 100);
 			upButton.setEnabled(false);
 			upButton.addMouseMotionListener(mouse);
 			upButton.addMouseListener(mouse);
@@ -88,6 +66,7 @@ public class MenuFactory {
 
 		if (map.keySet().size() > 30) {
 			downButton = new JMenuItem("▼");
+			downButton.setBackground(new Color(255, 245, 240));
 			downButton.setEnabled(false);
 			downButton.addMouseMotionListener(mouse);
 			downButton.addMouseListener(mouse);
@@ -103,12 +82,10 @@ public class MenuFactory {
 		if (entry.getValue() instanceof Color) {
 			icon = new ColorIcon((Color) entry.getValue());
 			item = new JRadioButtonMenuItem(entry.getKey());
-			item.setBackground(new Color(100, 200, 100));
 			item.setIcon(icon.getIcon());
 		} else if (entry.getValue() instanceof Font) {
 			icon = new FontIcon((Font) entry.getValue());
 			item = new JRadioButtonMenuItem(entry.getKey(), icon.getIcon());
-			//item = new JRadioButtonMenuItem(icon.getIcon());
 		}
 		menuView.itemList.add(item);
 		item.addActionListener(menuTemplate);

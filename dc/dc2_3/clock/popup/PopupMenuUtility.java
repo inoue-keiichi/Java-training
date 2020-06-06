@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class PopupMenuUtility {
-	public static final String[] FONT_SIZES = { "100", "120", "130", "140", "150", "160", "170", "180", "190", "200",
-			"250", "300" };
+	public static final String[] FONT_SIZES = { "100", "110", "120", "130", "140", "150", "160", "170", "180", "190",
+			"200", "250", "300", "350", "400" };
 	public static final String[] COLORS = { "black", "blue", "cyan", "darkGray", "gray", "green",
 			"lightGray", "magenta", "orange", "pink", "red", "white", "yellow" };
 
