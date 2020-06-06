@@ -25,12 +25,10 @@ public class ClockPopup extends PopupView implements ActionListener {
 	public ClockPopup(DIGenerator generator, DIService service) {
 		super(generator, service);
 		view.setName("Property");
-		//fontMenuView = MenuFactory.create(generator, service, "Font", PopupMenuUtility.FONT_FAMILY_NAMES);
 		fontMenuView = MenuFactory.create(generator, service, "Font", PopupMenuUtility.FONTMAP);
 		fontSizeMenuView = MenuFactory.create(generator, service, "Font Size", PopupMenuUtility.FONT_SIZES);
 		fontColorMenuView = MenuFactory.create(generator, service, "Font Color", PopupMenuUtility.COLORMAP);
-		backgroundColorMenuView = MenuFactory.create(generator, service, "Background Color",
-				PopupMenuUtility.COLORMAP);
+		backgroundColorMenuView = MenuFactory.create(generator, service, "Background Color", PopupMenuUtility.COLORMAP);
 		menuFinishItem = new JMenuItem("Finish");
 		menuFinishItem.addActionListener(this);
 		view.add(fontMenuView.view);
@@ -71,7 +69,6 @@ public class ClockPopup extends PopupView implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		System.out.println(command);
 
 		if (command.equals("Finish")) {
 			System.exit(0);

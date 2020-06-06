@@ -22,8 +22,6 @@ public class MenuTemplate implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		command = e.getActionCommand();
-		System.out.println("popupName: " + popupName);
-		System.out.println("command: " + command);
 		menuView.service.timeService.convertCommand(popupName, command);
 		menuView.service.clockFrameService.convertCommand(popupName, command);
 		this.menuView.generator.timePanelPrintGenerator.execute();

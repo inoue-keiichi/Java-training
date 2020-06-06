@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import javax.swing.JWindow;
 
 import dc2_3.abstracts.PrintGenerator;
-import dc2_3.clock.popup.ClickPopupListener;
+import dc2_3.clock.listener.DragWindowListener;
+import dc2_3.clock.listener.WindowListener;
 import dc2_3.clock.popup.ClockPopup;
+import dc2_3.clock.popup.listener.ClickPopupListener;
 import dc2_3.clock.time.TimePanelView;
 import dc2_3.di.DIGenerator;
 import dc2_3.di.DIService;
@@ -43,9 +45,6 @@ public class ClockWindowView extends FrameView implements Observer {
 	@Override
 	public void update(PrintGenerator printGenerator) {
 		this.view.setBackground(this.service.timeService.getBackgroundColor());
-		System.out.println(
-				"sizeX: " + this.service.timeService.getFontMetrics().stringWidth(this.service.timeService.getTime()));
-		System.out.println("sizeY: " + this.service.timeService.getFontMetrics().getHeight());
 
 		ClockWindowService.SPACE_X = this.service.timeService.getFontMetrics()
 				.stringWidth(this.service.timeService.getTime()) / 4;

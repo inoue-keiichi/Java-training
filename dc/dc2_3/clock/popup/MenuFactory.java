@@ -10,6 +10,10 @@ import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import dc2_3.clock.popup.icon.ColorIcon;
+import dc2_3.clock.popup.icon.FontIcon;
+import dc2_3.clock.popup.listener.ConformCommandMouseListener;
+import dc2_3.clock.popup.listener.ScrollMouseListener;
 import dc2_3.di.DIGenerator;
 import dc2_3.di.DIService;
 import dc2_3.interfaces.ItemIcon;
@@ -26,6 +30,7 @@ public class MenuFactory {
 			final JRadioButtonMenuItem item = new JRadioButtonMenuItem(menuItemNames[i]);
 			menuView.itemList.add(item);
 			item.addActionListener(menuTemplate);
+			item.addMouseListener(new ConformCommandMouseListener(menuView));
 			menuView.view.add(item);
 			menuView.group.add(item);
 			if (i > 30 - 1) {
@@ -42,7 +47,7 @@ public class MenuFactory {
 
 		JMenuItem upButton = null;
 		JMenuItem downButton = null;
-		final MouseAdapter mouse = new ScrollMouseLisner(menuView.view);
+		final MouseAdapter mouse = new ScrollMouseListener(menuView.view);
 
 		if (map.keySet().size() > 30) {
 			upButton = new JMenuItem("▲");
