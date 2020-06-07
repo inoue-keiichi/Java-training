@@ -20,24 +20,70 @@ import dc2_3.interfaces.ItemIcon;
 import dc2_3.view.MenuView;
 
 public class MenuFactory {
+	public static final int MENU_ITEM_DISPLAY_NUMBER = 30;
+
 	public Icon icon;
 
-	public static MenuView create(DIGenerator generator, DIService service, String name, String[] menuItemNames) {
+	public static <T> MenuView create(DIGenerator generator, DIService service, String name, String[] menuItemNames) {
 		final MenuView menuView = new MenuView(generator, service);
 		menuView.view.setText(name);
 		final MenuTemplate menuTemplate = new MenuTemplate(menuView);
-		for (int i = 0; i < menuItemNames.length; i++) {
-			final JRadioButtonMenuItem item = new JRadioButtonMenuItem(menuItemNames[i]);
-			menuView.itemList.add(item);
-			item.addActionListener(menuTemplate);
-			item.addMouseListener(new ConformCommandMouseListener(menuView));
-			menuView.view.add(item);
-			menuView.group.add(item);
-			if (i > 30 - 1) {
-				item.setVisible(false);
+
+		if (menuItemNames.length <= MENU_ITEM_DISPLAY_NUMBER) {
+			for (String itemName : menuItemNames) {
+				addItem(menuView, itemName, menuTemplate);
 			}
+			return menuTemplate.menuView;
 		}
+
+		final MouseAdapter mouse = new ScrollMouseListener(menuView.view);
+		final JMenuItem upButton = new JMenuItem("▲");
+		upButton.setBackground(new Color(255, 245, 240));
+		upButton.setBounds(100, 100, 100, 100);
+		upButton.setEnabled(false);
+		upButton.addMouseMotionListener(mouse);
+		upButton.addMouseListener(mouse);
+		menuView.view.add(upButton);
+
+		for (String itemName : menuItemNames) {
+			addItem(menuView, itemName, menuTemplate);
+		}
+
+		for (int i = MENU_ITEM_DISPLAY_NUMBER + 1; i < menuView.view.getItemCount(); i++) {
+			menuView.view.getItem(i).setVisible(false);
+		}
+
+		final JMenuItem downButton = new JMenuItem("▼");
+		downButton.setBackground(new Color(255, 245, 240));
+		downButton.setEnabled(false);
+		downButton.addMouseMotionListener(mouse);
+		downButton.addMouseListener(mouse);
+		menuView.view.add(downButton);
+
 		return menuTemplate.menuView;
+	}
+
+	//	private <T> void addItems(final MenuView menuView, final Object items, final MenuTemplate menuTemplate) {
+	//		if (items instanceof String[]) {
+	//			for (String itemName : (String[]) items) {
+	//				addItem(menuView, itemName, menuTemplate);
+	//			}
+	//		} else if (items instanceof Map) {
+	//			Map<String, T> map = (Map<String, T>) items;
+	//			for (Entry<String, T> entry : map.entrySet()) {
+	//				addItemWithIcon(menuView, entry, menuTemplate);
+	//			}
+	//		}
+	//	}
+
+	private static void addItem(final MenuView menuView, final String menuItemName,
+			final MenuTemplate menuTemplate) {
+		final JRadioButtonMenuItem item = new JRadioButtonMenuItem(menuItemName);
+		menuView.itemList.add(item);
+		item.addActionListener(menuTemplate);
+		item.addMouseListener(new ConformCommandMouseListener(menuView));
+		menuView.view.add(item);
+		menuView.group.add(item);
 	}
 
 	public static <T> MenuView create(DIGenerator generator, DIService service, String name, Map<String, T> map) {
@@ -45,38 +91,36 @@ public class MenuFactory {
 		menuView.view.setText(name);
 		final MenuTemplate menuTemplate = new MenuTemplate(menuView);
 
-		JMenuItem upButton = null;
-		JMenuItem downButton = null;
-		final MouseAdapter mouse = new ScrollMouseListener(menuView.view);
-
-		if (map.keySet().size() > 30) {
-			upButton = new JMenuItem("▲");
-			upButton.setBackground(new Color(255, 245, 240));
-			upButton.setBounds(100, 100, 100, 100);
-			upButton.setEnabled(false);
-			upButton.addMouseMotionListener(mouse);
-			upButton.addMouseListener(mouse);
-			menuView.view.add(upButton);
+		if (map.keySet().size() <= MENU_ITEM_DISPLAY_NUMBER) {
+			for (Entry<String, T> entry : map.entrySet()) {
+				addItemWithIcon(menuView, entry, menuTemplate);
+			}
+			return menuTemplate.menuView;
 		}
+
+		final MouseAdapter mouse = new ScrollMouseListener(menuView.view);
+		final JMenuItem upButton = new JMenuItem("▲");
+		upButton.setBackground(new Color(255, 245, 240));
+		upButton.setBounds(100, 100, 100, 100);
+		upButton.setEnabled(false);
+		upButton.addMouseMotionListener(mouse);
+		upButton.addMouseListener(mouse);
+		menuView.view.add(upButton);
 
 		for (Entry<String, T> entry : map.entrySet()) {
 			addItemWithIcon(menuView, entry, menuTemplate);
 		}
 
-		for (int i = 1; i < menuView.view.getItemCount(); i++) {
-			if (i > 30 - 1) {
-				menuView.view.getItem(i).setVisible(false);
-			}
+		for (int i = MENU_ITEM_DISPLAY_NUMBER + 1; i < menuView.view.getItemCount(); i++) {
+			menuView.view.getItem(i).setVisible(false);
 		}
 
-		if (map.keySet().size() > 30) {
-			downButton = new JMenuItem("▼");
-			downButton.setBackground(new Color(255, 245, 240));
-			downButton.setEnabled(false);
-			downButton.addMouseMotionListener(mouse);
-			downButton.addMouseListener(mouse);
-			menuView.view.add(downButton);
-		}
+		final JMenuItem downButton = new JMenuItem("▼");
+		downButton.setBackground(new Color(255, 245, 240));
+		downButton.setEnabled(false);
+		downButton.addMouseMotionListener(mouse);
+		downButton.addMouseListener(mouse);
+		menuView.view.add(downButton);
 
 		return menuTemplate.menuView;
 	}

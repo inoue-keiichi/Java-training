@@ -9,8 +9,9 @@ import java.util.Objects;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import dc2_3.clock.popup.MenuFactory;
+
 public class ScrollMouseListener extends MouseAdapter {
-	public static final int POPUP_ITEM_DISPLAY_NUMBER = 30;
 	private JMenu menu;
 	private Thread thread;
 	private int i = 1;
@@ -21,22 +22,18 @@ public class ScrollMouseListener extends MouseAdapter {
 				return;
 			}
 			i--;
-			if (i % 30 != 0) {
-				menu.getItem(i).setVisible(true);
-			}
-			menu.getItem(i + POPUP_ITEM_DISPLAY_NUMBER).setVisible(false);
+			menu.getItem(i).setVisible(true);
+			menu.getItem(i + MenuFactory.MENU_ITEM_DISPLAY_NUMBER).setVisible(false);
 		}
 	};
 	private final Runnable DOWN = new Runnable() {
 		@Override
 		public void run() {
-			if (i + POPUP_ITEM_DISPLAY_NUMBER > menu.getItemCount() - 2) {
+			if (i + MenuFactory.MENU_ITEM_DISPLAY_NUMBER > menu.getItemCount() - 2) {
 				return;
 			}
 			menu.getItem(i).setVisible(false);
-			if (i % 30 != 0) {
-				menu.getItem(i + POPUP_ITEM_DISPLAY_NUMBER).setVisible(true);
-			}
+			menu.getItem(i + MenuFactory.MENU_ITEM_DISPLAY_NUMBER).setVisible(true);
 			i++;
 		}
 	};
