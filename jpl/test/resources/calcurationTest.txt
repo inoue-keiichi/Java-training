@@ -1,0 +1,10 @@
+akira + 1
+akira + 2
+bob + 5
+ken - 2
+bob - 4
+bob + 1
+ken + 4
+ken - 1
+bob + 0
+q

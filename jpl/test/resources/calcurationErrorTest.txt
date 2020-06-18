@@ -1,0 +1,2 @@
+akira / 1
+akira % 2
