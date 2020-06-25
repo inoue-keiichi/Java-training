@@ -1,6 +1,5 @@
 package ch20.ex06;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +23,7 @@ public class CalculationTokenizer {
 		String name = null;
 		Character op = null;
 
-		try (Reader reader = new InputStreamReader(source); BufferedReader r = new BufferedReader(reader)) {
+		try (Reader reader = new InputStreamReader(source);) {
 			final StreamTokenizer in = new StreamTokenizer(reader);
 			while (true) {
 				in.nextToken();
