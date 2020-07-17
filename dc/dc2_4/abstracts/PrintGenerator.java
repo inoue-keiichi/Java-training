@@ -10,6 +10,7 @@ public abstract class PrintGenerator {
 	private List<Observer> observers = new ArrayList<>();
 	private Object item;
 	protected DIService service;
+	private boolean isChanged = true;
 
 	public PrintGenerator(final DIService service) {
 		this.service = service;
@@ -20,10 +21,17 @@ public abstract class PrintGenerator {
 	}
 
 	public void notifyObservers() {
+		if (!isChanged) {
+			return;
+		}
 		for (Observer observer : observers) {
 			observer.update(this);
 		}
 	}
 
 	public abstract void execute();
+
+	public void setChanged(final boolean isChanged) {
+		this.isChanged = isChanged;
+	}
 }

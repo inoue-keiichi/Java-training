@@ -1,16 +1,15 @@
 package dc2_4.clock.time;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.Objects;
 
 import javax.swing.JPanel;
 
 import dc2_4.abstracts.PrintGenerator;
+import dc2_4.clock.ClockFrameService;
 import dc2_4.di.DIGenerator;
 import dc2_4.di.DIService;
 import dc2_4.interfaces.Observer;
@@ -18,14 +17,18 @@ import dc2_4.interfaces.Observer;
 public class TimePanel extends JPanel implements Observer, Runnable, ComponentListener {
 	private static final int MIN_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT = 10;
 	private static final int MAX_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT = 20;
-	private static final int MIN_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT = 100;
-	private static final int MAX_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT = 0;
 
 	private final TimeService timeService;
 	private final Thread thread;
+	private boolean isShown = false;
 	private boolean resizedFlg;
-	public boolean isResize;
-	private int width;
+
+	private int i = 0;
+	private int j = 0;
+
+	private final PrintGenerator clockFramePrintGenerator;
+	private final PrintGenerator timePanelPrintGenerator;
+	private final ClockFrameService clockFrameService;
 
 	public TimePanel(final DIGenerator generator, final DIService service) {
 		this.timeService = service.timeService;
@@ -39,24 +42,23 @@ public class TimePanel extends JPanel implements Observer, Runnable, ComponentLi
 		timeService.setFontMetrics(fontMetrics);
 
 		//DI
-		generator.clockFramePrintGenerator.addObserver(this);
-
-		isResize = true;
+		generator.timePanelPrintGenerator.addObserver(this);
+		this.clockFramePrintGenerator = generator.clockFramePrintGenerator;
+		this.timePanelPrintGenerator = generator.timePanelPrintGenerator;
+		this.clockFrameService = service.clockFrameService;
 	}
 
 	public void paintComponent(Graphics g) {
+		if (!isShown) {
+			return;
+		}
 		// フレームの大きさによって文字の大きさを変える
-		final Dimension size = getSize();
 		FontMetrics fontMetrics = getFontMetrics(
 				new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
-		//		this.setMinimumSize(new Dimension(
-		//				fontMetrics.stringWidth(timeService.getTime()) + MAX_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT,
-		//				fontMetrics.getHeight() + MIN_LIMIT_FOR_HEIGHT_BETWEEN_FRAME_AND_FONT));
 		g.setColor(timeService.getFontColor());
 		g.setFont(fontMetrics.getFont());
-		g.drawString(timeService.getTime(), MIN_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT,
-				(int) ((size.height - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent()));
-
+		g.drawString(timeService.getTime(), this.timeService.getFontMetricsOffsetX(),
+				this.timeService.getFontMetricsOffsetY());
 	}
 
 	@Override
@@ -66,33 +68,103 @@ public class TimePanel extends JPanel implements Observer, Runnable, ComponentLi
 			repaint();
 			try {
 				Thread.sleep(1000); // スリープ１秒
-				this.resizedFlg = true;
 			} catch (InterruptedException e) {
 			}
 		}
 	}
 
+	public void show() {
+		isShown = true;
+	}
+
 	@Override
 	public void componentResized(ComponentEvent e) {
-		Dimension size = this.getSize();
-		FontMetrics fontMetrics = timeService.getFontMetrics();
-		if (Objects.isNull(fontMetrics)) {
-			return;
-		} else if (!resizedFlg) {
-			return;
-		}
-		while (size.width
-				- fontMetrics.stringWidth(timeService.getTime()) < MIN_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT) {
-			timeService.setFontSize(Integer.toString(timeService.getFontSize() - 1));
-			fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
-			timeService.setFontMetrics(fontMetrics);
-		}
-		while (size.width
-				- fontMetrics.stringWidth(timeService.getTime()) > MAX_LIMIT_FOR_WIDTH_BETWEEN_FRAME_AND_FONT) {
-			timeService.setFontSize(Integer.toString(timeService.getFontSize() + 1));
-			fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
-			timeService.setFontMetrics(fontMetrics);
-		}
+		//		Dimension size = this.getSize();
+		//		//System.out.println(size.getWidth() + " : " + size.getHeight());
+		//		FontMetrics fontMetrics = timeService.getFontMetrics();
+		//		if (Objects.isNull(fontMetrics)) {
+		//			return;
+		//		} else if (!this.resizedFlg) {
+		//			return;
+		//		}
+		//
+		//		int i = 0;
+		//
+		//		while (size.width != this.clockFrameService.getSpaceX() + fontMetrics.stringWidth(timeService.getTime())
+		//				|| size.height != this.clockFrameService.getSpaceY()
+		//						+ fontMetrics.stringWidth(timeService.getTime())) {
+		//			if (size.width < this.clockFrameService.getSpaceX() + fontMetrics.stringWidth(timeService.getTime())
+		//					|| size.height < this.clockFrameService.getSpaceY() + fontMetrics.getHeight()) {
+		//				timeService.setFontSize(Integer.toString(timeService.getFontSize() - 1));
+		//				fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		//				timeService.setFontMetrics(fontMetrics);
+		//			} else if (size.width > this.clockFrameService.getSpaceX() + fontMetrics.stringWidth(timeService.getTime())
+		//					|| size.height > this.clockFrameService.getSpaceY() + fontMetrics.getHeight()) {
+		//				timeService.setFontSize(Integer.toString(timeService.getFontSize() + 1));
+		//				fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		//				timeService.setFontMetrics(fontMetrics);
+		//			}
+		//
+		//			this.clockFrameService.setSpaceX(timeService.getFontMetrics().stringWidth(timeService.getTime()) / 4);
+		//			this.clockFrameService.setSpaceY(timeService.getFontMetrics().getHeight() / 4);
+		//			this.timeService.setFontMetricsOffsetX(this.clockFrameService.getSpaceX() / 2);
+		//			this.timeService
+		//					.setFontMetricsOffsetY(this.clockFrameService.getSpaceY() / 2 + fontMetrics.getAscent());
+		//			size = this.getSize();
+		//
+		//			// 文字サイズの増減を交互に繰り返して無限ループする場合がある
+		//			if (i > 30) {
+		//				break;
+		//			}
+		//			i++;
+		//		}
+		//
+		//		//		int i = 0;
+		//		//
+		//		//		while (size.width > (int) fontMetrics.stringWidth(timeService.getTime()) / 4 * 5 * 1.01
+		//		//				|| size.width < (int) fontMetrics.stringWidth(timeService.getTime()) / 4 * 5 * 0.99) {
+		//		//			if (size.width < (int) fontMetrics.stringWidth(timeService.getTime()) / 4 * 5) {
+		//		//				timeService.setFontSize(Integer.toString(timeService.getFontSize() - 1));
+		//		//				fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		//		//				timeService.setFontMetrics(fontMetrics);
+		//		//			} else if (size.width > (int) fontMetrics.stringWidth(timeService.getTime()) / 4 * 5) {
+		//		//				timeService.setFontSize(Integer.toString(timeService.getFontSize() + 1));
+		//		//				fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		//		//				timeService.setFontMetrics(fontMetrics);
+		//		//			}
+		//		//
+		//		//			this.clockFrameService.setSpaceX(timeService.getFontMetrics().stringWidth(timeService.getTime()) / 4);
+		//		//			this.clockFrameService.setSpaceY(timeService.getFontMetrics().getHeight() / 4);
+		//		//			this.timeService.setFontMetricsOffsetX(this.clockFrameService.getSpaceX() / 2);
+		//		//			this.timeService
+		//		//					.setFontMetricsOffsetY(this.clockFrameService.getSpaceY() / 2 + fontMetrics.getAscent());
+		//		//
+		//		//			if (i > 30) {
+		//		//				break;
+		//		//			}
+		//		//			i++;
+		//		//		}
+		//
+		//		//		while (size.height > (int) fontMetrics.getHeight() / 4 * 5 * 1.1
+		//		//				|| size.height < (int) fontMetrics.getHeight() / 4 * 5 * 0.9) {
+		//		//			if (size.height < (int) fontMetrics.getHeight() / 4 * 5) {
+		//		//				timeService.setFontSize(Integer.toString(timeService.getFontSize() - 1));
+		//		//				fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		//		//				timeService.setFontMetrics(fontMetrics);
+		//		//			} else if (size.height > (int) fontMetrics.getHeight() / 4 * 5) {
+		//		//				timeService.setFontSize(Integer.toString(timeService.getFontSize() + 1));
+		//		//				fontMetrics = getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		//		//				timeService.setFontMetrics(fontMetrics);
+		//		//			}
+		//		//			this.clockFrameService.setSpaceX(timeService.getFontMetrics().stringWidth(timeService.getTime()) / 4);
+		//		//			this.clockFrameService.setSpaceY(timeService.getFontMetrics().getHeight() / 4);
+		//		//			this.timeService.setFontMetricsOffsetX(this.clockFrameService.getSpaceX() / 2);
+		//		//			this.timeService
+		//		//					.setFontMetricsOffsetY(this.clockFrameService.getSpaceY() / 2 + fontMetrics.getAscent());
+		//		//		}
+		//
+		//		//this.clockFramePrintGenerator.setChanged(false);
+		//		//this.timePanelPrintGenerator.execute();
 	}
 
 	@Override
@@ -115,7 +187,27 @@ public class TimePanel extends JPanel implements Observer, Runnable, ComponentLi
 
 	@Override
 	public void update(PrintGenerator printGenerator) {
+		// フレームのサイズを変更すると、componentResize()が動いてしまう
+		this.resizedFlg = false;
+		this.show();
 		this.setBackground(this.timeService.getBackgroundColor());
-
+		final FontMetrics fontMetrics = this
+				.getFontMetrics(new Font(timeService.getFont(), Font.PLAIN, timeService.getFontSize()));
+		this.timeService.setFontMetrics(fontMetrics);
+		this.clockFramePrintGenerator.execute();
+		//this.clockFramePrintGenerator.setChanged(false);
+		this.timeService.setFontMetricsOffsetX(this.clockFrameService.getSpaceX() / 2);
+		this.timeService
+				.setFontMetricsOffsetY(this.clockFrameService.getSpaceY() / 2 + fontMetrics.getAscent());
+		//System.out.println(ClockFrameService.SPACE_X / 2 + " : " + ClockFrameService.SPACE_Y / 2);
+		//this.clockFramePrintGenerator.execute();
+		//this.clockFramePrintGenerator.setChanged(false);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		this.resizedFlg = true;
 	}
 }

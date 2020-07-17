@@ -2,19 +2,90 @@ package dc2_4.clock.time;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.prefs.Preferences;
 
+import dc2_4.clock.menu.PropertyUtility;
 import dc2_4.interfaces.Service;
 
 public class TimeService implements Service {
+	public enum MenuKey {
+		FONT_STYLE("fontStyle"), FONT_SIZE("fontSize"), FONT_COLOR("fontColor"), BACKGROUND_COLOR("backgroundColor");
+
+		private String name;
+
+		MenuKey(final String name) {
+			this.name = name;
+		}
+	}
+
+	private final Preferences prefs;
 	private FontMetrics fontMetrics;
-	private Color backgroundColor = Color.black;
-	private Color fontColor = Color.green;
-	private int fontSize = 100;
-	private String fontName = "Dialog";
+	private int fontMetricsOffsetX;
+	private int fontMetricsOffsetY;
+	private Color backgroundColor;
+	private Color fontColor;
+	private int fontSize;
+	private String fontStyle;
 	private int hour;
 	private int minute;
 	private int second;
+
+	public TimeService() {
+		prefs = Preferences.userNodeForPackage(this.getClass());
+		try {
+			fontColor = PropertyUtility.colorConverter(load(MenuKey.FONT_COLOR));
+			backgroundColor = PropertyUtility.colorConverter(load(MenuKey.BACKGROUND_COLOR));
+			fontSize = Integer.parseInt(load(MenuKey.FONT_SIZE));
+			fontStyle = load(MenuKey.FONT_STYLE);
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+	}
+
+	public String load(final MenuKey key) throws IOException {
+		switch (key) {
+		case FONT_STYLE:
+			return prefs.get(key.toString(), "Dialog");
+
+		case FONT_SIZE:
+			return prefs.get(key.toString(), "100");
+
+		case FONT_COLOR:
+			return prefs.get(key.toString(), "green");
+
+		case BACKGROUND_COLOR:
+			return prefs.get(key.toString(), "black");
+
+		default:
+			throw new IOException();
+		}
+	}
+
+	public void save(final MenuKey key, final String value) {
+		switch (key) {
+		case FONT_STYLE:
+			prefs.put(key.toString(), value);
+			break;
+
+		case FONT_SIZE:
+			prefs.put(key.toString(), value);
+			break;
+
+		case FONT_COLOR:
+			prefs.put(key.toString(), value);
+			break;
+
+		case BACKGROUND_COLOR:
+			prefs.put(key.toString(), value);
+			break;
+
+		default:
+			return;
+		}
+	}
 
 	public String getTime() {
 		String timeStr = new String();
@@ -40,16 +111,24 @@ public class TimeService implements Service {
 		setSecond(Calendar.getInstance().get(Calendar.SECOND));
 	}
 
-	public void setFontColor(Color fontColor) {
-		this.fontColor = fontColor;
+	public void setFontColor(String fontColor) {
+		this.save(MenuKey.FONT_COLOR, fontColor);
+		this.fontColor = PropertyUtility.colorConverter(fontColor);
+	}
+
+	public void setBackgroundColor(String backgroundColor) {
+		this.save(MenuKey.BACKGROUND_COLOR, backgroundColor);
+		this.backgroundColor = PropertyUtility.colorConverter(backgroundColor);
 	}
 
 	public void setFontSize(int fontSize) {
+		this.save(MenuKey.FONT_SIZE, String.valueOf(fontSize));
 		this.fontSize = fontSize;
 	}
 
-	public void setFont(String fontName) {
-		this.fontName = fontName;
+	public void setFont(String fontStyle) {
+		this.save(MenuKey.FONT_STYLE, fontStyle);
+		this.fontStyle = fontStyle;
 	}
 
 	public void setHour(int hour) {
@@ -73,7 +152,7 @@ public class TimeService implements Service {
 	}
 
 	public String getFont() {
-		return fontName;
+		return fontStyle;
 	}
 
 	public int getHour() {
@@ -104,7 +183,19 @@ public class TimeService implements Service {
 		return backgroundColor;
 	}
 
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
+	public void setFontMetricsOffsetX(int fontMetricsOffsetX) {
+		this.fontMetricsOffsetX = fontMetricsOffsetX;
+	}
+
+	public int getFontMetricsOffsetX() {
+		return this.fontMetricsOffsetX;
+	}
+
+	public void setFontMetricsOffsetY(int fontMetricsOffsetY) {
+		this.fontMetricsOffsetY = fontMetricsOffsetY;
+	}
+
+	public int getFontMetricsOffsetY() {
+		return this.fontMetricsOffsetY;
 	}
 }
