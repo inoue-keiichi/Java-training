@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0"
+	prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.162"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="dc3_2.TimeController">
+	<children>
+		<MenuBar fx:id="timeMenuBar">
+			<menus>
+				<Menu mnemonicParsing="false" text="Edit">
+					<items>
+						<MenuItem fx:id="property" mnemonicParsing="false"
+							onAction="#onOpenDialog" text="Property" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<Canvas fx:id="timeCanvas" height="150.0" width="300.0" />
+	</children>
+</VBox>
