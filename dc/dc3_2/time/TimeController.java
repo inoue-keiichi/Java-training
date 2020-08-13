@@ -1,4 +1,4 @@
-package dc3_2;
+package dc3_2.time;
 
 import java.io.IOException;
 import java.net.URL;
@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import dc3_2.MainService;
 import dc3_2.menu.MenuDialogController;
 import dc3_2.menu.MenuDialogObservable;
 import dc3_2.utils.ColorUtils;
@@ -51,7 +52,7 @@ public class TimeController implements Observer, Initializable {
 
 	@FXML
 	private void onOpenDialog() throws IOException {
-		final URL location = getClass().getResource("./menu/MenuDialogView.fxml");
+		final URL location = getClass().getResource("./../menu/MenuDialogView.fxml");
 		final FXMLLoader menuLoader = new FXMLLoader(location);
 		final Pane root = (Pane) menuLoader.load();
 		final Scene scene = new Scene(root, 300, 200);
@@ -71,18 +72,31 @@ public class TimeController implements Observer, Initializable {
 		timeMenuBar.setDisable(false);
 	}
 
-	private class Timer implements Runnable {
-		@Override
-		public void run() {
-			while (true) {
-				timeService.updateTime();
-				draw();
-				try {
-					Thread.sleep(1000); // スリープ１秒
-				} catch (final InterruptedException e) {
+	@Override
+	public void initialize(final URL location, final ResourceBundle resources) {
+		// init
+		timeService = TimeService.getInstance();
+		mainService = MainService.getInstance();
+		timeText = new Text();
+		timeText.setText(DEFAULT_TIMER_TEXT);
+		gc = timeCanvas.getGraphicsContext2D();
+		thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					timeService.updateTime();
+					draw();
+					try {
+						Thread.sleep(1000); // スリープ１秒
+					} catch (final InterruptedException e) {
+					}
 				}
 			}
-		}
+		});
+
+		// Add observer
+		menuDialogObservable = MenuDialogObservable.getInstance();
+		menuDialogObservable.addObserver(this);
 	}
 
 	public void initView(final Stage stage) {
@@ -91,16 +105,16 @@ public class TimeController implements Observer, Initializable {
 		this.preWidth = stage.getWidth();
 		final VBox pane = (VBox) stage.getScene().getRoot();
 		pane.widthProperty().addListener(evt -> {
-			setFontSize(stage);
+			resizeFont(stage);
 		});
 		pane.heightProperty().addListener(evt -> {
-			setFontSize(stage);
+			resizeFont(stage);
 		});
 		stage.fullScreenProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue,
 					final Boolean isFullScreen) {
-				setFontSize(stage);
+				resizeFont(stage);
 			}
 		});
 		timeCanvas.widthProperty().bind(pane.widthProperty());
@@ -113,94 +127,6 @@ public class TimeController implements Observer, Initializable {
 		this.thread.start();
 	}
 
-	public void setFontSize(final Stage stage) {
-		if (stage.getWidth() == preWidth) {
-			return;
-		}
-		final String family = timeService.getFont().getFamily();
-		timeText.setFont(timeService.getFont());
-		if (stage.getWidth() > preWidth) {
-			timeService.setFont(Font.font(family, plusFontSize(timeText.getFont(), stage.getWidth())));
-		} else {
-			timeService.setFont(Font.font(family, minusFontSize(timeText.getFont(), stage.getWidth())));
-		}
-		preWidth = stage.getWidth();
-		draw(stage);
-	}
-
-	private double plusFontSize(final Font font, final double width) {
-		final String family = font.getFamily();
-		double size = font.getSize();
-		final Text preText = new Text();
-		final Text text = new Text();
-		text.setText(DEFAULT_TIMER_TEXT);
-		preText.setText(DEFAULT_TIMER_TEXT);
-		while (true) {
-			text.setFont(Font.font(family, size));
-			preText.setFont(Font.font(family, size + 1));
-			if (width * 4 / 5 - text.getLayoutBounds().getWidth() < 0) {
-				break;
-			}
-			size++;
-		}
-		return size;
-	}
-
-	private double minusFontSize(final Font font, final double width) {
-		final String family = font.getFamily();
-		double size = font.getSize();
-		final Text preText = new Text();
-		final Text text = new Text();
-		text.setText(DEFAULT_TIMER_TEXT);
-		preText.setText(DEFAULT_TIMER_TEXT);
-		while (true) {
-			text.setFont(Font.font(family, size));
-			preText.setFont(Font.font(family, size - 1));
-			if (width * 4 / 5 - text.getLayoutBounds().getWidth() > 0) {
-				break;
-			}
-			size--;
-		}
-		return size;
-	}
-
-	private void draw() {
-		// Init
-		gc.clearRect(0, 0, timeCanvas.getWidth(), timeCanvas.getHeight());
-		// Set backgroundColor
-		gc.setFill(ColorUtils.get(timeService.getBackgroundColor()));
-		gc.fillRect(0, 0, timeCanvas.getWidth(), timeCanvas.getHeight());
-		// write text
-		gc.setFill(ColorUtils.get(timeService.getFontColor()));
-		gc.setFont(timeService.getFont());
-		gc.fillText(timeService.getTime(), x, y);
-	}
-
-	private void draw(final Stage stage) {
-		timeText.setFont(timeService.getFont());
-		x = (stage.getWidth() - timeText.getLayoutBounds().getWidth()) / 2;
-		y = stage.getHeight() / 2;
-
-		System.out.println(stage.getWidth() + ", " + timeText.getLayoutBounds().getWidth() + ", " + x);
-
-		draw();
-	}
-
-	@Override
-	public void initialize(final URL location, final ResourceBundle resources) {
-		// init
-		timeService = TimeService.getInstance();
-		mainService = MainService.getInstance();
-		timeText = new Text();
-		timeText.setText(DEFAULT_TIMER_TEXT);
-		gc = timeCanvas.getGraphicsContext2D();
-		thread = new Thread(new Timer());
-
-		// Add observer
-		menuDialogObservable = MenuDialogObservable.getInstance();
-		menuDialogObservable.addObserver(this);
-	}
-
 	@Override
 	public void update(final Observable o, final Object arg) {
 		this.timeText.setFont(timeService.getFont());
@@ -209,6 +135,21 @@ public class TimeController implements Observer, Initializable {
 		this.timeStage.getScene().setFill(ColorUtils.get(timeService.getBackgroundColor()));
 		final VBox pane = (VBox) this.timeStage.getScene().getRoot();
 		pane.setStyle("-fx-background-color:" + timeService.getBackgroundColor());
+	}
+
+	private void resizeFont(final Stage stage) {
+		if (stage.getWidth() == preWidth) {
+			return;
+		}
+		final String family = timeService.getFont().getFamily();
+		timeText.setFont(timeService.getFont());
+		if (stage.getWidth() > preWidth) {
+			timeService.setFont(Font.font(family, timeService.plusFontSize(timeText.getFont(), stage.getWidth())));
+		} else {
+			timeService.setFont(Font.font(family, timeService.minusFontSize(timeText.getFont(), stage.getWidth())));
+		}
+		preWidth = stage.getWidth();
+		draw(stage);
 	}
 
 	private void resizeStage(final Stage stage, final Text timeText) {
@@ -222,5 +163,25 @@ public class TimeController implements Observer, Initializable {
 		stage.setHeight(preHeight);
 
 		draw(stage);
+	}
+
+	private void draw(final Stage stage) {
+		timeText.setFont(timeService.getFont());
+		x = (stage.getWidth() - timeText.getLayoutBounds().getWidth()) / 2;
+		y = stage.getHeight() / 2;
+
+		draw();
+	}
+
+	private void draw() {
+		// Init
+		gc.clearRect(0, 0, timeCanvas.getWidth(), timeCanvas.getHeight());
+		// Set backgroundColor
+		gc.setFill(ColorUtils.get(timeService.getBackgroundColor()));
+		gc.fillRect(0, 0, timeCanvas.getWidth(), timeCanvas.getHeight());
+		// write text
+		gc.setFill(ColorUtils.get(timeService.getFontColor()));
+		gc.setFont(timeService.getFont());
+		gc.fillText(timeService.getTime(), x, y);
 	}
 }

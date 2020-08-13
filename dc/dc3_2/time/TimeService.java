@@ -1,8 +1,9 @@
-package dc3_2;
+package dc3_2.time;
 
 import java.util.Calendar;
 
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class TimeService {
 	private static final TimeService timeService = new TimeService();
@@ -20,6 +21,8 @@ public class TimeService {
 			this.name = name;
 		}
 	}
+
+	private static final String DEFAULT_TIMER_TEXT = "00:00:00";
 
 	private String backgroundColor;
 	private String fontColor;
@@ -57,6 +60,42 @@ public class TimeService {
 		hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 		minute = Calendar.getInstance().get(Calendar.MINUTE);
 		second = Calendar.getInstance().get(Calendar.SECOND);
+	}
+
+	public double plusFontSize(final Font font, final double width) {
+		final String family = font.getFamily();
+		double size = font.getSize();
+		final Text preText = new Text();
+		final Text text = new Text();
+		text.setText(DEFAULT_TIMER_TEXT);
+		preText.setText(DEFAULT_TIMER_TEXT);
+		while (true) {
+			text.setFont(Font.font(family, size));
+			preText.setFont(Font.font(family, size + 1));
+			if (width * 4 / 5 - text.getLayoutBounds().getWidth() < 0) {
+				break;
+			}
+			size++;
+		}
+		return size;
+	}
+
+	public double minusFontSize(final Font font, final double width) {
+		final String family = font.getFamily();
+		double size = font.getSize();
+		final Text preText = new Text();
+		final Text text = new Text();
+		text.setText(DEFAULT_TIMER_TEXT);
+		preText.setText(DEFAULT_TIMER_TEXT);
+		while (true) {
+			text.setFont(Font.font(family, size));
+			preText.setFont(Font.font(family, size - 1));
+			if (width * 4 / 5 - text.getLayoutBounds().getWidth() > 0) {
+				break;
+			}
+			size--;
+		}
+		return size;
 	}
 
 	public void setFontColor(final String fontColorName) {

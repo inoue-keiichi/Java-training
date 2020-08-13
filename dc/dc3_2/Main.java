@@ -2,6 +2,7 @@ package dc3_2;
 
 import java.net.URL;
 
+import dc3_2.time.TimeController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,7 +23,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		final URL location = getClass().getResource("TimeView.fxml");
+		final URL location = getClass().getResource("./time/TimeView.fxml");
 		final FXMLLoader timeLoader = new FXMLLoader(location);
 		final Pane root = (Pane) timeLoader.load();
 		final Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);

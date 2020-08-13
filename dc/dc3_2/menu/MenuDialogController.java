@@ -4,11 +4,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import dc3_2.TimeService;
 import dc3_2.menu.cell.ColorCell;
 import dc3_2.menu.cell.ColorModel;
 import dc3_2.menu.cell.FontCell;
 import dc3_2.menu.cell.FontModel;
+import dc3_2.time.TimeService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

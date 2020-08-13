@@ -10,7 +10,7 @@
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0"
 	prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.162"
 	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="dc3_2.TimeController">
+	fx:controller="dc3_2.time.TimeController">
 	<children>
 		<MenuBar fx:id="timeMenuBar">
 			<menus>
