@@ -22,12 +22,18 @@ public class TimeService {
 		}
 	}
 
+	public enum ClockType {
+		ANALOG, DEGITAL;
+	}
+
 	private static final String DEFAULT_TIMER_TEXT = "00:00:00";
 
 	private String backgroundColor;
 	private String fontColor;
 	private int fontSize;
 	private Font font;
+	private ClockType clockType;
+
 	private int hour;
 	private int minute;
 	private int second;
@@ -36,6 +42,7 @@ public class TimeService {
 		font = Font.font(60);
 		fontColor = "green";
 		backgroundColor = "black";
+		clockType = ClockType.DEGITAL;
 	}
 
 	public String getTime() {
@@ -124,5 +131,13 @@ public class TimeService {
 
 	public void setFont(final Font font) {
 		this.font = font;
+	}
+
+	public ClockType getClockType() {
+		return this.clockType;
+	}
+
+	public void setClockType(final ClockType clockType) {
+		this.clockType = clockType;
 	}
 }

@@ -9,8 +9,10 @@ import dc3_2.menu.cell.ColorModel;
 import dc3_2.menu.cell.FontCell;
 import dc3_2.menu.cell.FontModel;
 import dc3_2.time.TimeService;
+import dc3_2.time.TimeService.ClockType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -22,9 +24,10 @@ import javafx.util.Callback;
 
 public class MenuDialogController implements Initializable {
 	private TimeService timeService;
-	private MenuDialogService menuDialogService;
 	private Stage menuDialogStage;
 
+	@FXML
+	private ComboBox<ClockType> clockTypeComboBox;
 	@FXML
 	private ComboBox<FontModel> fontComboBox;
 	@FXML
@@ -40,6 +43,7 @@ public class MenuDialogController implements Initializable {
 		final int fontSize = Integer.valueOf(fontSizeComboBox.getSelectionModel().getSelectedItem());
 		final String fontColor = fontColorComboBox.getSelectionModel().getSelectedItem().toString();
 		final String backgroundColor = backgroundColorComboBox.getSelectionModel().getSelectedItem().toString();
+		timeService.setClockType(clockTypeComboBox.getSelectionModel().getSelectedItem());
 		timeService.setFont(Font.font(fontFamily, fontSize));
 		timeService.setFontColor(fontColor);
 		timeService.setBackgroundColor(backgroundColor);
@@ -60,7 +64,6 @@ public class MenuDialogController implements Initializable {
 	@Override
 	public void initialize(final URL location, final ResourceBundle resources) {
 		timeService = TimeService.getInstance();
-		menuDialogService = MenuDialogService.getInstance();
 
 		fontComboBox.setCellFactory(new Callback<ListView<FontModel>, ListCell<FontModel>>() {
 			@Override
@@ -83,12 +86,30 @@ public class MenuDialogController implements Initializable {
 			}
 		});
 
+		clockTypeComboBox.addEventHandler(ActionEvent.ACTION, event -> {
+			final ComboBox<?> ComboBox = (ComboBox<?>) event.getSource();
+			final ClockType clockType = (ClockType) ComboBox.getSelectionModel().getSelectedItem();
+			if (clockType == ClockType.DEGITAL) {
+				setFontDisable(false);
+			} else {
+				setFontDisable(true);
+			}
+		});
+
+		clockTypeComboBox.setItems(FXCollections.observableArrayList(ClockType.DEGITAL, ClockType.ANALOG));
 		fontComboBox.setItems(FXCollections.observableArrayList(createFontModels(MenuDialogService.FONT_FAMILY_NAMES)));
 		fontSizeComboBox.setItems(FXCollections.observableArrayList(MenuDialogService.FONT_SIZES));
 		fontColorComboBox.setItems(FXCollections.observableArrayList(createColorModels(MenuDialogService.COLORS)));
 		backgroundColorComboBox
 				.setItems(FXCollections.observableArrayList(createColorModels(MenuDialogService.COLORS)));
 
+		// set default value.
+		clockTypeComboBox.getSelectionModel().select(timeService.getClockType());
+		if (timeService.getClockType() == ClockType.DEGITAL) {
+			setFontDisable(false);
+		} else {
+			setFontDisable(true);
+		}
 		fontComboBox.getSelectionModel().select(new FontModel(timeService.getFont().getFamily()));
 		final int fontSize = Double.valueOf(timeService.getFont().getSize()).intValue();
 		fontSizeComboBox.getSelectionModel().select(String.valueOf(fontSize));
@@ -112,6 +133,12 @@ public class MenuDialogController implements Initializable {
 			colorModels.add(model);
 		}
 		return colorModels;
+	}
+
+	private void setFontDisable(final boolean value) {
+		fontComboBox.setDisable(value);
+		fontSizeComboBox.setDisable(value);
+		fontColorComboBox.setDisable(value);
 	}
 
 }

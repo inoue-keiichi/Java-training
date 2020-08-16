@@ -6,13 +6,11 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0"
-	prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.162"
+<VBox xmlns="http://javafx.com/javafx/8.0.162"
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="dc3_2.time.TimeController">
 	<children>
-		<MenuBar fx:id="timeMenuBar">
+		<MenuBar fx:id="timeMenuBar" prefWidth="300.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="Edit">
 					<items>
@@ -22,6 +20,6 @@
 				</Menu>
 			</menus>
 		</MenuBar>
-		<Canvas fx:id="timeCanvas" height="150.0" width="300.0" />
+		<Canvas fx:id="timeCanvas" height="151.0" width="300.0" />
 	</children>
 </VBox>
