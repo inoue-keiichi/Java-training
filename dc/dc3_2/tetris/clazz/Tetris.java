@@ -29,6 +29,8 @@ public class Tetris {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 	};
 
+	private Color[][] fieldColors = new Color[field.length][field[0].length];
+
 	private final List<Tetrimino> tetriminos;
 
 	public Tetris() {
@@ -201,5 +203,13 @@ public class Tetris {
 
 	public List<Tetrimino> getTetriminos() {
 		return this.tetriminos;
+	}
+
+	public Color[][] getFieldColors() {
+		return this.fieldColors;
+	}
+
+	public void setFieldColors(final Color[][] fieldColors) {
+		this.fieldColors = fieldColors;
 	}
 }

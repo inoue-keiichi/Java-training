@@ -9,32 +9,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class TetrisController implements Initializable {
 	private static int BLOCK_SIZE = 20;
-	private static int X_INIT = 3;
-	private static int Y_INIT = 0;
-	private static int R_INIT = 0;
-	private static int X_MIN = 0;
-	//private static int X_MAX = 10;
-	//private static int Y_MIN = 0;
-	//private static int Y_MAX = 20;
 
 	private Thread gameThread;
 	//private Thread controllerThread;
 	//private final Object waiter = new Object();
 	private GraphicsContext gc;
-	private int x;
-	private int y;
-	private int r;
 	private LinkedList<Tetrimino> tetriminos;
 	private Tetrimino currentTetrimino;
 	private int[][] field;
-	private int fieldWidth;
-	private int fieldHeight;
+	private Color[][] fieldColors;
 
 	private TetrisService tetrisService;
 
@@ -50,8 +38,6 @@ public class TetrisController implements Initializable {
 		// init
 		tetrisService = new TetrisService();
 		gc = tetrisCanvas.getGraphicsContext2D();
-		x = X_INIT;
-		y = Y_INIT;
 		currentTetrimino = tetrisService.getRandomTetrimino();
 		tetriminos = new LinkedList<Tetrimino>() {
 			{
@@ -60,8 +46,7 @@ public class TetrisController implements Initializable {
 			}
 		};
 		field = tetrisService.getTetris().getField();
-		fieldWidth = field[0].length;
-		fieldHeight = field.length;
+		fieldColors = tetrisService.getTetris().getFieldColors();
 
 		drowNextTetrimino(nextTetriminoCanvas, tetriminos.get(0));
 		drowNextTetrimino(tetriminoAfterNextCanvas, tetriminos.get(1));
@@ -70,22 +55,30 @@ public class TetrisController implements Initializable {
 			@Override
 			public void run() {
 				while (true) {
-					draw(currentTetrimino);
+					draw(field, fieldColors, currentTetrimino);
+					if (tetrisService.isBottom(field, currentTetrimino)) {
+						tetrisService.fixTetrimino(field, fieldColors, currentTetrimino);
+						rollbackTetrimino(field, fieldColors, currentTetrimino);
+						init();
+						continue;
+					}
 					try {
 						Thread.sleep(500);
-						y++;
-						if (y == fieldHeight) {
-							x = X_INIT;
-							y = Y_INIT;
-							r = R_INIT;
-							currentTetrimino = tetriminos.poll();
-							tetriminos.offer(tetrisService.getRandomTetrimino());
-							drowNextTetrimino(nextTetriminoCanvas, tetriminos.get(0));
-							drowNextTetrimino(tetriminoAfterNextCanvas, tetriminos.get(1));
+						tetrisService.moveUnder();
+						if (tetrisService.getY() == tetrisService.getFieldHeight()) {
+							init();
 						}
 					} catch (final InterruptedException e) {
 					}
 				}
+			}
+
+			private void init() {
+				tetrisService.initXYR();
+				currentTetrimino = tetriminos.poll();
+				tetriminos.offer(tetrisService.getRandomTetrimino());
+				drowNextTetrimino(nextTetriminoCanvas, tetriminos.get(0));
+				drowNextTetrimino(tetriminoAfterNextCanvas, tetriminos.get(1));
 			}
 		});
 		gameThread.start();
@@ -109,36 +102,9 @@ public class TetrisController implements Initializable {
 
 	public void initView(final Stage stage) {
 		stage.getScene().setOnKeyPressed(e -> {
-			handleTetorimino(e);
+			tetrisService.handleTetorimino(e, currentTetrimino);
+			draw(field, fieldColors, currentTetrimino);
 		});
-	}
-
-	private void handleTetorimino(final KeyEvent e) {
-		switch (e.getCode()) {
-		case LEFT:
-		case KP_LEFT:
-			x--;
-			if (isOutsideX(this.currentTetrimino)) {
-				x++;
-			}
-			break;
-		case RIGHT:
-		case KP_RIGHT:
-			x++;
-			if (isOutsideX(this.currentTetrimino)) {
-				x--;
-			}
-			break;
-		case DOWN:
-		case KP_DOWN:
-			break;
-		case SHIFT:
-			r = (r + 1) % this.currentTetrimino.getMino().length;
-			break;
-		default:
-			break;
-		}
-		draw(this.currentTetrimino);
 	}
 
 	private void drowNextTetrimino(final Canvas canvas, final Tetrimino tetrimino) {
@@ -157,20 +123,38 @@ public class TetrisController implements Initializable {
 		}
 	}
 
-	private boolean isOutsideX(final Tetrimino tetorimino) {
-		for (int i = 0; i < tetorimino.getMino()[r].length; i++) {
-			for (int j = 0; j < tetorimino.getMino()[0][i].length; j++) {
-				if (tetorimino.getMino()[r][i][j] != 0 && (j + x < 0 || j + x > fieldWidth - 1)) {
-					return true;
+	private void draw(final int[][] field, final Color[][] fieldColors, final Tetrimino tetorimino) {
+		final int x = tetrisService.getX();
+		final int y = tetrisService.getY();
+		final int r = tetrisService.getR();
+		drawInit(tetrisCanvas);
+		drawField(field, fieldColors, x, y, r);
+		drawFallingTetrimino(tetorimino, x, y, r);
+	}
+
+	private void rollbackTetrimino(final int[][] field, final Color[][] fieldColors, final Tetrimino tetorimino) {
+		final int x = tetrisService.getX();
+		final int y = tetrisService.getY();
+		final int r = tetrisService.getR();
+		drawInit(tetrisCanvas);
+		drawField(field, fieldColors, x, y, r);
+		drawFallingTetrimino(tetorimino, x, y - 1, r);
+	}
+
+	private void drawField(final int[][] field, final Color[][] fieldColors, final int x, final int y, final int r) {
+		for (int i = 0; i < field.length; i++) {
+			for (int j = 0; j < field[i].length; j++) {
+				if (field[i][j] != 0) {
+					gc.setFill(fieldColors[i][j]);
+					gc.fillRect(BLOCK_SIZE * j, BLOCK_SIZE * i, BLOCK_SIZE, BLOCK_SIZE);
+					gc.setStroke(Color.BLACK);
+					gc.strokeRect(BLOCK_SIZE * j, BLOCK_SIZE * i, BLOCK_SIZE, BLOCK_SIZE);
 				}
 			}
 		}
-		return false;
 	}
 
-	private void draw(final Tetrimino tetorimino) {
-		drawInit(tetrisCanvas);
-		// write falling tetrimino
+	private void drawFallingTetrimino(final Tetrimino tetorimino, final int x, final int y, final int r) {
 		gc.setFill(tetorimino.getColor());
 		for (int i = 0; i < tetorimino.getMino()[r].length; i++) {
 			for (int j = 0; j < tetorimino.getMino()[0][i].length; j++) {
