@@ -1,0 +1,13 @@
+# Collectionインターフェースの新たなstreamメソッドが古いコードのコンパイルを失敗させるシナリオは？
+defaultのstreamメソッドを持ったインターフェースAがあるとする。そのAを実装したImplAクラスはCollectionも実装している。そのImplAクラスのstreamメソッドを利用するMainクラスがある場合に、新たにCollectionにdefaultのstreamメソッドが実装されるとコンパイルエラーになる。コンパイラがどちらのdefaultメソッドを利用すればいいのか分からないからである。
+(例)
+public class ImplA<T> implements A<T>, Collection<T> {
+
+}
+
+# バイナリ互換性は？
+実行時に必要なライブラリがロードされるので、Collectionインターフェースの変更の影響は出てくる。そのため、Collectionにもdefaultが追加されればAとCollectionのどちらを見ればいいのか分からなくなってしまう。よって互換性はない。
+コンパイル時にimportファイルもコンパイルされているのか？
+
+# JREファイルは？
+Collectionに新たにdefaultメソッドが加わる前のものがJREファイルに入っており、Collectionインターフェースの変更に影響はない。よってJREファイルは実行できる。
