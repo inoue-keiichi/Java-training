@@ -16,4 +16,13 @@ public class MainTest {
 		final String[] expected = { "Hokkaido", "Sapporo", "Miyagi", "Sendai", "Kanagawa", "Yokohama" };
 		assertArrayEquals(expected, actual);
 	}
+
+	@Test
+	public void test2() {
+		final Stream<String> first = Stream.of("Hokkaido", "Miyagi", "Kanagawa");
+		final Stream<String> second = Stream.of("Sapporo", "Sendai", "Yokohama", "Nagoya");
+		final String[] actual = Main.zip(first, second).toArray(String[]::new);
+		final String[] expected = { "Hokkaido", "Sapporo", "Miyagi", "Sendai", "Kanagawa" };
+		assertArrayEquals(expected, actual);
+	}
 }

@@ -13,10 +13,11 @@ public class Main {
 		stream.isParallel();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> boolean isFinite(final Stream<T> stream) {
-		stream.forEach(e -> {
-		});
+
 		try {
+			stream.toArray();
 		} catch (final IllegalStateException e) {
 			return true;
 		}
