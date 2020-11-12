@@ -16,37 +16,20 @@ public class LatentImage {
 	private final Color[][] parallelIn;
 	private final List<UnaryOperatorAdapter<Color>> pendingOperations;
 
-	private LatentImage(final Image in) {
+	private LatentImage(final Color[][] image, final Image in) {
 		this.in = in;
-		this.parallelIn = null;
-		this.pendingOperations = new ArrayList<>();
-	}
-
-//    public static LatentImage from(Image image) {
-//        return new LatentImage(image);
-//    }
-
-	private LatentImage(final Color[][] image) {
-		this.in = null;
 		this.parallelIn = image;
 		this.pendingOperations = new ArrayList<>();
 	}
 
-//    LatentImage transform(UnaryOperator<Color> f) {
-//        pendingOperations.add(new UnaryOperatorAdapter<>(f, false));
-//        return this;
-//    }
+	public static LatentImage from(final Image image) {
+		final Color[][] colors = convertToMatrix(image);
+		return new LatentImage(colors, image);
+	}
 
-	public static LatentImage parallelFrom(final Image image) {
-		final int height = (int) image.getHeight();
-		final int width = (int) image.getWidth();
-		final Color[][] colors = new Color[height][width];
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				colors[y][x] = image.getPixelReader().getColor(x, y);
-			}
-		}
-		return new LatentImage(colors);
+	public LatentImage transform(final UnaryOperator<Color> f) {
+		pendingOperations.add(new UnaryOperatorAdapter<>(f, false));
+		return this;
 	}
 
 	public LatentImage parallelTransform(final UnaryOperator<Color> f) {
@@ -54,39 +37,59 @@ public class LatentImage {
 		return this;
 	}
 
-	public Image parallelToImage() {
-		final int height = parallelIn.length;
-		final int width = parallelIn[0].length;
-		final Color[][] out = parallelIn;
+	public Image toImage() {
 		if (pendingOperations.size() < 1) {
-			return convertImage(height, width, out);
+			return in;
 		}
+		Image result = in;
+		Color[][] resultParallel = parallelIn;
 		final List<ListAdapter<UnaryOperator<Color>>> list = convertListAdapterList(pendingOperations);
-		// TODO parallelと普通のを分けて実行するようにする
 		for (final ListAdapter<UnaryOperator<Color>> l : list) {
-			executeParallel(height, width, out, l.get());
+			if (l.isParallel()) {
+				executeParallel(resultParallel, l.get());
+				result = convertToImage(resultParallel);
+			} else {
+				result = execute(result, l.get());
+				resultParallel = convertToMatrix(result);
+			}
 		}
-		return convertImage(height, width, out);
+		return result;
 	}
 
 	private List<ListAdapter<UnaryOperator<Color>>> convertListAdapterList(
 			final List<UnaryOperatorAdapter<Color>> pendingOperations) {
 		final List<ListAdapter<UnaryOperator<Color>>> list = new ArrayList<>();
-		final ListAdapter<UnaryOperator<Color>> listAdapter = new ListAdapter<>();
+		final ListAdapter<UnaryOperator<Color>> listAdapter = new ListAdapter<>(pendingOperations.get(0).isParallel());
 		list.add(listAdapter);
 		listAdapter.add(pendingOperations.get(0).getUnaryOperator(), pendingOperations.get(0).isParallel());
 		for (final UnaryOperatorAdapter<Color> f : pendingOperations) {
-			if (list.get(list.size() - 1).isParallel() != null
-					&& list.get(list.size() - 1).isParallel() != f.isParallel()) {
-				list.add(new ListAdapter<>());
+			if (list.get(list.size() - 1).isParallel() != f.isParallel()) {
+				list.add(new ListAdapter<>(f.isParallel()));
 			}
 			list.get(list.size() - 1).add(f.getUnaryOperator(), f.isParallel());
 		}
 		return list;
 	}
 
-	private void executeParallel(final int height, final int width, final Color[][] out,
-			final List<UnaryOperator<Color>> pendingOperations) {
+	private Image execute(final Image in, final List<UnaryOperator<Color>> pendingOperations) {
+		final int width = (int) in.getWidth();
+		final int height = (int) in.getHeight();
+		final WritableImage out = new WritableImage(width, height);
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				Color c = in.getPixelReader().getColor(x, y);
+				for (final UnaryOperator<Color> f : pendingOperations) {
+					c = f.apply(c);
+				}
+				out.getPixelWriter().setColor(x, y, c);
+			}
+		}
+		return out;
+	}
+
+	private void executeParallel(final Color[][] out, final List<UnaryOperator<Color>> pendingOperations) {
+		final int height = out.length;
+		final int width = out[0].length;
 		final int n = Runtime.getRuntime().availableProcessors();
 		try {
 			final ExecutorService pool = Executors.newCachedThreadPool();
@@ -110,7 +113,9 @@ public class LatentImage {
 		}
 	}
 
-	private Image convertImage(final int height, final int width, final Color[][] out) {
+	private Image convertToImage(final Color[][] out) {
+		final int height = out.length;
+		final int width = out[0].length;
 		final WritableImage result = new WritableImage(width, height);
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -120,29 +125,25 @@ public class LatentImage {
 		return result;
 	}
 
-//    public Image toImage() {
-//        int width = (int) in.getWidth();
-//        int height = (int) in.getHeight();
-//        WritableImage out = new WritableImage(width, height);
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                Color c = in.getPixelReader().getColor(x, y);
-//                for (UnaryOperator<Color> f : pendingOperations) {
-//                    c = f.apply(c);
-//                }
-//                out.getPixelWriter().setColor(x, y, c);
-//            }
-//        }
-//        return out;
-//    }
+	private static Color[][] convertToMatrix(final Image image) {
+		final int height = (int) image.getHeight();
+		final int width = (int) image.getWidth();
+		final Color[][] colors = new Color[height][width];
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				colors[y][x] = image.getPixelReader().getColor(x, y);
+			}
+		}
+		return colors;
+	}
 
 	class ListAdapter<T> {
 		private final List<T> list;
 		private final Boolean parallel;
 
-		public ListAdapter() {
+		public ListAdapter(final boolean parallel) {
 			this.list = new ArrayList<>();
-			this.parallel = null;
+			this.parallel = parallel;
 		}
 
 		public boolean add(final T t, final boolean parallel) {
@@ -156,7 +157,7 @@ public class LatentImage {
 			return list.size();
 		}
 
-		public Boolean isParallel() {
+		public boolean isParallel() {
 			return parallel;
 		}
 

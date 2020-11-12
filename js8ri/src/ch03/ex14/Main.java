@@ -19,10 +19,8 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 		final Image image = new Image(new File("./src/resource/image/sample.png").toURI().toString());
-//        int width = (int) image.getWidth();
-//        int height = (int) image.getHeight();
-		final int width = 2;
-		final int height = 2;
+		final int width = (int) image.getWidth();
+		final int height = (int) image.getHeight();
 
 		final ColorTransFormer shadeOff = (x, y, reader) -> {
 			double aveR = 0;
@@ -52,12 +50,6 @@ public class Main extends Application {
 		final Image result = LatentImage.from(image)
 				.transform((x, y, reader) -> reader.getColor((int) image.getWidth() - (x + 1), y)).transform(shadeOff)
 				.toImage();
-		// final Image result = LatentImage.from(image).transform((x, y, reader) ->
-		// reader.getColor((int) image.getWidth() - (x + 1),
-		// y)).transform(shadeOff).toImage();
-		// final Image result = LatentImage.from(image).transform((x, y, r) ->
-		// r.getColor(x, y).brighter()).transform((x, y, r) -> r.getColor(x,
-		// y).brighter()).toImage();
 
 		final ImageView imageView = new ImageView(result);
 		final Pane pane = new Pane(imageView);

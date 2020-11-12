@@ -14,20 +14,16 @@ import javafx.scene.paint.Color;
 
 class WritableImageAdapter {
 	private final WritableImage writableImage;
-	private PixelReader pixelReaderAdapter;
+	private final PixelReader pixelReaderAdapter;
 	private final PixelWriter pixelWriterAdapter;
 	private final Color[][] cash;
 
-	public WritableImageAdapter(final int width, final int height, final PixelReader prePixelReader) {
-
+	public WritableImageAdapter(final int width, final int height, final PixelReader prePixelReader,
+			final ColorTransFormer ctf) {
 		this.cash = new Color[400][400];
 		this.writableImage = new WritableImage(width, height);
-		this.pixelWriterAdapter = new PixelWriterAdapter(this.writableImage.getPixelWriter(), this.cash);
-		if (prePixelReader instanceof PixelReaderAdapter) {
-			this.pixelReaderAdapter = prePixelReader;
-		} else {
-			this.pixelReaderAdapter = new PixelReaderAdapter(prePixelReader, this.cash);
-		}
+		this.pixelWriterAdapter = new PixelWriterImpl(this.cash);
+		this.pixelReaderAdapter = new PixelReaderImpl(prePixelReader, this.cash, ctf);
 	}
 
 	public PixelReader getPixelReader() {
@@ -36,6 +32,10 @@ class WritableImageAdapter {
 
 	public PixelWriter getPixelWriter() {
 		return this.pixelWriterAdapter;
+	}
+
+	public Color[][] getCash() {
+		return cash;
 	}
 
 	public Image createImage() {
@@ -49,12 +49,10 @@ class WritableImageAdapter {
 		return writableImage;
 	}
 
-	class PixelWriterAdapter implements PixelWriter {
-		private final PixelWriter pixelWriter;
+	class PixelWriterImpl implements PixelWriter {
 		private final Color[][] cash;
 
-		public PixelWriterAdapter(final PixelWriter pixelWriter, final Color[][] cash) {
-			this.pixelWriter = pixelWriter;
+		public PixelWriterImpl(final Color[][] cash) {
 			this.cash = cash;
 		}
 
@@ -100,13 +98,15 @@ class WritableImageAdapter {
 		}
 	}
 
-	class PixelReaderAdapter implements PixelReader {
+	class PixelReaderImpl implements PixelReader {
 		private final PixelReader pixelReader;
 		private final Color[][] cash;
+		private final ColorTransFormer ctf;
 
-		public PixelReaderAdapter(final PixelReader pixelReader, final Color[][] cash) {
+		public PixelReaderImpl(final PixelReader pixelReader, final Color[][] cash, final ColorTransFormer ctf) {
 			this.pixelReader = pixelReader;
 			this.cash = cash;
+			this.ctf = ctf;
 		}
 
 		@Override
@@ -114,7 +114,8 @@ class WritableImageAdapter {
 			if (cash[x][y] != null) {
 				return cash[x][y];
 			}
-			return pixelReader.getColor(x, y);
+
+			return ctf.apply(x, y, pixelReader);
 		}
 
 		@Override

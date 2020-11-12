@@ -23,9 +23,8 @@ public class Main extends Application {
 		// final Image result =
 		// LatentImage.from(image).transform(Color::brighter).transform(Color::grayscale).toImage();
 
-		final Image result = LatentImage.parallelFrom(image).parallelTransform(Color::brighter)
-				.parallelTransform(Color::brighter).parallelTransform(Color::brighter)
-				.parallelTransform(Color::brighter).parallelToImage();
+		final Image result = LatentImage.from(image).transform(Color::grayscale).parallelTransform(Color::brighter)
+				.parallelTransform(Color::brighter).parallelTransform(Color::brighter).toImage();
 
 		final ImageView imageView = new ImageView(result);
 		final Pane pane = new Pane(imageView);
