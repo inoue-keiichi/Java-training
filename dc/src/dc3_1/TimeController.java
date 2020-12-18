@@ -49,7 +49,8 @@ public class TimeController implements Initializable {
 		});
 		stage.fullScreenProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
-			public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean isFullScreen) {
+			public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue,
+					final Boolean isFullScreen) {
 				setFontSize(stage);
 			}
 		});
@@ -92,8 +93,6 @@ public class TimeController implements Initializable {
 		text.setFont(timeService.getFont());
 		x = (stage.getWidth() - text.getLayoutBounds().getWidth()) / 2;
 		y = stage.getHeight() / 2;
-		System.out.println(stage.getWidth() + ", " + stage.getHeight() + ", " + timeService.getFont().getSize());
-
 		draw();
 	}
 

@@ -14,24 +14,24 @@ import javafx.scene.paint.Color;
 
 class WritableImageAdapter {
 	private final WritableImage writableImage;
-	private final PixelReader pixelReaderAdapter;
-	private final PixelWriter pixelWriterAdapter;
+	private final PixelReader pixelReader;
+	private final PixelWriter pixelWriter;
 	private final Color[][] cash;
 
 	public WritableImageAdapter(final int width, final int height, final PixelReader prePixelReader,
 			final ColorTransFormer ctf) {
-		this.cash = new Color[400][400];
+		this.cash = new Color[width][height];
 		this.writableImage = new WritableImage(width, height);
-		this.pixelWriterAdapter = new PixelWriterImpl(this.cash);
-		this.pixelReaderAdapter = new PixelReaderImpl(prePixelReader, this.cash, ctf);
+		this.pixelWriter = new PixelWriterImpl(this.cash);
+		this.pixelReader = new PixelReaderImpl(prePixelReader, this.cash, ctf);
 	}
 
 	public PixelReader getPixelReader() {
-		return this.pixelReaderAdapter;
+		return this.pixelReader;
 	}
 
 	public PixelWriter getPixelWriter() {
-		return this.pixelWriterAdapter;
+		return this.pixelWriter;
 	}
 
 	public Color[][] getCash() {
@@ -41,8 +41,8 @@ class WritableImageAdapter {
 	public Image createImage() {
 		for (int i = 0; i < cash[0].length; i++) {
 			for (int j = 0; j < cash.length; j++) {
-				if (cash[i][j] != null) {
-					writableImage.getPixelWriter().setColor(i, j, cash[i][j]);
+				if (cash[j][i] != null) {
+					writableImage.getPixelWriter().setColor(j, i, cash[j][i]);
 				}
 			}
 		}

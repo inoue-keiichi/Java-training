@@ -4,21 +4,14 @@ import java.util.Comparator;
 
 public class Main {
 
-	public static Comparator<String> createComparator(final boolean normalOrder, final boolean distinguishCase,
-			final boolean omitSpace) {
+	public static Comparator<String> createComparator(final boolean normalOrder, final boolean distinguishedCase,
+			final boolean omittedSpace) {
 		return (final String o1, final String o2) -> {
-			String str1 = omitSpace(o1, omitSpace);
-			String str2 = omitSpace(o2, omitSpace);
-			str1 = distinguishCase(str1, distinguishCase);
-			str2 = distinguishCase(str2, distinguishCase);
-			final char[] chr1 = str1.toCharArray();
-			final char[] chr2 = str2.toCharArray();
-			for (int i = 0; i < chr1.length && i < chr2.length; i++) {
-				if (chr1[i] != chr2[i]) {
-					return (chr1[i] - chr2[i]) * reverseSign(!normalOrder);
-				}
-			}
-			return (o1.length() - o2.length()) * reverseSign(!normalOrder);
+			String str1 = omitSpace(o1, omittedSpace);
+			String str2 = omitSpace(o2, omittedSpace);
+			str1 = distinguishCase(str1, distinguishedCase);
+			str2 = distinguishCase(str2, distinguishedCase);
+			return str1.compareTo(str2) * reverseSign(!normalOrder);
 		};
 	}
 

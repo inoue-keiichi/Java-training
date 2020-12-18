@@ -11,6 +11,11 @@ public class MainTest {
 	@Test
 	public void test() {
 		final List<String> list = new ArrayList<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add("Washi");
 				add("Tonbi");
@@ -21,6 +26,11 @@ public class MainTest {
 		};
 		final List<Integer> actual = Main.map(list, (e) -> e.length());
 		final List<Integer> expected = new ArrayList<Integer>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(5);
 				add(5);

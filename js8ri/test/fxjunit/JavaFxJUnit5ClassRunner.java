@@ -9,11 +9,11 @@ import org.junit.runners.model.InitializationError;
 
 import javafx.application.Platform;
 
-public class JavaFxJUnit4ClassRunner extends BlockJUnit4ClassRunner {
+public class JavaFxJUnit5ClassRunner extends BlockJUnit4ClassRunner {
 
-	public JavaFxJUnit4ClassRunner(final Class<?> klass) throws InitializationError {
+	public JavaFxJUnit5ClassRunner(final Class<?> klass) throws InitializationError {
 		super(klass);
-		JavaFxJUnit4Application.startJavaFx();
+		JavaFxJUnit5Application.startJavaFx();
 	}
 
 	/**

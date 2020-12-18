@@ -26,8 +26,6 @@ public class EnhancedLoggerTest {
 		final String b = "fuga";
 		// INFOより低いレベルはログに出ない
 		enhancedLogger.logIf(Level.FINEST, () -> true, () -> "truetrue");
-		// 判定がnullならログに出ない
-		enhancedLogger.logIf(Level.INFO, () -> null, () -> "nullnull");
 		// 判定がtrueならログに出る
 		enhancedLogger.logIf(Level.INFO, () -> a.equals("hoge"), () -> "hogehoge");
 		enhancedLogger.logIf(Level.INFO, () -> b.equals("fuga"), () -> "fugafuga");
@@ -51,6 +49,6 @@ public class EnhancedLoggerTest {
 		}
 		assertEquals(1, actualHoge);
 		assertEquals(1, actualFuga);
-		//assertEquals(null, br.readLine());
+		// assertEquals(null, br.readLine());
 	}
 }

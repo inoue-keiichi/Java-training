@@ -1,6 +1,6 @@
 package ch02.ex12;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,11 @@ public class MainTest {
 	@Test
 	public void test() {
 		final List<String> list = new ArrayList<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				for (int i = 0; i < 15; i++) {
 					String str = "";

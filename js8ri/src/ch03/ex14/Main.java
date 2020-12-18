@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -52,8 +53,11 @@ public class Main extends Application {
 				.toImage();
 
 		final ImageView imageView = new ImageView(result);
-		final Pane pane = new Pane(imageView);
-		final Scene scene = new Scene(pane, result.getWidth(), result.getHeight());
+
+		final Pane pane = new HBox(5);
+		pane.getChildren().addAll(new ImageView(image), imageView);
+
+		final Scene scene = new Scene(pane, image.getWidth() + result.getWidth() + 5, result.getHeight());
 		stage.setScene(scene);
 		stage.show();
 

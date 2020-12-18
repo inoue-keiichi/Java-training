@@ -8,11 +8,11 @@ import java.io.File;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fxjunit.JavaFxJUnit4ClassRunner;
+import fxjunit.JavaFxJUnit5ClassRunner;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
+@RunWith(JavaFxJUnit5ClassRunner.class)
 public class MainTest {
 
 	@Test

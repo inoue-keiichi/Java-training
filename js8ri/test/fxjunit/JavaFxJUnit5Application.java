@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class JavaFxJUnit4Application extends Application {
+public class JavaFxJUnit5Application extends Application {
 	// JUnitの複数スレッド対策用Lockオブジェクト
 	private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -22,7 +22,7 @@ public class JavaFxJUnit4Application extends Application {
 			if (!started.get()) {
 				//　JavaFX初期化用のスレッドワーカー作成
 				final ExecutorService executor = Executors.newSingleThreadExecutor();
-				executor.execute(() -> JavaFxJUnit4Application.launch());
+				executor.execute(() -> JavaFxJUnit5Application.launch());
 
 				// JavaFX初期化完了まで待つ。
 				while (!started.get()) {

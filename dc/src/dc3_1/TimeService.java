@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.prefs.Preferences;
 
-import dc2_4.clock.menu.PropertyUtility;
-import dc2_4.interfaces.Service;
+//import dc2_4.clock.menu.PropertyUtility;
+//import dc2_4.interfaces.Service;
 import javafx.scene.text.Font;
 
-public class TimeService implements Service {
+public class TimeService {
 	public enum MenuKey {
 		FONT_STYLE("fontStyle"), FONT_SIZE("fontSize"), FONT_COLOR("fontColor"), BACKGROUND_COLOR("backgroundColor");
 
@@ -38,8 +38,9 @@ public class TimeService implements Service {
 	public TimeService() {
 		prefs = Preferences.userNodeForPackage(this.getClass());
 		try {
-			fontColor = PropertyUtility.colorConverter(load(MenuKey.FONT_COLOR));
-			backgroundColor = PropertyUtility.colorConverter(load(MenuKey.BACKGROUND_COLOR));
+			// fontColor = PropertyUtility.colorConverter(load(MenuKey.FONT_COLOR));
+			// backgroundColor =
+			// PropertyUtility.colorConverter(load(MenuKey.BACKGROUND_COLOR));
 			fontSize = Integer.parseInt(load(MenuKey.FONT_SIZE));
 			fontStyle = load(MenuKey.FONT_STYLE);
 			font = Font.font(60);
@@ -117,12 +118,12 @@ public class TimeService implements Service {
 
 	public void setFontColor(String fontColor) {
 		this.save(MenuKey.FONT_COLOR, fontColor);
-		this.fontColor = PropertyUtility.colorConverter(fontColor);
+		// this.fontColor = PropertyUtility.colorConverter(fontColor);
 	}
 
 	public void setBackgroundColor(String backgroundColor) {
 		this.save(MenuKey.BACKGROUND_COLOR, backgroundColor);
-		this.backgroundColor = PropertyUtility.colorConverter(backgroundColor);
+		// this.backgroundColor = PropertyUtility.colorConverter(backgroundColor);
 	}
 
 	public void setFontSize(int fontSize) {
@@ -155,9 +156,9 @@ public class TimeService implements Service {
 		return fontSize;
 	}
 
-	//	public String getFont() {
-	//		return fontStyle;
-	//	}
+	// public String getFont() {
+	// return fontStyle;
+	// }
 
 	public int getHour() {
 		return hour;

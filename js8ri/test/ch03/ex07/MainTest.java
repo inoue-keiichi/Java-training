@@ -1,6 +1,6 @@
 package ch03.ex07;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,11 @@ import org.junit.Test;
 
 public class MainTest {
 	private final List<String> list = new ArrayList<String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		{
 			add("amenbo");
 			add("suzumushi");
@@ -27,6 +32,11 @@ public class MainTest {
 		list.sort(Main.createComparator(true, true, false));
 
 		final List<String> expected = new ArrayList<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(" hachi");
 				add("Ari");
@@ -47,6 +57,11 @@ public class MainTest {
 		list.sort(Main.createComparator(false, true, false));
 
 		final List<String> expected = new ArrayList<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add("suzumushi");
 				add("kuwagata");
@@ -67,6 +82,11 @@ public class MainTest {
 		list.sort(Main.createComparator(true, false, false));
 
 		final List<String> expected = new ArrayList<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(" hachi");
 				add("amenbo");
@@ -87,6 +107,11 @@ public class MainTest {
 		list.sort(Main.createComparator(true, false, true));
 
 		final List<String> expected = new ArrayList<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add("amenbo");
 				add("Ari");

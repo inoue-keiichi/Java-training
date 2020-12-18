@@ -1,6 +1,7 @@
 package ch03.ex09;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,11 @@ public class MainTest {
 	@Before
 	public void setup() {
 		list = new ArrayList<Person>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(inoue3);
 				add(inoue);
@@ -35,6 +41,11 @@ public class MainTest {
 		list.sort(Main.lexicographicComparator("age", "name", "money", "initial"));
 
 		final List<Person> expected = new ArrayList<Person>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(akiyama);
 				add(sato);
@@ -50,6 +61,11 @@ public class MainTest {
 	@Test
 	public void test_error_fieldIsObject() {
 		final List<Person> list = new ArrayList<Person>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(new Person("inoue", new Object()));
 				add(new Person("uemura", new Object()));
@@ -59,7 +75,7 @@ public class MainTest {
 		try {
 			list.sort(Main.lexicographicComparator("hobby", "name"));
 			fail();
-		} catch (final IllegalArgumentException e) {
+		} catch (final ClassCastException e) {
 
 		}
 	}
@@ -69,6 +85,11 @@ public class MainTest {
 		list.sort(Main.lexicographicComparator());
 
 		final List<Person> expected = new ArrayList<Person>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(inoue3);
 				add(inoue);

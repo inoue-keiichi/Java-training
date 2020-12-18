@@ -8,10 +8,10 @@ import java.io.IOException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fxjunit.JavaFxJUnit4ClassRunner;
+import fxjunit.JavaFxJUnit5ClassRunner;
 import javafx.scene.image.Image;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
+@RunWith(JavaFxJUnit5ClassRunner.class)
 public class MainTest {
 
 	@Test
