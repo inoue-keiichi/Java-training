@@ -1,5 +1,7 @@
 package dc3_2.menu;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -8,8 +10,9 @@ import dc3_2.menu.cell.ColorCell;
 import dc3_2.menu.cell.ColorModel;
 import dc3_2.menu.cell.FontCell;
 import dc3_2.menu.cell.FontModel;
-import dc3_2.time.TimeService;
-import dc3_2.time.TimeService.ClockType;
+import dc3_2.clock.ClockService;
+import dc3_2.clock.ClockService.ClockType;
+import dc3_2.frame.FrameService.ScreenMode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,8 +26,10 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class MenuDialogController implements Initializable {
-	private TimeService timeService;
+	private ClockService clockService;
 	private Stage menuDialogStage;
+
+	private ClockType oldClockType;
 
 	@FXML
 	private ComboBox<ClockType> clockTypeComboBox;
@@ -43,12 +48,23 @@ public class MenuDialogController implements Initializable {
 		final int fontSize = Integer.valueOf(fontSizeComboBox.getSelectionModel().getSelectedItem());
 		final String fontColor = fontColorComboBox.getSelectionModel().getSelectedItem().toString();
 		final String backgroundColor = backgroundColorComboBox.getSelectionModel().getSelectedItem().toString();
-		timeService.setClockType(clockTypeComboBox.getSelectionModel().getSelectedItem());
-		timeService.setFont(Font.font(fontFamily, fontSize));
-		timeService.setFontColor(fontColor);
-		timeService.setBackgroundColor(backgroundColor);
+		clockService.setClockType(clockTypeComboBox.getSelectionModel().getSelectedItem());
+		clockService.setFont(Font.font(fontFamily, fontSize));
+		clockService.setFontColor(fontColor);
+		clockService.setBackgroundColor(backgroundColor);
 
-		MenuDialogObservable.execute();
+		switch (clockTypeComboBox.getSelectionModel().getSelectedItem()) {
+		case TETRIS:
+			MenuDialogObservable.execute("name", null, ScreenMode.TETRIS_CLOCK);
+			break;
+		case DEGITAL:
+		case ANALOG:
+			MenuDialogObservable.execute("name", null, ScreenMode.CLOCK);
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+
 		menuDialogStage.close();
 	}
 
@@ -63,7 +79,7 @@ public class MenuDialogController implements Initializable {
 
 	@Override
 	public void initialize(final URL location, final ResourceBundle resources) {
-		timeService = TimeService.getInstance();
+		clockService = ClockService.getInstance();
 
 		fontComboBox.setCellFactory(new Callback<ListView<FontModel>, ListCell<FontModel>>() {
 			@Override
@@ -96,7 +112,7 @@ public class MenuDialogController implements Initializable {
 			}
 		});
 
-		clockTypeComboBox.setItems(FXCollections.observableArrayList(ClockType.DEGITAL, ClockType.ANALOG));
+		clockTypeComboBox.setItems(FXCollections.observableArrayList(MenuDialogService.CLOCK_TYPES));
 		fontComboBox.setItems(FXCollections.observableArrayList(createFontModels(MenuDialogService.FONT_FAMILY_NAMES)));
 		fontSizeComboBox.setItems(FXCollections.observableArrayList(MenuDialogService.FONT_SIZES));
 		fontColorComboBox.setItems(FXCollections.observableArrayList(createColorModels(MenuDialogService.COLORS)));
@@ -104,17 +120,17 @@ public class MenuDialogController implements Initializable {
 				.setItems(FXCollections.observableArrayList(createColorModels(MenuDialogService.COLORS)));
 
 		// set default value.
-		clockTypeComboBox.getSelectionModel().select(timeService.getClockType());
-		if (timeService.getClockType() == ClockType.DEGITAL) {
+		clockTypeComboBox.getSelectionModel().select(clockService.getClockType());
+		if (clockService.getClockType() == ClockType.DEGITAL) {
 			setFontDisable(false);
 		} else {
 			setFontDisable(true);
 		}
-		fontComboBox.getSelectionModel().select(new FontModel(timeService.getFont().getFamily()));
-		final int fontSize = Double.valueOf(timeService.getFont().getSize()).intValue();
+		fontComboBox.getSelectionModel().select(new FontModel(clockService.getFont().getFamily()));
+		final int fontSize = Double.valueOf(clockService.getFont().getSize()).intValue();
 		fontSizeComboBox.getSelectionModel().select(String.valueOf(fontSize));
-		fontColorComboBox.getSelectionModel().select(new ColorModel(timeService.getFontColor()));
-		backgroundColorComboBox.getSelectionModel().select(new ColorModel(timeService.getBackgroundColor()));
+		fontColorComboBox.getSelectionModel().select(new ColorModel(clockService.getFontColor()));
+		backgroundColorComboBox.getSelectionModel().select(new ColorModel(clockService.getBackgroundColor()));
 	}
 
 	private ObservableList<FontModel> createFontModels(final List<String> fontFamilys) {

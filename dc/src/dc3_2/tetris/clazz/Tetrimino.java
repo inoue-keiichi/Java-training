@@ -73,6 +73,14 @@ public class Tetrimino {
 		r = (r + 1) % forms.length;
 	}
 
+	public void reverseRotate() {
+		if (r == 0) {
+			r = forms.length - 1;
+			return;
+		}
+		r = (r - 1) % forms.length;
+	}
+
 	public long getSpeed() {
 		return this.speed;
 	}

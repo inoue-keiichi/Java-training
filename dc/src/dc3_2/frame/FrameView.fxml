@@ -8,9 +8,9 @@
 
 <VBox xmlns="http://javafx.com/javafx/8.0.162"
 	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="dc3_2.time.TimeController">
+	fx:controller="dc3_2.frame.FrameController">
 	<children>
-		<MenuBar fx:id="timeMenuBar" prefWidth="300.0">
+		<MenuBar fx:id="menuBar" prefWidth="300.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="Edit">
 					<items>
@@ -18,8 +18,13 @@
 							onAction="#onOpenDialog" text="Property" />
 					</items>
 				</Menu>
+				<Menu mnemonicParsing="false" text="Game">
+					<items>
+						<MenuItem fx:id="property" mnemonicParsing="false"
+							onAction="#onOpenTetris" text="Tetris" />
+					</items>
+				</Menu>
 			</menus>
 		</MenuBar>
-		<Canvas fx:id="timeCanvas" height="151.0" width="300.0" />
 	</children>
 </VBox>

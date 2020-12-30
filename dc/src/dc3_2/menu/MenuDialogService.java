@@ -3,6 +3,7 @@ package dc3_2.menu;
 import java.util.ArrayList;
 import java.util.List;
 
+import dc3_2.clock.ClockService.ClockType;
 import dc3_2.utils.ColorUtils;
 
 public class MenuDialogService {
@@ -15,6 +16,14 @@ public class MenuDialogService {
 	private MenuDialogService() {
 
 	}
+
+	public static final List<ClockType> CLOCK_TYPES = new ArrayList<ClockType>() {
+		{
+			add(ClockType.DEGITAL);
+			add(ClockType.ANALOG);
+			add(ClockType.TETRIS);
+		}
+	};
 
 	public static final List<String> FONT_FAMILY_NAMES = javafx.scene.text.Font.getFamilies();
 
