@@ -21,7 +21,8 @@ public class TetrisClockService {
 		HOURS_LEFT, HOURS_RIGHT, MINUTES_LEFT, MINUTES_RIGHT
 	}
 
-	final TetrisService tetrisService = new TetrisService();
+	private final TetrisService tetrisService = new TetrisService();
+	private final ClockService clockService = ClockService.getInstance();
 
 	boolean hourFlag = false;
 	boolean minuteFlag = false;
@@ -35,7 +36,10 @@ public class TetrisClockService {
 	final Object leftMinutesLock = new Object();
 	final Object rightMinutesLock = new Object();
 
-	ExecutorService es = Executors.newFixedThreadPool(4);
+	final ExecutorService hles = Executors.newSingleThreadExecutor();
+	final ExecutorService hres = Executors.newSingleThreadExecutor();
+	final ExecutorService mles = Executors.newSingleThreadExecutor();
+	final ExecutorService mres = Executors.newSingleThreadExecutor();
 
 	public boolean ischangedMinutes() {
 		if (oldMinutes != null && oldMinutes == Calendar.getInstance().get(Calendar.MINUTE)) {
@@ -48,28 +52,29 @@ public class TetrisClockService {
 			final DigitTetrisField leftMinutes, final DigitTetrisField rightMinutes) {
 
 		synchronized (this) {
-			final int newHours = Calendar.getInstance().get(Calendar.HOUR);
+			final int newHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 			final int newMinutes = Calendar.getInstance().get(Calendar.MINUTE);
 
 			if (oldHours == null || oldHours / 10 != newHours / 10) {
-				setDigitNumber(leftHours.getGraphicsContext(), leftHours.getWidth(), leftHours.getHeight(),
+				setDigitNumber(hles, leftHours.getGraphicsContext(), leftHours.getWidth(), leftHours.getHeight(),
 						leftHours.getTetrisField(), NumberScenarioFactory.create(newHours / 10), leftHoursLock);
 			}
 			if (oldHours == null || oldHours % 10 != newHours % 10) {
-				setDigitNumber(rightHours.getGraphicsContext(), rightHours.getWidth(), rightHours.getHeight(),
+				setDigitNumber(hres, rightHours.getGraphicsContext(), rightHours.getWidth(), rightHours.getHeight(),
 						rightHours.getTetrisField(), NumberScenarioFactory.create(newHours % 10), rightHoursLock);
 			}
 			if (oldMinutes == null || oldMinutes / 10 != newMinutes / 10) {
-				setDigitNumber(leftMinutes.getGraphicsContext(), leftMinutes.getWidth(), leftMinutes.getHeight(),
+				setDigitNumber(mles, leftMinutes.getGraphicsContext(), leftMinutes.getWidth(), leftMinutes.getHeight(),
 						leftMinutes.getTetrisField(), NumberScenarioFactory.create(newMinutes / 10), leftMinutesLock);
 			}
 			if (oldMinutes == null || oldMinutes % 10 != newMinutes % 10) {
-				setDigitNumber(rightMinutes.getGraphicsContext(), rightMinutes.getWidth(), rightMinutes.getHeight(),
+				setDigitNumber(mres, rightMinutes.getGraphicsContext(), rightMinutes.getWidth(),
+						rightMinutes.getHeight(),
 						rightMinutes.getTetrisField(), NumberScenarioFactory.create(newMinutes % 10), rightMinutesLock);
 			}
 
 			oldMinutes = Calendar.getInstance().get(Calendar.MINUTE);
-			oldHours = Calendar.getInstance().get(Calendar.HOUR);
+			oldHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 		}
 
 	}
@@ -91,33 +96,35 @@ public class TetrisClockService {
 				TetrisField.BLOCK_SIZE);
 	}
 
-	private void setDigitNumber(final GraphicsContext gc, final double width, final double height,
-			final TetrisField field, final List<DigitTetrimino> scenarios, final Object ) {
-			// init
-			CanvasUtil.initGc(gc, width, height);
-			field.clear();
+	private void setDigitNumber(final ExecutorService es, final GraphicsContext gc, final double width,
+			final double height,
+			final TetrisField field, final List<DigitTetrimino> scenarios, final Object lock) {
 
 		es.execute(() -> {
-			synchronized (lock) {
-				for (DigitTetrimino scenario : scenarios) {
-					// tetrisService.drawFallingTetrimino(gc, scenario.getTetrimino());
-					for (Action action : scenario.getActions()) {
-						synchronized (this) {
-							tetrisService.initGc(gc, width, height);
-							tetrisService.drawField(gc, field.getColors());
-							move(scenario.getTetrimino(), action);
-							tetrisService.drawFallingTetrimino(gc, scenario.getTetrimino());
-						}
-						try {
-							Thread.sleep(80);
-						} catch (InterruptedException e) {
-							// TODO 自動生成された catch ブロック
-							e.printStackTrace();
-						}
+			// init
+			CanvasUtil.initGc(gc, width, height);
+			//CanvasUtil.initGc(gc, ColorUtils.get(clockService.getBackgroundColor()), width, height);
+			field.clear();
+
+			for (DigitTetrimino scenario : scenarios) {
+				// tetrisService.drawFallingTetrimino(gc, scenario.getTetrimino());
+				for (Action action : scenario.getActions()) {
+					synchronized (this) {
+						CanvasUtil.initGc(gc, width, height);
+						//CanvasUtil.initGc(gc, ColorUtils.get(clockService.getBackgroundColor()), width, height);
+						tetrisService.drawField(gc, field.getColors());
+						move(scenario.getTetrimino(), action);
+						tetrisService.drawFallingTetrimino(gc, scenario.getTetrimino());
 					}
-					scenario.getTetrimino().moveDown();
-					field.fixTetrimino(scenario.getTetrimino());
+					try {
+						Thread.sleep(70);
+					} catch (InterruptedException e) {
+						// TODO 自動生成された catch ブロック
+						e.printStackTrace();
+					}
 				}
+				scenario.getTetrimino().moveDown();
+				field.fixTetrimino(scenario.getTetrimino());
 			}
 		});
 	}

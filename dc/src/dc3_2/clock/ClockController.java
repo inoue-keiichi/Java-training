@@ -4,12 +4,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dc3_2.MainService;
-import dc3_2.menu.MenuDialogObservable;
 import dc3_2.clock.ClockService.ClockType;
-import dc3_2.frame.FrameService;
-import dc3_2.frame.FrameService.ScreenMode;
+import dc3_2.menu.MenuDialogObservable;
 import dc3_2.utils.ColorUtils;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -137,16 +134,10 @@ public class ClockController implements Initializable {
 
 		switch (clockService.getClockType()) {
 		case ANALOG:
-			// clockService.changeUpdateSpeed(Mode.CLOCK);
 			analogClockService.setClock(gc, clockCanvas.getWidth(), clockCanvas.getHeight());
 			break;
-//		case TETRIS:
-//			clockService.changeUpdateSpeed(ScreenMode.TETRIS);
-//			tetrisClockService.setClock(gc, clockCanvas.getWidth(), clockCanvas.getHeight());
-//			break;
 		case DEGITAL:
 		default:
-			// clockService.changeUpdateSpeed(Mode.CLOCK);
 			setDegitalClock();
 		}
 	}

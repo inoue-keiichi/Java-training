@@ -6,15 +6,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dc3_2.clock.TetrisClockService.Digit;
-import dc3_2.frame.FrameService.ScreenMode;
 import dc3_2.tetris.clazz.DigitTetrisField;
-import dc3_2.tetris.clazz.TetrisField;
-import dc3_2.utils.CanvasUtil;
-import dc3_2.utils.ColorUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 
 public class TetrisClockController implements Initializable {
@@ -30,6 +25,7 @@ public class TetrisClockController implements Initializable {
 	Canvas clockDot;
 
 	private TetrisClockService tetrisClockService;
+
 	private DigitTetrisField leftHoursTetrisField;
 	private DigitTetrisField rightHoursTetrisField;
 	private DigitTetrisField leftMinutesTetrisField;

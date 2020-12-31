@@ -1,18 +1,16 @@
 package dc3_2.menu;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import dc3_2.clock.ClockService;
+import dc3_2.clock.ClockService.ClockType;
+import dc3_2.frame.FrameService.ScreenMode;
 import dc3_2.menu.cell.ColorCell;
 import dc3_2.menu.cell.ColorModel;
 import dc3_2.menu.cell.FontCell;
 import dc3_2.menu.cell.FontModel;
-import dc3_2.clock.ClockService;
-import dc3_2.clock.ClockService.ClockType;
-import dc3_2.frame.FrameService.ScreenMode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,11 +53,11 @@ public class MenuDialogController implements Initializable {
 
 		switch (clockTypeComboBox.getSelectionModel().getSelectedItem()) {
 		case TETRIS:
-			MenuDialogObservable.execute("name", null, ScreenMode.TETRIS_CLOCK);
+			MenuDialogObservable.execute("", null, ScreenMode.TETRIS_CLOCK);
 			break;
 		case DEGITAL:
 		case ANALOG:
-			MenuDialogObservable.execute("name", null, ScreenMode.CLOCK);
+			MenuDialogObservable.execute("", null, ScreenMode.CLOCK);
 			break;
 		default:
 			throw new IllegalArgumentException();
@@ -105,10 +103,17 @@ public class MenuDialogController implements Initializable {
 		clockTypeComboBox.addEventHandler(ActionEvent.ACTION, event -> {
 			final ComboBox<?> ComboBox = (ComboBox<?>) event.getSource();
 			final ClockType clockType = (ClockType) ComboBox.getSelectionModel().getSelectedItem();
-			if (clockType == ClockType.DEGITAL) {
+			switch (clockType) {
+			case DEGITAL:
 				setFontDisable(false);
-			} else {
+				break;
+			case ANALOG:
 				setFontDisable(true);
+				break;
+			case TETRIS:
+				setFontDisable(true);
+				backgroundColorComboBox.setDisable(true);
+				break;
 			}
 		});
 
@@ -121,10 +126,17 @@ public class MenuDialogController implements Initializable {
 
 		// set default value.
 		clockTypeComboBox.getSelectionModel().select(clockService.getClockType());
-		if (clockService.getClockType() == ClockType.DEGITAL) {
+		switch (clockService.getClockType()) {
+		case DEGITAL:
 			setFontDisable(false);
-		} else {
+			break;
+		case ANALOG:
 			setFontDisable(true);
+			break;
+		case TETRIS:
+			setFontDisable(true);
+			backgroundColorComboBox.setDisable(true);
+			break;
 		}
 		fontComboBox.getSelectionModel().select(new FontModel(clockService.getFont().getFamily()));
 		final int fontSize = Double.valueOf(clockService.getFont().getSize()).intValue();
@@ -156,5 +168,4 @@ public class MenuDialogController implements Initializable {
 		fontSizeComboBox.setDisable(value);
 		fontColorComboBox.setDisable(value);
 	}
-
 }
