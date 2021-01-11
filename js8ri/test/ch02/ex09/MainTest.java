@@ -1,7 +1,7 @@
 package ch02.ex09;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -14,7 +14,7 @@ public class MainTest {
 	public void test() {
 		final ArrayList<String> list1 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class MainTest {
 		};
 		final ArrayList<String> list2 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class MainTest {
 		};
 		final ArrayList<String> list3 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class MainTest {
 	public void test2() {
 		final ArrayList<String> list1 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -73,7 +73,7 @@ public class MainTest {
 		};
 		final ArrayList<String> list2 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -86,7 +86,7 @@ public class MainTest {
 		};
 		final ArrayList<String> list3 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -108,7 +108,7 @@ public class MainTest {
 	public void test3() {
 		final ArrayList<String> list1 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -120,7 +120,7 @@ public class MainTest {
 		};
 		final ArrayList<String> list2 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -133,7 +133,7 @@ public class MainTest {
 		};
 		final ArrayList<String> list3 = new ArrayList<String>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 

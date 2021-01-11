@@ -1,0 +1,2 @@
+throws FileNotFoundException, UnknwonHostException
+と宣言する。細かく書いた方が解析しやすいため。
