@@ -106,9 +106,11 @@ public class MenuDialogController implements Initializable {
 			switch (clockType) {
 			case DEGITAL:
 				setFontDisable(false);
+				backgroundColorComboBox.setDisable(false);
 				break;
 			case ANALOG:
 				setFontDisable(true);
+				backgroundColorComboBox.setDisable(false);
 				break;
 			case TETRIS:
 				setFontDisable(true);
@@ -129,9 +131,11 @@ public class MenuDialogController implements Initializable {
 		switch (clockService.getClockType()) {
 		case DEGITAL:
 			setFontDisable(false);
+			backgroundColorComboBox.setDisable(false);
 			break;
 		case ANALOG:
 			setFontDisable(true);
+			backgroundColorComboBox.setDisable(false);
 			break;
 		case TETRIS:
 			setFontDisable(true);
