@@ -3,11 +3,9 @@ package dc3_2;
 import java.net.URL;
 
 import dc3_2.frame.FrameController;
-import dc3_2.tetris.TetrisController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -25,7 +23,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		final URL location = getClass().getResource("./frame/FrameView.fxml");
+		final URL location = getClass().getResource("frame/FrameView.fxml");
 		final FXMLLoader timeLoader = new FXMLLoader(location);
 		final Pane root = (Pane) timeLoader.load();
 		final Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);

@@ -32,6 +32,7 @@ javafx {
 
 dependencies {
   testCompile 'org.assertj:assertj-core:3.2.0'
+  testCompile 'org.junit.jupiter:junit-jupiter-api:5.7.0'
 }
 
 //compileJava {

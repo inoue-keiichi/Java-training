@@ -1,8 +1,33 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
+plugins {
+	id 'java'
+	id 'application'
+	id 'eclipse'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
+  test {
+    java {
+     srcDir 'test'
+    }
+  }
+}
 
 repositories {
     jcenter()
+}
+
+javafx {
+    version = '11.0.2'
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web']
 }
 
 dependencies {

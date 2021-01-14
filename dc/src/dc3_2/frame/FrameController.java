@@ -9,19 +9,18 @@ import java.util.ResourceBundle;
 import dc3_2.MainService;
 import dc3_2.clock.ClockController;
 import dc3_2.clock.ClockService;
-import dc3_2.menu.MenuDialogController;
-import dc3_2.menu.MenuDialogObservable;
-import dc3_2.tetris.TetrisController;
 import dc3_2.clock.ClockService.ClockType;
 import dc3_2.clock.TetrisClockController;
 import dc3_2.frame.FrameService.ScreenMode;
+import dc3_2.menu.MenuDialogController;
+import dc3_2.menu.MenuDialogObservable;
+import dc3_2.tetris.TetrisController;
 import dc3_2.utils.ColorUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -48,7 +47,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	@FXML
 	private void onOpenDialog() throws IOException {
-		final URL location = getClass().getResource("./../menu/MenuDialogView.fxml");
+		final URL location = getClass().getResource("MenuDialogView.fxml");
 		final FXMLLoader menuLoader = new FXMLLoader(location);
 		final Pane root = (Pane) menuLoader.load();
 		final Scene scene = new Scene(root, 300, 200);
@@ -80,13 +79,13 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		URL location = null;
 		switch (mode) {
 		case CLOCK:
-			location = getClass().getResource("./../clock/ClockView.fxml");
+			location = getClass().getResource("ClockView.fxml");
 			break;
 		case TETRIS:
-			location = getClass().getResource("./../tetris/TetrisView.fxml");
+			location = getClass().getResource("TetrisView.fxml");
 			break;
 		case TETRIS_CLOCK:
-			location = getClass().getResource("./../clock/TetrisClockView.fxml");
+			location = getClass().getResource("TetrisClockView.fxml");
 			break;
 		default:
 		}
