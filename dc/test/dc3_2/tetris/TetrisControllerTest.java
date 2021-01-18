@@ -13,9 +13,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import dc3_2.tetris.TetriminoFactory;
-import dc3_2.tetris.TetriminoFactory.TetriminoForm;
-import dc3_2.tetris.TetrisController;
+import dc3_2.frame.game.tetris.TetriminoFactory;
+import dc3_2.frame.game.tetris.TetrisController;
+import dc3_2.frame.game.tetris.TetriminoFactory.TetriminoForm;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

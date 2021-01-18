@@ -5,9 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import dc3_2.tetris.TetriminoFactory.TetriminoForm;
-import dc3_2.tetris.clazz.Tetrimino;
-import dc3_2.tetris.clazz.TetrisField;
+import dc3_2.frame.game.tetris.TetriminoFactory;
+import dc3_2.frame.game.tetris.TetrisService;
+import dc3_2.frame.game.tetris.TetriminoFactory.TetriminoForm;
+import dc3_2.frame.game.tetris.clazz.Tetrimino;
+import dc3_2.frame.game.tetris.clazz.TetrisField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
