@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.HBox?>
+
+
+<HBox fx:controller="dc3_4.frame.clock.TetrisClockController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Canvas fx:id="hoursLeftSide" height="400.0" width="160.0" />
+      <Canvas fx:id="hoursRightSide" height="400.0" width="160.0" />
+      <Canvas fx:id="clockDot" height="400.0" width="60.0" />
+      <Canvas fx:id="minutesLeftSide" height="400.0" width="160.0" />
+      <Canvas fx:id="minutesRightSide" height="400.0" width="160.0" />
+   </children>
+</HBox>
