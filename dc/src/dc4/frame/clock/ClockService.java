@@ -1,10 +1,13 @@
-package dc3_4.frame.clock;
+package dc4.frame.clock;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
-import dc3_4.frame.ScreenMode;
+import dc4.frame.ScreenMode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -40,6 +43,11 @@ public class ClockService {
 
 	private long updateSpeed;
 
+	private String music;
+	private String customMusic;
+	private int alarmHour;
+	private int alarmMinute;
+
 	private final Preferences prefs;
 
 	private ClockService() {
@@ -50,6 +58,10 @@ public class ClockService {
 			backgroundColorName = load(MenuKey.BACKGROUND_COLOR);
 			font = loadFont();
 			clockType = loadClockType();
+			music = "Sample1";
+			alarmHour = 0;
+			alarmMinute = 0;
+
 		} catch (final IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -188,6 +200,22 @@ public class ClockService {
 		this.clockType = clockType;
 	}
 
+	public void setMusic(final String music) {
+		this.music = music;
+	}
+
+	public void setCustomMusic(final String customMusic) {
+		this.customMusic = customMusic;
+	}
+
+	public void setAlarmHour(final int alarmHour) {
+		this.alarmHour = alarmHour;
+	}
+
+	public void setAlarmMinute(final int alarmMinute) {
+		this.alarmMinute = alarmMinute;
+	}
+
 	public String getFontColorName() {
 		return fontColorName;
 	}
@@ -214,6 +242,22 @@ public class ClockService {
 		}
 	}
 
+	public String getMusic() {
+		return this.music;
+	}
+
+	public String getCustomMusic() {
+		return this.customMusic;
+	}
+
+	public int getAlarmHour() {
+		return this.alarmHour;
+	}
+
+	public int getAlarmMinute() {
+		return this.alarmMinute;
+	}
+
 	public void changeUpdateSpeed(ScreenMode mode) {
 		synchronized (this) {
 			switch (mode) {
@@ -227,6 +271,19 @@ public class ClockService {
 				break;
 			}
 
+		}
+	}
+
+	public void playMusic(String musicPath) {
+		if (musicPath != null
+				&& Objects.equals(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+						this.getAlarmHour())
+				&& Objects.equals(Calendar.getInstance().get(Calendar.MINUTE),
+						this.getAlarmMinute())
+				&& Objects.equals(Calendar.getInstance().get(Calendar.SECOND), 0)) {
+			Media media = new Media(musicPath);
+			MediaPlayer mplayer = new MediaPlayer(media);
+			mplayer.play();
 		}
 	}
 }

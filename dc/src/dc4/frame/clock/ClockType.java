@@ -1,4 +1,4 @@
-package dc3_4.frame.clock;
+package dc4.frame.clock;
 
 public enum ClockType {
 	ANALOG("analog"), DEGITAL("degital"), TETRIS("tetris");

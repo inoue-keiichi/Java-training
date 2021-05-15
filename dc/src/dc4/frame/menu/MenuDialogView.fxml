@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="314.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dc4.frame.menu.MenuDialogController">
+   <children>
+      <TabPane>
+         <tabs>
+            <Tab closable="false" text="Clock">
+               <content>
+                  <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="435.0">
+                  	<columnConstraints>
+                  		<ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="132.0" />
+                  		<ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="64.0" />
+                  		<ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="285.0" />
+                        <ColumnConstraints />
+                  	</columnConstraints>
+                  	<rowConstraints>
+                  		<RowConstraints />
+                  		<RowConstraints maxHeight="61.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                  		<RowConstraints maxHeight="82.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                  		<RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                  		<RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                  		<RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                  	</rowConstraints>
+                  	<children>
+                  		<Label text="Font" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                  			<GridPane.margin>
+                  				<Insets left="10.0" />
+                  			</GridPane.margin>
+                  		</Label>
+                  		<Label text="Font Size" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                  			<GridPane.margin>
+                  				<Insets left="10.0" />
+                  			</GridPane.margin>
+                  		</Label>
+                  		<Label text="Font Color" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                  			<GridPane.margin>
+                  				<Insets left="10.0" />
+                  			</GridPane.margin>
+                  		</Label>
+                  		<Label text="Background Color" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  			<GridPane.margin>
+                  				<Insets left="10.0" />
+                  			</GridPane.margin>
+                  		</Label>
+                  		<ComboBox fx:id="fontComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                  			<GridPane.margin>
+                  				<Insets right="10.0" />
+                  			</GridPane.margin>
+                  		</ComboBox>
+                  		<ComboBox fx:id="fontSizeComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                  			<GridPane.margin>
+                  				<Insets right="10.0" />
+                  			</GridPane.margin>
+                  		</ComboBox>
+                  		<ComboBox fx:id="fontColorComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                  			<GridPane.margin>
+                  				<Insets right="10.0" />
+                  			</GridPane.margin>
+                  		</ComboBox>
+                  		<ComboBox fx:id="backgroundColorComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  			<GridPane.margin>
+                  				<Insets right="10.0" />
+                  			</GridPane.margin>
+                  		</ComboBox>
+                  		<Label text="ClockType" GridPane.rowIndex="1">
+                  			<GridPane.margin>
+                  				<Insets left="10.0" />
+                  			</GridPane.margin>
+                  		</Label>
+                  		<ComboBox fx:id="clockTypeComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                  			<GridPane.margin>
+                  				<Insets right="10.0" />
+                  			</GridPane.margin>
+                  		</ComboBox>
+                  	</children>
+                  </GridPane>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Alarm">
+               <content>
+                  <GridPane prefHeight="233.0" prefWidth="345.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="67.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.0" minWidth="10.0" prefWidth="46.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="306.0" minWidth="10.0" prefWidth="238.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="97.0" minHeight="10.0" prefHeight="82.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="191.0" minHeight="10.0" prefHeight="83.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Sample">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <ComboBox fx:id="musicSampleComboBox" prefHeight="27.0" prefWidth="161.0" GridPane.columnIndex="2" />
+                        <Label text="Custom" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Time" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <children>
+                              <ComboBox fx:id="alarmHourComboBox" prefWidth="80.0">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <Label text=":">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="alarmMinuteComboBox" prefWidth="80.0" />
+                           </children>
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <VBox alignment="CENTER" prefHeight="82.0" prefWidth="223.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                           <children>
+                              <TextField fx:id="musicFileText" editable="false" prefHeight="27.0" prefWidth="257.0" />
+                              <HBox alignment="TOP_RIGHT" prefHeight="27.0" prefWidth="228.0">
+                                 <children>
+                                    <Button fx:id="musicFileSelectButton" mnemonicParsing="false" onAction="#openMusicFileAction" text="Open">
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="musicFileDeleteButton" mnemonicParsing="false" onAction="#deleteMusicFileAction" text="Delete">
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+            <Tab text="News">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="196.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="News Bar">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Country" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <CheckBox fx:id="newsBarCheckBox" mnemonicParsing="false" text="display" GridPane.columnIndex="1" />
+                        <ComboBox fx:id="newsCountryComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <GridPane prefHeight="37.0" prefWidth="481.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.0" minWidth="10.0" prefWidth="223.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="53.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="71.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="45.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+      		<Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onClickCancel" prefHeight="27.0" prefWidth="65.0" text="Cancel" GridPane.columnIndex="2" />
+      		<Button fx:id="okBtn" alignment="TOP_RIGHT" contentDisplay="TOP" mnemonicParsing="false" onAction="#onClickOk" text="OK" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+   </children>
+</VBox>
