@@ -1,13 +1,17 @@
 package dc4.frame;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 import dc4.frame.clock.ClockController;
 import dc4.frame.clock.TetrisClockController;
 import dc4.frame.game.tetris.TetrisController;
+import dc4.frame.menu.MenuDialogController;
 import dc4.frame.news.bar.NewsBarController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -35,8 +39,17 @@ public class FrameService {
 	private double width;
 	private double height;
 	private ScreenMode screenMode;
-	private boolean newsBarVisible;
-	private String newsCountry;
+	private boolean newsBarVisible = false;
+	private String newsCountry = "Japan";
+	private List<String> newsCategories;
+	private boolean newsCategoryAll = false;
+	private boolean newsBusiness = false;
+	private boolean newsEntertainment = false;
+	private boolean newsGeneral = false;
+	private boolean newsHealth = false;
+	private boolean newsScience = false;
+	private boolean newsSports = false;
+	private boolean newsTechnology = false;
 
 	public static FrameService getInstance() {
 		return timeService;
@@ -109,6 +122,24 @@ public class FrameService {
 	public void bindNewsController(Stage stage, FXMLLoader loader) {
 		NewsBarController newsController = loader.getController();
 		newsController.initView(stage);
+	}
+
+	public Stage createDialog() throws IOException {
+		final URL location = getClass().getResource("menu/MenuDialogView.fxml");
+		final FXMLLoader menuLoader = new FXMLLoader(location);
+		final VBox root = (VBox) menuLoader.load();
+		final Scene scene = new Scene(root, 400, 300);
+		final Stage stage = new Stage();
+		stage.setScene(scene);
+
+		// setup menuDialog to bind
+		final MenuDialogController menuDialogController = menuLoader.getController();
+		menuDialogController.initView(stage);
+
+		stage.setX(this.getX() - scene.getWidth());
+		stage.setY(this.getY());
+		stage.setResizable(false);
+		return stage;
 	}
 
 	public void saveX(final double value) {
@@ -219,5 +250,77 @@ public class FrameService {
 
 	public void setNewsCountry(String newsCountry) {
 		this.newsCountry = newsCountry;
+	}
+
+	public List<String> getNewsCategories() {
+		return newsCategories;
+	}
+
+	public void setNewsCategories(List<String> newsCategories) {
+		this.newsCategories = newsCategories;
+	}
+
+	public boolean getNewsCategoryAll() {
+		return newsCategoryAll;
+	}
+
+	public void setNewsCategoryAll(boolean newsCategoryAll) {
+		this.newsCategoryAll = newsCategoryAll;
+	}
+
+	public boolean getNewsBusiness() {
+		return newsBusiness;
+	}
+
+	public void setNewsBusiness(boolean newsBusiness) {
+		this.newsBusiness = newsBusiness;
+	}
+
+	public boolean getNewsEntertainment() {
+		return newsEntertainment;
+	}
+
+	public void setNewsEntertainment(boolean newsEntertainment) {
+		this.newsEntertainment = newsEntertainment;
+	}
+
+	public boolean getNewsGeneral() {
+		return newsGeneral;
+	}
+
+	public void setNewsGeneral(boolean newsGeneral) {
+		this.newsGeneral = newsGeneral;
+	}
+
+	public boolean getNewsHealth() {
+		return newsHealth;
+	}
+
+	public void setNewsHealth(boolean newsHealth) {
+		this.newsHealth = newsHealth;
+	}
+
+	public boolean getNewsScience() {
+		return newsScience;
+	}
+
+	public void setNewsScience(boolean newsScience) {
+		this.newsScience = newsScience;
+	}
+
+	public boolean getNewsSports() {
+		return newsSports;
+	}
+
+	public void setNewsSports(boolean newsSports) {
+		this.newsSports = newsSports;
+	}
+
+	public boolean getNewsTechnology() {
+		return newsTechnology;
+	}
+
+	public void setNewsTechnology(boolean newsTechnology) {
+		this.newsTechnology = newsTechnology;
 	}
 }

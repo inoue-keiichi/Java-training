@@ -20,6 +20,21 @@ public class MenuDialogService {
 
 	}
 
+	public enum NewsCategories {
+		BUSINESS("business"), ENTERTAINMENT("entertainment"), GENERAL("general"), HEALTH("health"), SCIENCE(
+				"science"), SPORTS("sports"), TECHNOLOGY("technology");
+
+		private String name;
+
+		private NewsCategories(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
+
 	public static final List<ClockType> CLOCK_TYPES = new ArrayList<ClockType>() {
 		{
 			add(ClockType.DEGITAL);
@@ -64,12 +79,25 @@ public class MenuDialogService {
 
 	public static final Map<String, String> COUNTRY = new LinkedHashMap<>() {
 		{
+			put("Japan", "jp");
 			put("US", "us");
-			put("Japan", "ja");
 			put("China", "ch");
 			put("Korea", "kr");
 		}
 	};
+
+	//	public static final List<String> CATEGORY = new ArrayList<>() {
+	//		{
+	//			add("business");
+	//			add("entertainment");
+	//			add("general");
+	//			add("health");
+	//			add("science");
+	//			add("sports");
+	//			add("technology");
+	//
+	//		}
+	//	};
 
 	public static final Map<String, String> MUSIC_SAMPLES = new LinkedHashMap<>() {
 		{

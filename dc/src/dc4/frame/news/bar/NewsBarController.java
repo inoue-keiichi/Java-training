@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 
 import com.kwabenaberko.newsapilib.models.Article;
 
+import dc4.frame.FrameService;
 import dc4.frame.news.NewsObservable;
 import dc4.frame.news.NewsService;
 import javafx.application.Platform;
@@ -22,6 +23,7 @@ public class NewsBarController implements PropertyChangeListener, Initializable 
 	NewsService newsService;
 	NewsBarService newsBarService;
 	NewsBarObservable newsObservable;
+	FrameService frameService;
 	int count = 0;
 
 	ExecutorService es;
@@ -35,13 +37,14 @@ public class NewsBarController implements PropertyChangeListener, Initializable 
 	public void initialize(URL location, ResourceBundle resources) {
 		this.newsService = NewsService.getInstance();
 		this.newsBarService = NewsBarService.getInstance();
+		this.frameService = FrameService.getInstance();
 		this.es = Executors.newSingleThreadExecutor();
 
 		// Add observer
 		newsObservable = NewsBarObservable.getInstance();
 		newsObservable.addPropertyChangeListener(this);
 
-		this.newsBarService.requestArticles();
+		this.newsBarService.requestArticles(frameService.getNewsCountry(), frameService.getNewsCategories());
 	}
 
 	public void initView(final Stage stage) {

@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 
 import dc4.frame.clock.ClockService;
 import dc4.frame.clock.ClockType;
-import dc4.frame.menu.MenuDialogController;
 import dc4.frame.menu.MenuDialogObservable;
 import dc4.frame.news.NewsObservable;
 import dc4.utils.ColorUtils;
@@ -17,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -44,21 +42,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	@FXML
 	private void onOpenDialog() throws IOException {
-		final URL location = getClass().getResource("menu/MenuDialogView.fxml");
-		final FXMLLoader menuLoader = new FXMLLoader(location);
-		final VBox root = (VBox) menuLoader.load();
-		final Scene scene = new Scene(root, 400, 300);
-		final Stage stage = new Stage();
-		stage.setScene(scene);
-
-		// setup menuDialog to bind
-		final MenuDialogController menuDialogController = menuLoader.getController();
-		menuDialogController.initView(stage);
-
-		stage.setX(frameService.getX() - scene.getWidth());
-		stage.setY(frameService.getY());
-		stage.setResizable(false);
-
+		final Stage stage = frameService.createDialog();
 		menuBar.setDisable(true);
 		stage.showAndWait();
 		menuBar.setDisable(false);
@@ -66,24 +50,37 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	@FXML
 	private void onOpenTetris() {
-		changeMainPane(ScreenMode.TETRIS);
+		try {
+			initMainPane(ScreenMode.TETRIS);
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
 		this.timeStage.setWidth(300);
 		this.timeStage.setHeight(500);
 		this.timeStage.show();
 	}
 
-	private void changeMainPane(ScreenMode mode) {
+	private void deletePanel() {
 		VBox pane = (VBox) this.timeStage.getScene().getRoot();
 		frameService.deleteElements(pane);
+	}
 
-		changeNewsBarPane();
-		changeClockPane(mode);
-
+	private void changeMainPane(ScreenMode mode) throws IOException {
+		//		VBox pane = (VBox) this.timeStage.getScene().getRoot();
+		//		frameService.deleteElements(pane);
+		setClockPane(mode);
+		resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 		frameService.setScreenMode(mode);
 	}
 
-	private void changeNewsPane(String url) {
-		VBox pane = (VBox) this.timeStage.getScene().getRoot();
+	private void changeNewsPane() {
+		final VBox pane = (VBox) this.timeStage.getScene().getRoot();
+		final Node node = createNewsPane();
+		pane.getChildren().set(MAIN_PANE_NUM, node);
+	}
+
+	private Node createNewsPane() {
 		final FXMLLoader loader = frameService.createNewsLoader();
 		Node node = null;
 		try {
@@ -92,24 +89,24 @@ public class FrameController implements PropertyChangeListener, Initializable {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		pane.getChildren().set(MAIN_PANE_NUM, node);
+		return node;
 	}
 
-	private void changeClockPane(ScreenMode mode) {
-		final FXMLLoader loader = frameService.createClockLoader(mode);
-		Node node = null;
-		try {
-			node = (Node) loader.load();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+	private void setClockPane(ScreenMode mode) throws IOException {
+		Node node = createClockPane(mode);
 		VBox pane = (VBox) this.timeStage.getScene().getRoot();
 		pane.getChildren().add(node);
-		frameService.bindClockController(timeStage, mode, loader);
 	}
 
-	private void changeNewsBarPane() {
+	private Node createClockPane(ScreenMode mode) throws IOException {
+		final FXMLLoader loader = frameService.createClockLoader(mode);
+		Node node = null;
+		node = (Node) loader.load();
+		frameService.bindClockController(timeStage, mode, loader);
+		return node;
+	}
+
+	private void setNewsBarPane() {
 		final FXMLLoader loader = frameService.createNewsBarLoader();
 		Node node = null;
 		try {
@@ -138,29 +135,41 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		newsObservable.addPropertyChangeListener(this);
 	}
 
-	public void initView(final Stage stage) {
+	public void initView(final Stage stage) throws IOException {
 		this.timeStage = stage;
 		stage.setX(frameService.getX());
 		stage.setY(frameService.getY());
 		stage.show();
+		initMainPane(frameService.getScreenMode());
+	}
 
-		changeMainPane(frameService.getScreenMode());
+	private void initMainPane(ScreenMode mode) throws IOException {
+		deletePanel();
+		if (frameService.getNewsBarVisible()) {
+			setNewsBarPane();
+		}
+		changeMainPane(mode);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (Objects.equals(evt.getPropertyName(), "news")) {
-			changeNewsPane((String) evt.getNewValue());
+			changeNewsPane();
 			return;
 		}
 
 		final ScreenMode newVal = (ScreenMode) evt.getNewValue();
-		if (!Objects.equals(frameService.getScreenMode(), newVal)) {
-			changeMainPane(newVal);
+		if (!Objects.equals(frameService.getScreenMode(), newVal) || frameService.getNewsBarVisible()) {
+			try {
+				initMainPane(newVal);
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
 		}
 
 		this.timeText.setFont(clockService.getFont());
-		resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
+		//resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 		this.timeStage.getScene().setFill(ColorUtils.get(clockService.getBackgroundColorName()));
 	}
 
