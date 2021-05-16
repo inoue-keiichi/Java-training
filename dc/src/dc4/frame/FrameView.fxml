@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.162"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="dc4.frame.FrameController">
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dc4.frame.FrameController">
 	<children>
 		<MenuBar fx:id="menuBar" prefWidth="300.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="Edit">
 					<items>
-						<MenuItem fx:id="property" mnemonicParsing="false"
-							onAction="#onOpenDialog" text="Property" />
+						<MenuItem fx:id="property" mnemonicParsing="false" onAction="#onOpenDialog" text="Property" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Game">
 					<items>
-						<MenuItem fx:id="property" mnemonicParsing="false"
-							onAction="#onOpenTetris" text="Tetris" />
+						<MenuItem fx:id="property" mnemonicParsing="false" onAction="#onOpenTetris" text="Tetris" />
 					</items>
 				</Menu>
+            <Menu mnemonicParsing="false" text="News">
+              <items>
+                  <MenuItem mnemonicParsing="false" onAction="#onOpenNewsDialog" text="Property" />
+                <MenuItem mnemonicParsing="false" onAction="#backClock" text="Back" />
+              </items>
+            </Menu>
 			</menus>
 		</MenuBar>
 	</children>

@@ -8,9 +8,7 @@ import java.util.concurrent.Executors;
 import dc4.frame.FrameService;
 import dc4.frame.menu.MenuDialogObservable;
 import dc4.frame.menu.MenuDialogService;
-import dc4.frame.news.bar.NewsBarObservable;
 import dc4.utils.ColorUtils;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -56,7 +54,6 @@ public class ClockController implements Initializable {
 		timeText.setText(DEFAULT_TIMER_TEXT);
 		gc = clockCanvas.getGraphicsContext2D();
 		es = Executors.newSingleThreadExecutor();
-		int[] count = { 0 };
 		es.execute(() -> {
 			while (true) {
 				// customMusicを優先する
@@ -69,12 +66,6 @@ public class ClockController implements Initializable {
 				try {
 					Thread.sleep(clockService.getUpdateSpeed());
 				} catch (final InterruptedException e) {
-				}
-				if (count[0] >= 60) {
-					Platform.runLater(() -> NewsBarObservable.execute("articles", null, null));
-					count[0] = 0;
-				} else {
-					count[0]++;
 				}
 			}
 		});

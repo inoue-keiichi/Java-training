@@ -8,8 +8,8 @@ import java.util.prefs.Preferences;
 import dc4.frame.clock.ClockController;
 import dc4.frame.clock.TetrisClockController;
 import dc4.frame.game.tetris.TetrisController;
-import dc4.frame.menu.MenuDialogController;
 import dc4.frame.news.bar.NewsBarController;
+import dc4.interfaces.DialogController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -124,8 +124,8 @@ public class FrameService {
 		newsController.initView(stage);
 	}
 
-	public Stage createDialog() throws IOException {
-		final URL location = getClass().getResource("menu/MenuDialogView.fxml");
+	public Stage createDialog(String path) throws IOException {
+		final URL location = getClass().getResource(path);
 		final FXMLLoader menuLoader = new FXMLLoader(location);
 		final VBox root = (VBox) menuLoader.load();
 		final Scene scene = new Scene(root, 400, 300);
@@ -133,7 +133,7 @@ public class FrameService {
 		stage.setScene(scene);
 
 		// setup menuDialog to bind
-		final MenuDialogController menuDialogController = menuLoader.getController();
+		final DialogController menuDialogController = menuLoader.getController();
 		menuDialogController.initView(stage);
 
 		stage.setX(this.getX() - scene.getWidth());

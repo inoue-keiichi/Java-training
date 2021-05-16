@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -173,62 +172,6 @@
                               <Insets />
                            </opaqueInsets>
                         </VBox>
-                     </children>
-                  </GridPane>
-               </content>
-            </Tab>
-            <Tab text="News">
-               <content>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="102.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" prefWidth="248.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="121.0" minHeight="10.0" prefHeight="107.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="News Bar">
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label text="Country" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <CheckBox fx:id="newsBarCheckBox" mnemonicParsing="false" onAction="#changeNewsDisabled" text="Visible" GridPane.columnIndex="1" />
-                        <ComboBox fx:id="newsCountryComboBox" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Category" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <CheckBox fx:id="newsBusinessCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="Business" GridPane.columnIndex="1" />
-                              <CheckBox fx:id="newsEntertainmentCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="Entertainment" GridPane.rowIndex="1" />
-                              <CheckBox fx:id="newsGeneralCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="General" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <CheckBox fx:id="newsHealthCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="Health" GridPane.rowIndex="2" />
-                              <CheckBox fx:id="newsScienceCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="Science" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <CheckBox fx:id="newsSportsCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="Sports" GridPane.rowIndex="3" />
-                              <CheckBox fx:id="newsTechnologyCheckBox" disable="true" mnemonicParsing="false" onAction="#changeIndeterminateSelected" selected="true" text="Technology" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <CheckBox fx:id="newsAllCheckBox" disable="true" mnemonicParsing="false" onAction="#changeAllSelected" selected="true" text="All" />
-                           </children>
-                        </GridPane>
                      </children>
                   </GridPane>
                </content>

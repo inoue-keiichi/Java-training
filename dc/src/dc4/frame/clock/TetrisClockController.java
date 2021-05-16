@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 
 import dc4.frame.clock.TetrisClockService.Digit;
 import dc4.frame.game.tetris.clazz.DigitTetrisField;
+import dc4.frame.menu.MenuDialogService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -25,6 +26,7 @@ public class TetrisClockController implements Initializable {
 	@FXML
 	Canvas clockDot;
 
+	private ClockService clockService;
 	private TetrisClockService tetrisClockService;
 
 	private DigitTetrisField leftHoursTetrisField;
@@ -41,6 +43,7 @@ public class TetrisClockController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		this.clockService = ClockService.getInstance();
 		this.tetrisClockService = new TetrisClockService();
 		this.leftHoursTetrisField = new DigitTetrisField(Digit.HOURS_LEFT, hoursLeftSide.getGraphicsContext2D(),
 				hoursLeftSide.getWidth(), hoursLeftSide.getHeight());
@@ -106,6 +109,11 @@ public class TetrisClockController implements Initializable {
 				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
+				// customMusicを優先する
+				final String musicPath = clockService.getCustomMusic() != null
+						? "file:" + clockService.getCustomMusic()
+						: MenuDialogService.MUSIC_SAMPLES.get(clockService.getMusic());
+				clockService.playMusic(musicPath);
 			}
 		});
 

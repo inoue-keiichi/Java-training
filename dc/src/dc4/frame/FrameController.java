@@ -28,9 +28,10 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	private ClockService clockService;
 	private MenuDialogObservable menuDialogObservable;
+	private dc4.frame.news.menu.MenuDialogObservable newsDialogObservable;
 	private NewsObservable newsObservable;
 	private Stage timeStage;
-	private static FrameService frameService;
+	private FrameService frameService;
 
 	private Text timeText;
 
@@ -42,7 +43,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	@FXML
 	private void onOpenDialog() throws IOException {
-		final Stage stage = frameService.createDialog();
+		final Stage stage = frameService.createDialog("menu/MenuDialogView.fxml");
 		menuBar.setDisable(true);
 		stage.showAndWait();
 		menuBar.setDisable(false);
@@ -61,14 +62,30 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		this.timeStage.show();
 	}
 
+	@FXML
+	private void onOpenNewsDialog() throws IOException {
+		final Stage stage = frameService.createDialog("news/menu/MenuDialogView.fxml");
+		menuBar.setDisable(true);
+		stage.showAndWait();
+		menuBar.setDisable(false);
+	}
+
+	@FXML
+	private void backClock() {
+		try {
+			initMainPane(frameService.getScreenMode());
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+	}
+
 	private void deletePanel() {
 		VBox pane = (VBox) this.timeStage.getScene().getRoot();
 		frameService.deleteElements(pane);
 	}
 
 	private void changeMainPane(ScreenMode mode) throws IOException {
-		//		VBox pane = (VBox) this.timeStage.getScene().getRoot();
-		//		frameService.deleteElements(pane);
 		setClockPane(mode);
 		resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 		frameService.setScreenMode(mode);
@@ -131,6 +148,8 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		// Add observer
 		menuDialogObservable = MenuDialogObservable.getInstance();
 		menuDialogObservable.addPropertyChangeListener(this);
+		newsDialogObservable = dc4.frame.news.menu.MenuDialogObservable.getInstance();
+		newsDialogObservable.addPropertyChangeListener(this);
 		newsObservable = NewsObservable.getInstance();
 		newsObservable.addPropertyChangeListener(this);
 	}
@@ -157,9 +176,18 @@ public class FrameController implements PropertyChangeListener, Initializable {
 			changeNewsPane();
 			return;
 		}
+		if (Objects.equals(evt.getPropertyName(), "newsBar")) {
+			try {
+				initMainPane(frameService.getScreenMode());
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+			return;
+		}
 
 		final ScreenMode newVal = (ScreenMode) evt.getNewValue();
-		if (!Objects.equals(frameService.getScreenMode(), newVal) || frameService.getNewsBarVisible()) {
+		if (!Objects.equals(frameService.getScreenMode(), newVal)) {
 			try {
 				initMainPane(newVal);
 			} catch (IOException e) {
@@ -169,7 +197,6 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		}
 
 		this.timeText.setFont(clockService.getFont());
-		//resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 		this.timeStage.getScene().setFill(ColorUtils.get(clockService.getBackgroundColorName()));
 	}
 

@@ -1,10 +1,7 @@
 package dc4.frame.menu;
 
-import static dc4.frame.menu.MenuDialogService.NewsCategories.*;
-
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -16,6 +13,7 @@ import dc4.frame.menu.cell.ColorCell;
 import dc4.frame.menu.cell.ColorModel;
 import dc4.frame.menu.cell.FontCell;
 import dc4.frame.menu.cell.FontModel;
+import dc4.interfaces.DialogController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,7 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class MenuDialogController implements Initializable {
+public class MenuDialogController implements Initializable, DialogController {
 	private FrameService frameService;
 	private ClockService clockService;
 	private Stage menuDialogStage;
@@ -92,7 +90,6 @@ public class MenuDialogController implements Initializable {
 		final String musicSample = musicSampleComboBox.getSelectionModel().getSelectedItem();
 		final int alarmHour = alarmHourComboBox.getSelectionModel().getSelectedItem();
 		final int alarmMinute = alarmMinuteComboBox.getSelectionModel().getSelectedItem();
-		final String newsCountry = newsCountryComboBox.getSelectionModel().getSelectedItem();
 		clockService.setClockType(clockTypeComboBox.getSelectionModel().getSelectedItem());
 		clockService.setFont(Font.font(fontFamily, fontSize));
 		clockService.setFontColor(fontColor);
@@ -101,24 +98,6 @@ public class MenuDialogController implements Initializable {
 		clockService.setCustomMusic(musicFile);
 		clockService.setAlarmHour(alarmHour);
 		clockService.setAlarmMinute(alarmMinute);
-		frameService.setNewsBarVisible(newsBarCheckBox.isSelected());
-		frameService.setNewsCountry(MenuDialogService.COUNTRY.get(newsCountry));
-		frameService.setNewsCategoryAll(newsAllCheckBox.isSelected());
-		frameService.setNewsBusiness(newsBusinessCheckBox.isSelected());
-		frameService.setNewsEntertainment(newsEntertainmentCheckBox.isSelected());
-		frameService.setNewsGeneral(newsGeneralCheckBox.isSelected());
-		frameService.setNewsHealth(newsHealthCheckBox.isSelected());
-		frameService.setNewsScience(newsScienceCheckBox.isSelected());
-		frameService.setNewsSports(newsSportsCheckBox.isSelected());
-		frameService.setNewsTechnology(newsTechnologyCheckBox.isSelected());
-
-		if (!newsAllCheckBox.isSelected()) {
-			frameService.setNewsCategories(createCategories(newsBusinessCheckBox.isSelected(),
-					newsEntertainmentCheckBox.isSelected(), newsGeneralCheckBox.isSelected(),
-					newsHealthCheckBox.isSelected(),
-					newsScienceCheckBox.isSelected(), newsSportsCheckBox.isSelected(),
-					newsTechnologyCheckBox.isSelected()));
-		}
 
 		switch (clockTypeComboBox.getSelectionModel().getSelectedItem()) {
 		case TETRIS:
@@ -133,33 +112,6 @@ public class MenuDialogController implements Initializable {
 		}
 
 		menuDialogStage.close();
-	}
-
-	private List<String> createCategories(boolean newsBusiness, boolean ewsEntertainment, boolean newsGeneral,
-			boolean newsHealth, boolean newsScience, boolean newsSports, boolean newsTechnology) {
-		final List<String> categories = new ArrayList<>();
-		if (newsBusiness) {
-			categories.add(BUSINESS.toString());
-		}
-		if (ewsEntertainment) {
-			categories.add(ENTERTAINMENT.toString());
-		}
-		if (newsGeneral) {
-			categories.add(GENERAL.toString());
-		}
-		if (newsHealth) {
-			categories.add(HEALTH.toString());
-		}
-		if (newsScience) {
-			categories.add(SCIENCE.toString());
-		}
-		if (newsSports) {
-			categories.add(SPORTS.toString());
-		}
-		if (newsTechnology) {
-			categories.add(TECHNOLOGY.toString());
-		}
-		return categories;
 	}
 
 	@FXML
@@ -313,20 +265,6 @@ public class MenuDialogController implements Initializable {
 		musicFileText.setText(clockService.getCustomMusic());
 		alarmHourComboBox.getSelectionModel().select(clockService.getAlarmHour());
 		alarmMinuteComboBox.getSelectionModel().select(clockService.getAlarmMinute());
-
-		//News Init
-		newsCountryComboBox.setItems(FXCollections.observableArrayList(MenuDialogService.COUNTRY.keySet()));
-		this.newsBarCheckBox.setSelected(frameService.getNewsBarVisible());
-		this.newsCountryComboBox.getSelectionModel().select(frameService.getNewsCountry());
-		this.newsAllCheckBox.setSelected(frameService.getNewsCategoryAll());
-		this.newsBusinessCheckBox.setSelected(frameService.getNewsBusiness());
-		this.newsEntertainmentCheckBox.setSelected(frameService.getNewsEntertainment());
-		this.newsGeneralCheckBox.setSelected(frameService.getNewsGeneral());
-		this.newsHealthCheckBox.setSelected(frameService.getNewsHealth());
-		this.newsScienceCheckBox.setSelected(frameService.getNewsScience());
-		this.newsSportsCheckBox.setSelected(frameService.getNewsSports());
-		this.newsTechnologyCheckBox.setSelected(frameService.getNewsTechnology());
-		changeNewsDisabled();
 	}
 
 	private ObservableList<FontModel> createFontModels(final List<String> fontFamilys) {
