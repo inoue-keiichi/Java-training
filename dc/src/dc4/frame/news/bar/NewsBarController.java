@@ -40,6 +40,8 @@ public class NewsBarController implements PropertyChangeListener, Initializable 
 		this.frameService = FrameService.getInstance();
 		this.es = Executors.newSingleThreadExecutor();
 
+		this.newsBarService.setHeight(this.newsPane.getHeight());
+
 		// Add observer
 		newsObservable = NewsBarObservable.getInstance();
 		newsObservable.addPropertyChangeListener(this);
@@ -74,21 +76,6 @@ public class NewsBarController implements PropertyChangeListener, Initializable 
 				}
 			}
 		});
-
-		//		this.newsService.updateArticle(this.newsPane, count);
-		//		count++;
-
-		//		try {
-		//			Thread.sleep(5000);
-		//		} catch (InterruptedException e) {
-		//			// TODO 自動生成された catch ブロック
-		//			e.printStackTrace();
-		//		}
-		//		this.newsService.updateArticle(this.newsPane, articles.get(1));
-
-		//		this.hyperLink = new Hyperlink(articles.get(0).getTitle());
-		//		this.newsPane.getChildren().clear();
-		//		this.newsPane.getChildren().add(this.hyperLink);
 	}
 
 }

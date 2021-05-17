@@ -40,16 +40,16 @@ public class FrameService {
 	private double height;
 	private ScreenMode screenMode;
 	private boolean newsBarVisible = false;
-	private String newsCountry = "Japan";
+	private String newsCountry = "jp";
 	private List<String> newsCategories;
-	private boolean newsCategoryAll = false;
-	private boolean newsBusiness = false;
-	private boolean newsEntertainment = false;
-	private boolean newsGeneral = false;
-	private boolean newsHealth = false;
-	private boolean newsScience = false;
-	private boolean newsSports = false;
-	private boolean newsTechnology = false;
+	private boolean newsCategoryAll = true;
+	private boolean newsBusiness = true;
+	private boolean newsEntertainment = true;
+	private boolean newsGeneral = true;
+	private boolean newsHealth = true;
+	private boolean newsScience = true;
+	private boolean newsSports = true;
+	private boolean newsTechnology = true;
 
 	public static FrameService getInstance() {
 		return timeService;
@@ -161,48 +161,6 @@ public class FrameService {
 	public void saveScreenMode() {
 		prefs.put(FrameKey.SCREEN_MODE.toString(), screenMode.toString());
 	}
-
-	//	private void save(final FrameKey key, final double value) {
-	//		switch (key) {
-	//		case FRAME_X:
-	//			prefs.putDouble(key.toString(), value);
-	//			break;
-	//
-	//		case FRAME_Y:
-	//			prefs.putDouble(key.toString(), value);
-	//			break;
-	//
-	//		case HEIGHT:
-	//			prefs.putDouble(key.toString(), value);
-	//			break;
-	//
-	//		case WIDTH:
-	//			prefs.putDouble(key.toString(), value);
-	//			break;
-	//
-	//		default:
-	//			return;
-	//		}
-	//	}
-
-	//	private double load(final FrameKey key) throws IOException {
-	//		switch (key) {
-	//		case FRAME_X:
-	//			return prefs.getDouble(key.toString(), 0d);
-	//
-	//		case FRAME_Y:
-	//			return prefs.getDouble(key.toString(), 0d);
-	//
-	//		case HEIGHT:
-	//			return prefs.getDouble(key.toString(), DEFAULT_HEIGHT);
-	//
-	//		case WIDTH:
-	//			return prefs.getDouble(key.toString(), DEFAULT_WIDTH);
-	//
-	//		default:
-	//			throw new IllegalArgumentException();
-	//		}
-	//	}
 
 	public double getX() {
 		return x;

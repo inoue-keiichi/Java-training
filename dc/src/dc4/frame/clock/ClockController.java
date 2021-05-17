@@ -39,6 +39,7 @@ public class ClockController implements Initializable {
 	private double preWidth;
 
 	private ExecutorService es;
+	private boolean execute = true;
 
 	@FXML
 	private Canvas clockCanvas;
@@ -55,7 +56,7 @@ public class ClockController implements Initializable {
 		gc = clockCanvas.getGraphicsContext2D();
 		es = Executors.newSingleThreadExecutor();
 		es.execute(() -> {
-			while (true) {
+			while (execute) {
 				// customMusicを優先する
 				final String musicPath = clockService.getCustomMusic() != null
 						? "file:" + clockService.getCustomMusic()

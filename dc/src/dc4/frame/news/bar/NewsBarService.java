@@ -2,8 +2,6 @@ package dc4.frame.news.bar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.kwabenaberko.newsapilib.NewsApiClient;
 import com.kwabenaberko.newsapilib.NewsApiClient.ArticlesResponseCallback;
@@ -19,10 +17,11 @@ import javafx.scene.layout.VBox;
 public class NewsBarService {
 	private static String API_KEY = "e2ceb8478a18426d8e849e73ff52d1de";
 	private static final NewsBarService newsService = new NewsBarService();
-	ExecutorService es = Executors.newSingleThreadExecutor();
 	private NewsApiClient newsApiClient;
 	private ArticlesResponseCallback responseCallback;
-	private List<Article> articlesCache;
+	private List<Article> articles;
+
+	private double height;
 
 	private int next;
 	private int maxArticleNum;
@@ -30,7 +29,7 @@ public class NewsBarService {
 	private NewsBarService() {
 		this.newsApiClient = new NewsApiClient(API_KEY);
 		this.responseCallback = createResponseCallback();
-		this.articlesCache = new ArrayList<>();
+		this.articles = new ArrayList<>();
 		this.next = 0;
 	}
 
@@ -39,10 +38,6 @@ public class NewsBarService {
 	}
 
 	public void requestArticles(String country, List<String> categories) {
-		if (articlesCache.size() > 1) {
-			Platform.runLater(() -> NewsBarObservable.execute("articles", null, articlesCache));
-			return;
-		}
 		Builder builder = createHeaderBuilder(country, categories);
 		newsApiClient.getTopHeadlines(builder.build(), responseCallback);
 	}
@@ -64,10 +59,10 @@ public class NewsBarService {
 		return new ArticlesResponseCallback() {
 			@Override
 			public void onSuccess(ArticleResponse response) {
-				articlesCache = response.getArticles();
+				articles = response.getArticles();
 				maxArticleNum = response.getArticles().size();
 				// JavaFXのウィジェットはJavaFXの自分のスレッド以外から触ろうとすることが禁じられている
-				Platform.runLater(() -> NewsBarObservable.execute("articles", null, response.getArticles()));
+				Platform.runLater(() -> NewsBarObservable.execute("articles", null, null));
 			}
 
 			@Override
@@ -79,19 +74,26 @@ public class NewsBarService {
 
 	public void updateArticle(VBox pane, int count) {
 		pane.getChildren().clear();
-		pane.getChildren().add(new Hyperlink(articlesCache.get(count).getTitle()));
+		pane.getChildren().add(new Hyperlink(articles.get(count).getTitle()));
 	}
 
 	public Article nextArticle() {
-		if (this.articlesCache.size() == 0) {
+		if (this.articles.size() == 0) {
 			return null;
 		}
 		if (this.next >= this.maxArticleNum) {
 			this.next = 0;
 		}
-		Article article = this.articlesCache.get(next);
+		Article article = this.articles.get(next);
 		this.next++;
 		return article;
 	}
 
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
 }

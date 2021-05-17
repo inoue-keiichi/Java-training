@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 public class MenuDialogController implements Initializable, DialogController {
 	private FrameService frameService;
+	private MenuDialogService menuDialogService;
 	private Stage menuDialogStage;
 
 	@FXML
@@ -47,6 +48,7 @@ public class MenuDialogController implements Initializable, DialogController {
 
 		frameService.setNewsBarVisible(newsBarCheckBox.isSelected());
 		frameService.setNewsCountry(MenuDialogService.COUNTRY.get(newsCountry));
+		menuDialogService.setCountry(newsCountry);
 		frameService.setNewsCategoryAll(newsAllCheckBox.isSelected());
 		frameService.setNewsBusiness(newsBusinessCheckBox.isSelected());
 		frameService.setNewsEntertainment(newsEntertainmentCheckBox.isSelected());
@@ -143,10 +145,11 @@ public class MenuDialogController implements Initializable, DialogController {
 	@Override
 	public void initialize(final URL location, final ResourceBundle resources) {
 		frameService = FrameService.getInstance();
+		menuDialogService = MenuDialogService.getInstance();
 
 		newsCountryComboBox.setItems(FXCollections.observableArrayList(MenuDialogService.COUNTRY.keySet()));
 		this.newsBarCheckBox.setSelected(frameService.getNewsBarVisible());
-		this.newsCountryComboBox.getSelectionModel().select(frameService.getNewsCountry());
+		this.newsCountryComboBox.getSelectionModel().select(menuDialogService.getCountry());
 		this.newsAllCheckBox.setSelected(frameService.getNewsCategoryAll());
 		this.newsBusinessCheckBox.setSelected(frameService.getNewsBusiness());
 		this.newsEntertainmentCheckBox.setSelected(frameService.getNewsEntertainment());

@@ -11,6 +11,7 @@ import dc4.frame.clock.ClockService;
 import dc4.frame.clock.ClockType;
 import dc4.frame.menu.MenuDialogObservable;
 import dc4.frame.news.NewsObservable;
+import dc4.frame.news.bar.NewsBarService;
 import dc4.utils.ColorUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +33,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 	private NewsObservable newsObservable;
 	private Stage timeStage;
 	private FrameService frameService;
+	private NewsBarService newsBarService;
 
 	private Text timeText;
 
@@ -87,7 +89,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	private void changeMainPane(ScreenMode mode) throws IOException {
 		setClockPane(mode);
-		resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
+		//resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 		frameService.setScreenMode(mode);
 	}
 
@@ -113,6 +115,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		Node node = createClockPane(mode);
 		VBox pane = (VBox) this.timeStage.getScene().getRoot();
 		pane.getChildren().add(node);
+
 	}
 
 	private Node createClockPane(ScreenMode mode) throws IOException {
@@ -142,6 +145,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		// init
 		clockService = ClockService.getInstance();
 		frameService = FrameService.getInstance();
+		newsBarService = NewsBarService.getInstance();
 		timeText = new Text();
 		timeText.setText(DEFAULT_TIMER_TEXT);
 
@@ -179,6 +183,8 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		if (Objects.equals(evt.getPropertyName(), "newsBar")) {
 			try {
 				initMainPane(frameService.getScreenMode());
+				this.timeText.setFont(clockService.getFont());
+				resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
@@ -190,6 +196,8 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		if (!Objects.equals(frameService.getScreenMode(), newVal)) {
 			try {
 				initMainPane(newVal);
+				this.timeText.setFont(clockService.getFont());
+				resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
@@ -215,7 +223,11 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		final double textHeight = timeText.getLayoutBounds().getHeight();
 
 		preWidth = textWidth * 1.25;
-		preHeight = menuBar.getHeight() + textHeight * 2.0;
+		if (frameService.getNewsBarVisible()) {
+			preHeight = menuBar.getHeight() + this.newsBarService.getHeight() + textHeight * 2.0;
+		} else {
+			preHeight = menuBar.getHeight() + textHeight * 2.0;
+		}
 
 		stage.setWidth(preWidth);
 		stage.setHeight(preHeight);

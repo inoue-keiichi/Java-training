@@ -6,6 +6,8 @@ import java.util.Map;
 public class MenuDialogService {
 	private static final MenuDialogService menuDialogService = new MenuDialogService();
 
+	private String country = "Japan";
+
 	public static MenuDialogService getInstance() {
 		return menuDialogService;
 	}
@@ -33,8 +35,16 @@ public class MenuDialogService {
 		{
 			put("Japan", "jp");
 			put("US", "us");
-			put("China", "ch");
+			put("China", "cn");
 			put("Korea", "kr");
 		}
 	};
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
 }

@@ -116,22 +116,6 @@ public class TetrisClockController implements Initializable {
 				clockService.playMusic(musicPath);
 			}
 		});
-
-		//		this.es = Executors.newSingleThreadExecutor();
-		//		this.es.execute(() -> {
-		//			while (true) {
-		//				synchronized (this) {
-		//					if (tetrisClockService.ischangedMinutes()) {
-		//						draw();
-		//					}
-		//				}
-		//				try {
-		//					Thread.sleep(1000);
-		//				} catch (final InterruptedException e) {
-		//					e.printStackTrace();
-		//				}
-		//			}
-		//		});
 	}
 
 	public void initView(Stage stage) {
@@ -139,30 +123,7 @@ public class TetrisClockController implements Initializable {
 		stage.setHeight(400);
 	}
 
-	//	private void draw() {
-	//		tetrisClockService.drawDot(clockDot.getGraphicsContext2D(), clockDot.getWidth(), clockDot.getHeight());
-	//		tetrisClockService.setClock(leftHoursTetrisField, rightHoursTetrisField, leftMinutesTetrisField,
-	//				rightMinutesTetrisField);
-	//	}
-
 	private void drawDigit(DigitTetrisField field, int num) {
-		//tetrisClockService.drawDot(clockDot.getGraphicsContext2D(), clockDot.getWidth(), clockDot.getHeight());
 		tetrisClockService.setClockDigit(field, num);
 	}
-
-	//	private void draw(ClockDigit clockDigit) {
-	//		tetrisClockService.drawDot(clockDot.getGraphicsContext2D(), clockDot.getWidth(), clockDot.getHeight());
-	//		switch (clockDigit) {
-	//		case HOUR_LEFT:
-	//			tetrisClockService.setHourLeftDigit();
-	//		case HOUR_RIGHT:
-	//			tetrisClockService.setHourRightDigit();
-	//		case MINUTES_LEFT:
-	//			tetrisClockService.setMinutesLeftDigit();
-	//		case MINUTES_RIGHT:
-	//			tetrisClockService.setMinutesLeftDigit();
-	//		default:
-	//			throw new IllegalArgumentException();
-	//		}
-	//	}
 }
