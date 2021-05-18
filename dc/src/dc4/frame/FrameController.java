@@ -89,7 +89,6 @@ public class FrameController implements PropertyChangeListener, Initializable {
 
 	private void changeMainPane(ScreenMode mode) throws IOException {
 		setClockPane(mode);
-		//resizeStage(this.timeStage, clockService.getClockType(), this.timeText);
 		frameService.setScreenMode(mode);
 	}
 
@@ -137,7 +136,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 		}
 		Pane pane = (Pane) this.timeStage.getScene().getRoot();
 		pane.getChildren().add(node);
-		frameService.bindNewsController(timeStage, loader);
+		frameService.bindNewsBarController(timeStage, loader);
 	}
 
 	@Override
@@ -167,6 +166,7 @@ public class FrameController implements PropertyChangeListener, Initializable {
 	}
 
 	private void initMainPane(ScreenMode mode) throws IOException {
+		//ClockObservable.execute("stop", null, null);
 		deletePanel();
 		if (frameService.getNewsBarVisible()) {
 			setNewsBarPane();

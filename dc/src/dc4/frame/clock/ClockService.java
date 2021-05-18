@@ -270,7 +270,6 @@ public class ClockService {
 			default:
 				break;
 			}
-
 		}
 	}
 

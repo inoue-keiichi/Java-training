@@ -119,7 +119,7 @@ public class FrameService {
 		}
 	}
 
-	public void bindNewsController(Stage stage, FXMLLoader loader) {
+	public void bindNewsBarController(Stage stage, FXMLLoader loader) {
 		NewsBarController newsController = loader.getController();
 		newsController.initView(stage);
 	}

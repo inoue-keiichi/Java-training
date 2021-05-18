@@ -20,7 +20,6 @@ public class TetrisClockService {
 	}
 
 	private final TetrisService tetrisService = new TetrisService();
-	private final ClockService clockService = ClockService.getInstance();
 
 	Integer oldHours1 = null;
 	Integer oldHours2 = null;

@@ -5,10 +5,9 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import dc4.frame.FrameService;
-import dc4.frame.menu.MenuDialogObservable;
 import dc4.frame.menu.MenuDialogService;
 import dc4.utils.ColorUtils;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -26,11 +25,7 @@ public class ClockController implements Initializable {
 	//private Thread thread;
 	private ClockService clockService;
 	private GraphicsContext gc;
-	private MenuDialogObservable menuDialogObservable;
-	private Stage timeStage;
-	private FrameService frameService;
 	private AnalogClockService analogClockService;
-	private TetrisClockService tetrisClockService;
 
 	private Text timeText;
 	private double x;
@@ -39,7 +34,6 @@ public class ClockController implements Initializable {
 	private double preWidth;
 
 	private ExecutorService es;
-	private boolean execute = true;
 
 	@FXML
 	private Canvas clockCanvas;
@@ -48,15 +42,13 @@ public class ClockController implements Initializable {
 	public void initialize(final URL location, final ResourceBundle resources) {
 		// init
 		clockService = ClockService.getInstance();
-		frameService = FrameService.getInstance();
 		analogClockService = new AnalogClockService();
-		tetrisClockService = new TetrisClockService();
 		timeText = new Text();
 		timeText.setText(DEFAULT_TIMER_TEXT);
 		gc = clockCanvas.getGraphicsContext2D();
 		es = Executors.newSingleThreadExecutor();
 		es.execute(() -> {
-			while (execute) {
+			while (true) {
 				// customMusicを優先する
 				final String musicPath = clockService.getCustomMusic() != null
 						? "file:" + clockService.getCustomMusic()
@@ -65,7 +57,8 @@ public class ClockController implements Initializable {
 				clockService.updateTime();
 				draw();
 				try {
-					Thread.sleep(clockService.getUpdateSpeed());
+					Thread.sleep(500);
+					//Thread.sleep(clockService.getUpdateSpeed());
 				} catch (final InterruptedException e) {
 				}
 			}
@@ -74,7 +67,6 @@ public class ClockController implements Initializable {
 
 	public void initView(final Stage stage) {
 		// init
-		this.timeStage = stage;
 		this.preWidth = stage.getWidth();
 		final VBox pane = (VBox) stage.getScene().getRoot();
 
@@ -132,20 +124,22 @@ public class ClockController implements Initializable {
 	}
 
 	private void draw() {
-		// Init
-		gc.clearRect(0, 0, clockCanvas.getWidth(), clockCanvas.getHeight());
-		// Set backgroundColor
-		gc.setFill(ColorUtils.get(clockService.getBackgroundColorName()));
-		gc.fillRect(0, 0, clockCanvas.getWidth(), clockCanvas.getHeight());
+		Platform.runLater(() -> {
+			// Init
+			gc.clearRect(0, 0, clockCanvas.getWidth(), clockCanvas.getHeight());
+			// Set backgroundColor
+			gc.setFill(ColorUtils.get(clockService.getBackgroundColorName()));
+			gc.fillRect(0, 0, clockCanvas.getWidth(), clockCanvas.getHeight());
 
-		switch (clockService.getClockType()) {
-		case ANALOG:
-			analogClockService.setClock(gc, clockCanvas.getWidth(), clockCanvas.getHeight());
-			break;
-		case DEGITAL:
-		default:
-			setDegitalClock();
-		}
+			switch (clockService.getClockType()) {
+			case ANALOG:
+				analogClockService.setClock(gc, clockCanvas.getWidth(), clockCanvas.getHeight());
+				break;
+			case DEGITAL:
+			default:
+				setDegitalClock();
+			}
+		});
 	}
 
 	private void setDegitalClock() {

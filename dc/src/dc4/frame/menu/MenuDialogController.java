@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import dc4.frame.FrameService;
 import dc4.frame.ScreenMode;
 import dc4.frame.clock.ClockService;
 import dc4.frame.clock.ClockType;
@@ -31,11 +30,9 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class MenuDialogController implements Initializable, DialogController {
-	private FrameService frameService;
 	private ClockService clockService;
 	private Stage menuDialogStage;
 
-	private ClockType oldClockType;
 	private String musicFile;
 
 	@FXML
@@ -186,7 +183,6 @@ public class MenuDialogController implements Initializable, DialogController {
 
 	@Override
 	public void initialize(final URL location, final ResourceBundle resources) {
-		frameService = FrameService.getInstance();
 		clockService = ClockService.getInstance();
 
 		fontComboBox.setCellFactory(new Callback<ListView<FontModel>, ListCell<FontModel>>() {

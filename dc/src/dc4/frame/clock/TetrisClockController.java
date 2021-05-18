@@ -34,8 +34,6 @@ public class TetrisClockController implements Initializable {
 	private DigitTetrisField leftMinutesTetrisField;
 	private DigitTetrisField rightMinutesTetrisField;
 
-	private ExecutorService es;
-
 	private ExecutorService eshl;
 	private ExecutorService eshr;
 	private ExecutorService esml;

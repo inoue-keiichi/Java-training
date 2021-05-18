@@ -22,5 +22,4 @@ public class NewsController implements Initializable {
 		String url = newsService.getUrl();
 		webEngine.load(url);
 	}
-
 }

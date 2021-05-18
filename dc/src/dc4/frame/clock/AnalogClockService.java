@@ -19,7 +19,6 @@ public class AnalogClockService {
 		public final Color color;
 
 		Hand(final String name) {
-			// this.name = name;
 			switch (name) {
 			case "hour":
 				this.lineWidthRatio = 0.04;
@@ -59,8 +58,6 @@ public class AnalogClockService {
 		createHand(gc, Hand.SECOND, diameter, x, y);
 		createHand(gc, Hand.MINUTE, diameter, x, y);
 		createHand(gc, Hand.HOUR, diameter, x, y);
-
-		//createPendulum(gc, diameter, x, y);
 	}
 
 	private void createFrame(final GraphicsContext gc, final double diameter, final double x, final double y) {
@@ -70,11 +67,6 @@ public class AnalogClockService {
 		gc.setFill(Color.WHITE); // 白色に設定
 		gc.fillOval(x + INNER_MARGIN, y + INNER_MARGIN, diameter - INNER_MARGIN * 2, diameter - INNER_MARGIN * 2); // 盤を描画
 	}
-
-	//	private void createPendulum(final GraphicsContext gc, final double diameter, final double x, final double y) {
-	//		gc.setFill(Color.SKYBLUE); // 水色に設定
-	//		gc.fillOval(x + OUTER_MARGIN + diameter/2-25, y + OUTER_MARGIN + diameter, 50, 50);
-	//	}
 
 	private void createLargeScale(final GraphicsContext gc, final double diameter, final double x, final double y) {
 		final double radius = diameter / 2 - INNER_MARGIN;
