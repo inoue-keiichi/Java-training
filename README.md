@@ -5,13 +5,13 @@ https://docs.google.com/document/d/1hZT8FjNAv8u6v2HzPlselocPsTjKD3DNjBIqxLSHVA0/
 # ディレクトリ構成
 
 ## dc
-デジタル時計を作成する課題。以下のGUIツールキットを使用。
+デジタル時計を作成する課題。以下のGUIツールキットを使用。詳しくは[こちら](https://docs.google.com/document/d/1hZT8FjNAv8u6v2HzPlselocPsTjKD3DNjBIqxLSHVA0/edit)
 - AWT
 - Swing
 - JavaFX
 
 ## interpret
-java.lang.reflectを使ってjava内蔵のクラスを生成できるGUIアプリの作成課題
+java.lang.reflectを使ってjava内蔵のクラスを生成できるGUIアプリの作成課題。詳しくは[こちら](https://docs.google.com/document/d/1hZT8FjNAv8u6v2HzPlselocPsTjKD3DNjBIqxLSHVA0/edit)
 
 ## jpl
 [プログラミング言語Java 第4版](https://www.tdupress.jp/book/b350040.html)に記載されている課題
